@@ -51,16 +51,14 @@ const CustomStyles = () => (
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
-    /* Smooth range slider */
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
       height: 20px;
       width: 20px;
       border-radius: 50%;
-      background: #059669;
+      background: #064e3b;
       cursor: pointer;
       margin-top: -8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
     input[type=range]::-webkit-slider-runnable-track {
       width: 100%;
@@ -68,10 +66,6 @@ const CustomStyles = () => (
       cursor: pointer;
       background: #d1fae5;
       border-radius: 2px;
-    }
-    /* Prevent horizontal scroll on mobile */
-    body {
-        overflow-x: hidden;
     }
   `}} />
 );
@@ -360,8 +354,11 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
     { id: 'about', label: 'About Us' },
   ];
 
+  // Helper to determine if we are on a page with a dark hero section where header is transparent
+  // Modified: Only 'home' gets the transparent header over the hero image.
   const hasDarkHero = ['home'].includes(currentPage);
 
+  // Function to handle search submit
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if(searchTerm.trim()){
@@ -370,18 +367,18 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
   }
 
   return (
-      <nav className={`fixed w-full z-50 transition-all duration-300 border-b border-transparent ${isScrolled ? 'bg-white/95 backdrop-blur-md py-3 md:py-4 border-gray-100 shadow-sm' : hasDarkHero ? 'bg-transparent py-4 md:py-6' : 'bg-white py-3 md:py-4 border-gray-100 shadow-sm'}`}>
-        <div className="container mx-auto px-4 lg:px-24 xl:px-32 flex justify-between items-center gap-4">
+      <nav className={`fixed w-full z-50 transition-all duration-300 border-b border-transparent ${isScrolled ? 'bg-white/95 backdrop-blur-md py-4 border-gray-100 shadow-sm' : hasDarkHero ? 'bg-transparent py-6' : 'bg-white py-4 border-gray-100 shadow-sm'}`}>
+        <div className="container mx-auto px-8 lg:px-24 xl:px-32 flex justify-between items-center gap-4">
           {/* Brand Logo */}
           <div
               onClick={() => onNavigate('home')}
               className={`flex flex-col items-start leading-none group cursor-pointer shrink-0 ${isScrolled || !hasDarkHero ? 'text-emerald-950' : 'text-white'}`}
           >
-            <span className="font-serif font-black text-xl md:text-2xl tracking-tight">Humsafar</span>
-            <span className="font-sans text-[0.55rem] md:text-[0.65rem] font-bold tracking-[0.2em] uppercase opacity-80 group-hover:tracking-[0.3em] transition-all duration-300">Community</span>
+            <span className="font-serif font-black text-2xl tracking-tight">Humsafar</span>
+            <span className="font-sans text-[0.65rem] font-bold tracking-[0.2em] uppercase opacity-80 group-hover:tracking-[0.3em] transition-all duration-300">Community</span>
           </div>
 
-          {/* Desktop Search Bar */}
+          {/* Search Bar - Only Visible When Scrolled or on specific pages, but now takes to a new page */}
           <div className={`hidden md:flex flex-1 max-w-md mx-4 transition-all duration-500 transform ${isScrolled ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
             <form onSubmit={handleSearchSubmit} className="relative w-full group">
               <input
@@ -398,7 +395,7 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
           </div>
 
           {/* Desktop Menu */}
-          <div className={`hidden md:flex items-center space-x-6 lg:space-x-8 text-sm font-semibold tracking-wide shrink-0 ${isScrolled || !hasDarkHero ? 'text-gray-600' : 'text-white/90'}`}>
+          <div className={`hidden md:flex items-center space-x-8 text-sm font-semibold tracking-wide shrink-0 ${isScrolled || !hasDarkHero ? 'text-gray-600' : 'text-white/90'}`}>
             {menuItems.map((item) => (
                 <button
                     key={item.id}
@@ -427,37 +424,14 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
           </div>
 
           {/* Mobile Toggle */}
-          <div className="md:hidden flex items-center">
-            <button
-                onClick={toggleMenu}
-                className={`p-2 rounded-md ${isScrolled || !hasDarkHero ? 'text-emerald-950' : 'text-white'}`}
-                aria-label="Menu"
-            >
-              {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
-          </div>
+          <button onClick={toggleMenu} className={`md:hidden p-2 ${isScrolled || !hasDarkHero ? 'text-emerald-950' : 'text-white'}`}>
+            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
 
         {/* Mobile Menu Overlay */}
         {isMenuOpen && (
-            <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-2xl p-6 flex flex-col space-y-6 text-gray-800 animate-in slide-in-from-top-5 border-t border-gray-100 h-[90vh] overflow-y-auto">
-
-              {/* Mobile Search Bar */}
-              <div className="relative w-full">
-                <form onSubmit={(e) => { handleSearchSubmit(e); toggleMenu(); }}>
-                  <input
-                      type="text"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      placeholder="Search destinations..."
-                      className="w-full bg-gray-100 text-gray-800 text-sm rounded-xl py-3 pl-11 pr-4 outline-none border border-transparent focus:border-emerald-500 focus:bg-white transition-all shadow-inner font-medium"
-                  />
-                  <button type="submit" className="absolute left-3 top-1/2 -translate-y-1/2 p-1">
-                    <Search className="w-5 h-5 text-gray-400" />
-                  </button>
-                </form>
-              </div>
-
+            <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-2xl p-6 flex flex-col space-y-6 text-gray-800 animate-in slide-in-from-top-5 border-t border-gray-100">
               {menuItems.map(item => (
                   <button
                       key={item.id}
@@ -469,16 +443,12 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
                           onNavigate(item.id);
                         }
                       }}
-                      className="font-serif font-bold text-2xl text-emerald-950 text-left hover:text-emerald-700 transition-colors"
+                      className="font-serif font-bold text-2xl text-emerald-950 text-left"
                   >
                     {item.label}
                   </button>
               ))}
-              <hr className="border-gray-100"/>
-              <a
-                  href="https://wa.me/919999999999"
-                  className="bg-emerald-900 text-white py-4 rounded-xl flex justify-center items-center font-bold uppercase tracking-widest text-sm"
-              >
+              <a href="https://wa.me/919999999999" className="bg-emerald-900 text-white py-4 rounded-xl flex justify-center items-center font-bold uppercase tracking-widest text-sm">
                 <MessageCircle className="w-5 h-5 mr-2" /> WhatsApp Us
               </a>
             </div>
@@ -489,7 +459,7 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
 
 const Hero = ({ searchTerm, setSearchTerm, onSearch }) => (
     <section id="home" className="relative h-[92vh] flex items-center justify-center text-center text-white bg-emerald-950 overflow-hidden">
-      {/* Background Image */}
+      {/* Background Image - Lush Green Landscape */}
       <div className="absolute inset-0 opacity-80">
         <img
             src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2000&auto=format&fit=crop"
@@ -497,36 +467,34 @@ const Hero = ({ searchTerm, setSearchTerm, onSearch }) => (
             className="w-full h-full object-cover"
         />
       </div>
-      {/* Gradient Overlays */}
+      {/* Gradient Overlays for Readability */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"></div>
       <div className="absolute inset-0 bg-emerald-900/20 mix-blend-multiply"></div>
 
-      <div className="relative z-10 container mx-auto px-4 lg:px-24 xl:px-32 pt-20 w-full">
-        <div className="inline-block mb-4 px-4 py-1.5 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-[0.65rem] md:text-xs font-bold uppercase tracking-[0.2em]">
+      <div className="relative z-10 container mx-auto px-8 lg:px-24 xl:px-32 pt-20">
+        <div className="inline-block mb-4 px-4 py-1.5 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-xs font-bold uppercase tracking-[0.2em]">
           Explore the Unseen
         </div>
-        <h1 className="text-4xl md:text-6xl lg:text-8xl font-serif font-bold mb-6 md:mb-8 leading-tight tracking-tight drop-shadow-lg">
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold mb-8 leading-tight tracking-tight drop-shadow-lg">
           Find Your <span className="italic text-emerald-300">Wild.</span>
         </h1>
-        <p className="text-base md:text-xl mb-8 md:mb-12 font-medium max-w-2xl mx-auto text-gray-100 leading-relaxed drop-shadow-md px-4">
+        <p className="text-lg md:text-xl mb-12 font-medium max-w-2xl mx-auto text-gray-100 leading-relaxed drop-shadow-md">
           Curated expeditions for the modern explorer. Join the community that travels deeper.
         </p>
 
         {/* Main Search Bar - OTA Style */}
-        <form onSubmit={onSearch} className="max-w-4xl mx-auto bg-white rounded-2xl md:rounded-full p-3 md:p-2 md:pl-6 flex flex-col md:flex-row items-stretch md:items-center shadow-2xl transform transition-all hover:scale-[1.01] gap-2 md:gap-0">
-          <div className="flex-1 flex items-center px-2 md:px-0">
-            <Search className="text-gray-400 w-5 h-5 mr-3 shrink-0" />
-            <input
-                type="text"
-                placeholder="Search places (e.g. Spiti, Kerala)"
-                className="w-full py-2 md:py-4 bg-transparent text-gray-800 placeholder-gray-400 outline-none text-base md:text-lg font-medium"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+        <form onSubmit={onSearch} className="max-w-4xl mx-auto bg-white rounded-full p-2 pl-6 flex items-center shadow-2xl transform transition-all hover:scale-[1.01]">
+          <Search className="text-gray-400 w-5 h-5 mr-3" />
+          <input
+              type="text"
+              placeholder="Where is your soul calling? (e.g. Spiti, Kerala)"
+              className="flex-1 py-4 bg-transparent text-gray-800 placeholder-gray-400 outline-none text-lg font-medium"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+          />
           <button
               type="submit"
-              className="bg-emerald-900 hover:bg-emerald-800 text-white px-6 md:px-8 py-3 md:py-4 rounded-xl md:rounded-full font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 shrink-0"
+              className="bg-emerald-900 hover:bg-emerald-800 text-white px-8 py-4 rounded-full font-bold transition-all shadow-md hover:shadow-lg flex items-center gap-2"
           >
             Search <ArrowRight className="w-4 h-4" />
           </button>
@@ -553,18 +521,18 @@ const FilterBar = ({ selectedRegion, setSelectedRegion, selectedType, setSelecte
   ];
 
   return (
-      <div className="container mx-auto px-4 lg:px-24 xl:px-32 -mt-10 md:-mt-20 relative z-30">
-        <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-100/50 backdrop-blur-sm">
+      <div className="container mx-auto px-8 lg:px-24 xl:px-32 -mt-20 relative z-30">
+        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100/50 backdrop-blur-sm">
           <div className="flex flex-col lg:flex-row gap-8 justify-between items-start">
 
             <div className="w-full">
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Destinations</h3>
-              <div className="flex flex-wrap gap-2 md:gap-3">
+              <div className="flex flex-wrap gap-3">
                 {regions.map(r => (
                     <button
                         key={r.id}
                         onClick={() => setSelectedRegion(r.id)}
-                        className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all border ${selectedRegion === r.id ? 'bg-emerald-900 text-white border-emerald-900 shadow-lg' : 'bg-white text-gray-600 border-gray-200 hover:border-emerald-300 hover:text-emerald-700'}`}
+                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all border ${selectedRegion === r.id ? 'bg-emerald-900 text-white border-emerald-900 shadow-lg' : 'bg-white text-gray-600 border-gray-200 hover:border-emerald-300 hover:text-emerald-700'}`}
                     >
                       {r.label}
                     </button>
@@ -574,12 +542,12 @@ const FilterBar = ({ selectedRegion, setSelectedRegion, selectedType, setSelecte
 
             <div className="w-full lg:w-auto min-w-[300px]">
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Experience Type</h3>
-              <div className="flex flex-wrap gap-2 md:gap-3">
+              <div className="flex flex-wrap gap-3">
                 {types.map(t => (
                     <button
                         key={t.id}
                         onClick={() => setSelectedType(t.id)}
-                        className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all border ${selectedType === t.id ? 'bg-orange-500 text-white border-orange-500 shadow-lg' : 'bg-white text-gray-600 border-gray-200 hover:border-orange-300 hover:text-orange-600'}`}
+                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all border ${selectedType === t.id ? 'bg-orange-500 text-white border-orange-500 shadow-lg' : 'bg-white text-gray-600 border-gray-200 hover:border-orange-300 hover:text-orange-600'}`}
                     >
                       {t.label}
                     </button>
@@ -630,9 +598,9 @@ const TourCard = ({ tour }) => {
         </div>
 
         {/* Content Section */}
-        <div className="p-4 md:p-5 flex flex-col flex-1">
+        <div className="p-5 flex flex-col flex-1">
           <div className="flex justify-between items-center mb-3">
-            <div className="flex items-center text-emerald-700 bg-emerald-50 px-2 py-1 rounded text-[10px] md:text-xs font-bold">
+            <div className="flex items-center text-emerald-700 bg-emerald-50 px-2 py-1 rounded text-xs font-bold">
               <Clock className="w-3 h-3 mr-1" /> {tour.duration}
             </div>
             <div className="flex items-center text-gray-500 text-xs">
@@ -642,7 +610,7 @@ const TourCard = ({ tour }) => {
             </div>
           </div>
 
-          <h3 className="text-base md:text-lg font-sans font-bold text-gray-900 leading-snug mb-3 group-hover:text-emerald-700 transition-colors line-clamp-2">
+          <h3 className="text-lg font-sans font-bold text-gray-900 leading-snug mb-3 group-hover:text-emerald-700 transition-colors line-clamp-2">
             {tour.title}
           </h3>
 
@@ -668,7 +636,7 @@ const TourCard = ({ tour }) => {
                 <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1 rounded">SAVE 25%</span>
               </div>
               <div className="flex items-baseline gap-1">
-                <p className="text-lg md:text-xl font-bold text-gray-900">₹{tour.price.toLocaleString()}</p>
+                <p className="text-xl font-bold text-gray-900">₹{tour.price.toLocaleString()}</p>
                 <p className="text-xs text-gray-500 font-medium">/ person</p>
               </div>
             </div>
@@ -676,7 +644,7 @@ const TourCard = ({ tour }) => {
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 md:px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wide transition-all shadow-md hover:shadow-lg"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wide transition-all shadow-md hover:shadow-lg"
             >
               View Deal
             </a>
@@ -686,6 +654,7 @@ const TourCard = ({ tour }) => {
   );
 };
 
+// Moved InquiryForms to be used in AboutPage
 const InquiryForms = () => {
   const [activeTab, setActiveTab] = useState('retail');
 
@@ -695,117 +664,118 @@ const InquiryForms = () => {
   };
 
   return (
-      <section id="forms" className="py-16 md:py-24 bg-white relative overflow-hidden w-full">
+      <section id="forms" className="py-24 bg-white relative overflow-hidden">
         <div className="absolute inset-0 bg-scribble pointer-events-none opacity-50"></div>
 
-        {/* Subtle decorative circles - contained within parent */}
-        <div className="absolute top-20 right-0 w-64 md:w-96 h-64 md:h-96 bg-emerald-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob overflow-hidden"></div>
-        <div className="absolute top-20 left-0 w-64 md:w-96 h-64 md:h-96 bg-purple-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000 overflow-hidden"></div>
+        {/* Subtle decorative circles */}
+        <div className="absolute top-20 right-0 w-96 h-96 bg-emerald-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+        <div className="absolute top-20 left-0 w-96 h-96 bg-purple-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
 
         <div className="container mx-auto px-4 lg:px-12 relative z-10">
           <div className="max-w-7xl mx-auto bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-gray-100">
 
-            {/* Side Info Panel */}
-            <div className="md:w-4/12 bg-emerald-900 p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden">
+            {/* Side Info Panel - Enhanced */}
+            <div className="md:w-4/12 bg-emerald-900 p-12 text-white flex flex-col justify-between relative overflow-hidden">
+              {/* Pattern Overlay */}
               <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
 
-              <div className="relative z-10 space-y-8 md:space-y-12">
+              <div className="relative z-10 space-y-12">
                 <div>
-                  <h3 className="text-3xl md:text-4xl font-serif font-bold mb-4">Let's Plan Your<br/>Next Escape.</h3>
-                  <p className="text-emerald-200 text-base md:text-lg leading-relaxed">Whether it's a solo soul-search or a corporate retreat, we craft journeys that linger in your memory.</p>
+                  <h3 className="text-4xl font-serif font-bold mb-4">Let's Plan Your<br/>Next Escape.</h3>
+                  <p className="text-emerald-200 text-lg leading-relaxed">Whether it's a solo soul-search or a corporate retreat, we craft journeys that linger in your memory.</p>
                 </div>
 
-                <div className="space-y-6 md:space-y-8">
+                <div className="space-y-8">
                   <div className="flex items-center group">
-                    <div className="bg-emerald-800/50 w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mr-4 md:mr-5 group-hover:bg-emerald-700 transition-colors border border-emerald-700/30 shrink-0">
-                      <Phone className="w-4 h-4 md:w-5 md:h-5 text-emerald-300" />
+                    <div className="bg-emerald-800/50 w-12 h-12 rounded-xl flex items-center justify-center mr-5 group-hover:bg-emerald-700 transition-colors border border-emerald-700/30">
+                      <Phone className="w-5 h-5 text-emerald-300" />
                     </div>
                     <div>
                       <p className="text-[10px] text-emerald-400 uppercase tracking-widest font-bold mb-1">Talk to an Expert</p>
-                      <p className="font-medium text-base md:text-lg tracking-wide break-all">+91 98765 43210</p>
+                      <p className="font-medium text-lg tracking-wide">+91 98765 43210</p>
                     </div>
                   </div>
 
                   <div className="flex items-center group">
-                    <div className="bg-emerald-800/50 w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mr-4 md:mr-5 group-hover:bg-emerald-700 transition-colors border border-emerald-700/30 shrink-0">
-                      <Mail className="w-4 h-4 md:w-5 md:h-5 text-emerald-300" />
+                    <div className="bg-emerald-800/50 w-12 h-12 rounded-xl flex items-center justify-center mr-5 group-hover:bg-emerald-700 transition-colors border border-emerald-700/30">
+                      <Mail className="w-5 h-5 text-emerald-300" />
                     </div>
                     <div>
                       <p className="text-[10px] text-emerald-400 uppercase tracking-widest font-bold mb-1">Write to Us</p>
-                      <p className="font-medium text-base md:text-lg tracking-wide break-all">hello@humsafar.com</p>
+                      <p className="font-medium text-lg tracking-wide">hello@humsafar.com</p>
                     </div>
                   </div>
 
                   <div className="flex items-center group">
-                    <div className="bg-emerald-800/50 w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mr-4 md:mr-5 group-hover:bg-emerald-700 transition-colors border border-emerald-700/30 shrink-0">
-                      <MapPin className="w-4 h-4 md:w-5 md:h-5 text-emerald-300" />
+                    <div className="bg-emerald-800/50 w-12 h-12 rounded-xl flex items-center justify-center mr-5 group-hover:bg-emerald-700 transition-colors border border-emerald-700/30">
+                      <MapPin className="w-5 h-5 text-emerald-300" />
                     </div>
                     <div>
                       <p className="text-[10px] text-emerald-400 uppercase tracking-widest font-bold mb-1">Visit HQ</p>
-                      <p className="font-medium text-base md:text-lg leading-snug">Hauz Khas Village,<br/>New Delhi, India</p>
+                      <p className="font-medium text-lg leading-snug">Hauz Khas Village,<br/>New Delhi, India</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="relative z-10 mt-8 md:mt-12 pt-8 border-t border-emerald-800/50">
+              <div className="relative z-10 mt-12 pt-8 border-t border-emerald-800/50">
                 <p className="text-emerald-400 text-xs italic">"The journey of a thousand miles begins with a single step."</p>
               </div>
             </div>
 
-            {/* Form Area */}
-            <div className="md:w-8/12 p-8 md:p-12 lg:p-16 bg-gray-50/30">
-              <div className="flex space-x-6 md:space-x-8 mb-10 border-b-2 border-gray-100 overflow-x-auto scrollbar-hide">
+            {/* Form Area - Widened & Redesigned */}
+            <div className="md:w-8/12 p-12 lg:p-16 bg-gray-50/30">
+              <div className="flex space-x-8 mb-10 border-b-2 border-gray-100">
                 <button
                     onClick={() => setActiveTab('retail')}
-                    className={`pb-4 font-bold text-sm uppercase tracking-widest transition-all relative px-2 shrink-0 ${activeTab === 'retail' ? 'text-emerald-900 border-b-2 border-emerald-900 -mb-[2px]' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`pb-4 font-bold text-sm uppercase tracking-widest transition-all relative px-2 ${activeTab === 'retail' ? 'text-emerald-900 border-b-2 border-emerald-900 -mb-[2px]' : 'text-gray-400 hover:text-gray-600'}`}
                 >
                   Plan A Trip
                 </button>
                 <button
                     onClick={() => setActiveTab('b2b')}
-                    className={`pb-4 font-bold text-sm uppercase tracking-widest transition-all relative px-2 shrink-0 ${activeTab === 'b2b' ? 'text-emerald-900 border-b-2 border-emerald-900 -mb-[2px]' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`pb-4 font-bold text-sm uppercase tracking-widest transition-all relative px-2 ${activeTab === 'b2b' ? 'text-emerald-900 border-b-2 border-emerald-900 -mb-[2px]' : 'text-gray-400 hover:text-gray-600'}`}
                 >
                   Partner With Us
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                  <div className="space-y-2 md:space-y-3 group">
+              <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3 group">
                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Full Name</label>
-                    <input required type="text" className="w-full px-0 py-2 md:py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. John Doe" />
+                    <input required type="text" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. John Doe" />
                   </div>
-                  <div className="space-y-2 md:space-y-3 group">
+                  <div className="space-y-3 group">
                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Phone Number</label>
-                    <input required type="tel" className="w-full px-0 py-2 md:py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. +91 98765..." />
+                    <input required type="tel" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. +91 98765..." />
                   </div>
                 </div>
 
                 {activeTab === 'b2b' && (
-                    <div className="space-y-2 md:space-y-3 group">
+                    <div className="space-y-3 group">
                       <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Company / Agency Name</label>
-                      <input required type="text" className="w-full px-0 py-2 md:py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. Wanderlust Travels Pvt Ltd" />
+                      <input required type="text" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. Wanderlust Travels Pvt Ltd" />
                     </div>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                  <div className="space-y-2 md:space-y-3 group">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3 group">
                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Destination Interest</label>
-                    <input required type="text" className="w-full px-0 py-2 md:py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. Spiti Valley, Kerala..." />
+                    <input required type="text" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. Spiti Valley, Kerala..." />
                   </div>
-                  <div className="space-y-2 md:space-y-3 group">
+                  <div className="space-y-3 group">
                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Travel Dates (Approx)</label>
-                    <input type="text" className="w-full px-0 py-2 md:py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. Mid December" />
+                    <input type="text" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. Mid December" />
                   </div>
                 </div>
 
-                <div className="space-y-2 md:space-y-3 group">
+                <div className="space-y-3 group">
                   <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Tell us more</label>
-                  <textarea rows="3" className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none transition-all text-gray-800 placeholder-gray-400 resize-none" placeholder="Group size, specific requirements..."></textarea>
+                  <textarea rows="3" className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none transition-all text-gray-800 placeholder-gray-400 resize-none" placeholder="Group size, specific requirements, or just what you're dreaming of..."></textarea>
                 </div>
 
-                <div className="pt-4 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="pt-4 flex items-center justify-between">
                   <p className="text-xs text-gray-400 hidden md:block">We usually respond within 2 hours.</p>
                   <button type="submit" className="bg-emerald-900 text-white font-bold py-4 px-10 rounded-xl hover:bg-emerald-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 flex items-center gap-3 w-full md:w-auto justify-center">
                     Send Inquiry <ArrowRight className="w-5 h-5" />
@@ -820,19 +790,20 @@ const InquiryForms = () => {
 };
 
 const FeatureSection = () => (
-    <section className="py-16 md:py-24 bg-emerald-950 relative overflow-hidden">
-      {/* Abstract Background Element - contained */}
+    <section className="py-24 bg-emerald-950 relative overflow-hidden">
+      {/* Abstract Background Element */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] right-[-5%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-emerald-900/30 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-[-10%] left-[-5%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-emerald-900/30 rounded-full blur-3xl"></div>
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-emerald-900/30 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-emerald-900/30 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="container mx-auto px-4 lg:px-24 xl:px-32 relative z-10">
+      <div className="container mx-auto px-8 lg:px-24 xl:px-32 relative z-10">
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 items-center">
 
           {/* Left Column - Features */}
-          <div className="space-y-8 md:space-y-12 order-2 lg:order-1">
+          <div className="space-y-12">
+            {/* Feature 1 */}
             <div className="flex flex-col items-center text-center p-4 rounded-2xl transition-all duration-300 hover:bg-white/5">
               <div className="bg-emerald-900/50 p-3 rounded-xl text-emerald-400 mb-3 shadow-sm border border-emerald-800">
                 <Users className="w-6 h-6" />
@@ -840,6 +811,8 @@ const FeatureSection = () => (
               <h3 className="font-bold text-white mb-1 text-lg">Community First</h3>
               <p className="text-sm text-gray-400 leading-relaxed">Join a family of 10k+ travelers sharing stories and creating memories.</p>
             </div>
+
+            {/* Feature 2 */}
             <div className="flex flex-col items-center text-center p-4 rounded-2xl transition-all duration-300 hover:bg-white/5">
               <div className="bg-emerald-900/50 p-3 rounded-xl text-orange-400 mb-3 shadow-sm border border-emerald-800">
                 <ShieldCheck className="w-6 h-6" />
@@ -850,18 +823,19 @@ const FeatureSection = () => (
           </div>
 
           {/* Center Column - Title Text */}
-          <div className="text-center relative order-1 lg:order-2 mb-8 lg:mb-0">
+          <div className="text-center relative">
             <span className="text-emerald-400 font-bold uppercase tracking-[0.2em] text-xs mb-4 block">Why Choose Us</span>
-            <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mb-6 leading-tight">
+            <h2 className="text-4xl md:text-5xl font-serif font-bold text-white mb-6 leading-tight">
               Redefining<br />how you <span className="italic text-emerald-400">travel.</span>
             </h2>
-            <p className="text-gray-400 text-sm md:text-base leading-relaxed max-w-sm mx-auto">
-              We don't just plan trips; we curate immersive experiences that bring people together. Trusted by thousands of wanderers.
+            <p className="text-gray-400 text-base leading-relaxed max-w-sm mx-auto">
+              We don't just plan trips; we curate immersive experiences that bring people together. Trusted by thousands of wanderers across the globe.
             </p>
           </div>
 
           {/* Right Column - Features */}
-          <div className="space-y-8 md:space-y-12 order-3">
+          <div className="space-y-12">
+            {/* Feature 3 */}
             <div className="flex flex-col items-center text-center p-4 rounded-2xl transition-all duration-300 hover:bg-white/5">
               <div className="bg-emerald-900/50 p-3 rounded-xl text-blue-400 mb-3 shadow-sm border border-emerald-800">
                 <Star className="w-6 h-6" />
@@ -869,6 +843,8 @@ const FeatureSection = () => (
               <h3 className="font-bold text-white mb-1 text-lg">Top Rated</h3>
               <p className="text-sm text-gray-400 leading-relaxed">4.8/5 average rating across all platforms from happy travelers.</p>
             </div>
+
+            {/* Feature 4 */}
             <div className="flex flex-col items-center text-center p-4 rounded-2xl transition-all duration-300 hover:bg-white/5">
               <div className="bg-emerald-900/50 p-3 rounded-xl text-purple-400 mb-3 shadow-sm border border-emerald-800">
                 <MapIcon className="w-6 h-6" />
@@ -884,8 +860,8 @@ const FeatureSection = () => (
 );
 
 const Footer = ({ onNavigate }) => (
-    <footer className="bg-gray-950 text-gray-400 py-16 md:py-20 border-t border-gray-900">
-      <div className="container mx-auto px-4 lg:px-24 xl:px-32">
+    <footer className="bg-gray-950 text-gray-400 py-20 border-t border-gray-900">
+      <div className="container mx-auto px-8 lg:px-24 xl:px-32">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-20 mb-16">
           <div className="lg:col-span-1">
             <div
@@ -909,7 +885,7 @@ const Footer = ({ onNavigate }) => (
               <h4 className="text-white font-bold mb-6 tracking-widest uppercase text-xs">Destinations</h4>
               <ul className="space-y-4 text-sm font-medium">
                 {['Himachal Pradesh', 'Uttarakhand', 'Rajasthan', 'International', 'North East India'].map(item => (
-                    <li key={item}><button onClick={() => onNavigate('home')} className="hover:text-emerald-400 transition-colors text-left">{item}</button></li>
+                    <li key={item}><button onClick={() => onNavigate('home')} className="hover:text-emerald-400 transition-colors">{item}</button></li>
                 ))}
               </ul>
             </div>
@@ -937,7 +913,7 @@ const Footer = ({ onNavigate }) => (
           </div>
         </div>
 
-        <div className="pt-8 border-t border-gray-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-600 text-center md:text-left">
+        <div className="pt-8 border-t border-gray-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-600">
           <p>© {new Date().getFullYear()} Humsafar Community. All rights reserved.</p>
           <p className="flex items-center">Made with <Heart className="w-3 h-3 inline text-emerald-700 mx-1 fill-current" /> in India</p>
         </div>
@@ -948,6 +924,7 @@ const Footer = ({ onNavigate }) => (
 // --- NEW PAGE COMPONENTS ---
 
 const SearchResultsPage = ({ searchTerm, setSearchTerm }) => {
+  // Basic search filtering logic
   const filteredTours = TOURS.filter(tour => {
     const term = searchTerm.toLowerCase();
     return tour.title.toLowerCase().includes(term) ||
@@ -957,11 +934,13 @@ const SearchResultsPage = ({ searchTerm, setSearchTerm }) => {
 
   return (
       <div className="bg-gray-50 min-h-screen pt-20">
+        {/* Minimal Search Header */}
         <div className="bg-white border-b border-gray-200 py-12">
-          <div className="container mx-auto px-4 lg:px-24 xl:px-32">
+          <div className="container mx-auto px-8 lg:px-24 xl:px-32">
             <h1 className="text-3xl font-serif font-bold text-gray-900 mb-4">Search Results</h1>
             <p className="text-gray-500 mb-6">Showing results for "<span className="font-bold text-gray-900">{searchTerm}</span>"</p>
 
+            {/* Search Input on Results Page */}
             <div className="max-w-2xl relative">
               <input
                   type="text"
@@ -975,7 +954,7 @@ const SearchResultsPage = ({ searchTerm, setSearchTerm }) => {
           </div>
         </div>
 
-        <div className="container mx-auto px-4 lg:px-24 xl:px-32 py-12">
+        <div className="container mx-auto px-8 lg:px-24 xl:px-32 py-12">
           {filteredTours.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {filteredTours.map(tour => <TourCard key={tour.id} tour={tour} />)}
@@ -996,22 +975,26 @@ const HomePage = ({ onSearch, setSearchTerm, searchTerm }) => {
   const [selectedRegion, setSelectedRegion] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
 
+  // Filter Logic for Main List
   const filteredTours = TOURS.filter(tour => {
     const matchesRegion = selectedRegion === 'all' || tour.region === selectedRegion;
     const matchesType = selectedType === 'all' || tour.type === selectedType;
     return matchesRegion && matchesType;
   });
 
+  // Categorized Data
   const bestsellers = TOURS.filter(t => t.bestseller).slice(0, 4);
   const trending = [...TOURS].sort((a, b) => b.rating - a.rating).slice(0, 4);
   const international = TOURS.filter(t => t.region === 'international').slice(0, 4);
 
+  // If filters are active, show filtered list. Else show categorized sections.
   const isDefaultView = selectedRegion === 'all' && selectedType === 'all';
 
   return (
       <>
         <Hero searchTerm={searchTerm} setSearchTerm={setSearchTerm} onSearch={onSearch} />
 
+        {/* Moved FilterBar outside to fix clipping/stacking issue */}
         <FilterBar
             selectedRegion={selectedRegion}
             setSelectedRegion={setSelectedRegion}
@@ -1019,26 +1002,30 @@ const HomePage = ({ onSearch, setSearchTerm, searchTerm }) => {
             setSelectedType={setSelectedType}
         />
 
+        {/* Background Wrapper for Tours section */}
         <div className="relative bg-white overflow-hidden">
-          {/* Abstract shapes - overflow handled by container */}
+          {/* Abstract shapes/circles */}
           <div className="absolute top-0 right-0 translate-x-1/3 -translate-y-1/4 w-[500px] h-[500px] rounded-full border border-gray-100 pointer-events-none" />
           <div className="absolute top-20 right-0 translate-x-1/2 w-[300px] h-[300px] rounded-full bg-emerald-50/50 blur-3xl pointer-events-none" />
+
           <div className="absolute bottom-0 left-0 -translate-x-1/3 translate-y-1/4 w-[600px] h-[600px] rounded-full border border-gray-100 pointer-events-none" />
 
+          {/* Subtle Scribble Texture Overlay */}
           <div className="absolute inset-0 bg-scribble pointer-events-none" />
 
-          <section id="tours" className="py-16 md:py-24 min-h-[600px] relative z-10">
-            <div className="container mx-auto px-4 lg:px-24 xl:px-32">
+          <section id="tours" className="py-24 min-h-[600px] relative z-10">
+            <div className="container mx-auto px-8 lg:px-24 xl:px-32">
 
               {!isDefaultView ? (
+                  // Filtered View
                   <div>
-                    <div className="flex justify-between items-end mb-8 md:mb-12">
+                    <div className="flex justify-between items-end mb-12">
                       <div>
                         <span className="text-emerald-600 font-bold uppercase tracking-widest text-xs mb-3 block">Results</span>
-                        <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900">Your Selection</h2>
+                        <h2 className="text-4xl font-serif font-bold text-gray-900">Your Selection</h2>
                       </div>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                       {filteredTours.map(tour => <TourCard key={tour.id} tour={tour} />)}
                     </div>
                     {filteredTours.length === 0 && (
@@ -1049,11 +1036,12 @@ const HomePage = ({ onSearch, setSearchTerm, searchTerm }) => {
                     )}
                   </div>
               ) : (
-                  <div className="space-y-20 md:space-y-24">
+                  // Default Categorized View
+                  <div className="space-y-24">
 
                     {/* Section 1: Bestsellers */}
                     <div>
-                      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-10 gap-4">
+                      <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
                         <div>
                           <span className="text-emerald-600 font-bold uppercase tracking-widest text-xs mb-3 block">Traveler Favorites</span>
                           <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900">Bestselling Collections</h2>
@@ -1062,33 +1050,33 @@ const HomePage = ({ onSearch, setSearchTerm, searchTerm }) => {
                           See All <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </button>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         {bestsellers.map(tour => <TourCard key={tour.id} tour={tour} />)}
                       </div>
                     </div>
 
                     {/* Section 2: Trending */}
                     <div>
-                      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-10 gap-4">
+                      <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
                         <div>
                           <span className="text-orange-500 font-bold uppercase tracking-widest text-xs mb-3 block">Don't Miss Out</span>
                           <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900">Trending Now</h2>
                         </div>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         {trending.map(tour => <TourCard key={tour.id} tour={tour} />)}
                       </div>
                     </div>
 
                     {/* Section 3: International */}
                     <div>
-                      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-10 gap-4">
+                      <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
                         <div>
                           <span className="text-blue-500 font-bold uppercase tracking-widest text-xs mb-3 block">Global Wandering</span>
                           <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900">International Adventures</h2>
                         </div>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         {international.map(tour => <TourCard key={tour.id} tour={tour} />)}
                       </div>
                     </div>
@@ -1110,10 +1098,13 @@ const UpcomingTripsPage = () => {
   const [priceRange, setPriceRange] = useState(60000);
   const [selectedDurations, setSelectedDurations] = useState([]);
 
+  // Helper to generate next Saturdays
   const getUpcomingSaturdays = (count = 5) => {
     const dates = [];
     let currentDate = new Date();
+    // Move to next Saturday
     currentDate.setDate(currentDate.getDate() + (6 - currentDate.getDay() + 7) % 7);
+    // Ensure it's in the future
     if (currentDate <= new Date()) currentDate.setDate(currentDate.getDate() + 7);
 
     for (let i = 0; i < count; i++) {
@@ -1124,19 +1115,26 @@ const UpcomingTripsPage = () => {
   };
 
   const upcomingDates = useMemo(() => getUpcomingSaturdays(8), []);
+
+  // Extract unique regions for filter
   const uniqueRegions = Array.from(new Set(TOURS.map(t => t.location)));
 
+  // Generate schedule
   const schedule = useMemo(() => {
     return upcomingDates.map(date => {
+      // Randomly select tours for this date (simulated)
       const availableTours = TOURS.filter((tour, index) => {
+        // Filter logic
         const matchesDest = selectedDestinations.length === 0 || selectedDestinations.includes(tour.location);
         const matchesPrice = tour.price <= priceRange;
+        // Simple duration matching logic (parsing string to approx days)
         const days = parseInt(tour.duration);
         const isShort = days <= 5;
         const matchesDuration = selectedDurations.length === 0 ||
             (selectedDurations.includes('short') && isShort) ||
             (selectedDurations.includes('long') && !isShort);
 
+        // Deterministic randomization based on date + index
         const isScheduled = (date.getTime() + index) % 3 === 0;
 
         return matchesDest && matchesPrice && matchesDuration && isScheduled;
@@ -1159,15 +1157,16 @@ const UpcomingTripsPage = () => {
 
   return (
       <div className="bg-gray-50 min-h-screen pt-20">
+        {/* Header */}
         <div className="bg-white border-b border-gray-200 py-12">
-          <div className="container mx-auto px-4 lg:px-24 xl:px-32">
-            <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">Upcoming Departures</h1>
+          <div className="container mx-auto px-8 lg:px-24 xl:px-32">
+            <h1 className="text-4xl font-serif font-bold text-gray-900 mb-4">Upcoming Departures</h1>
             <p className="text-gray-500 max-w-2xl">Plan your weekends with our scheduled group departures. Fixed dates, like-minded travelers, and curated experiences.</p>
           </div>
         </div>
 
         <div className="container mx-auto px-4 lg:px-24 xl:px-32 py-12">
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+          <div className="flex flex-col lg:flex-row gap-12">
 
             {/* Left Sidebar Filters */}
             <div className="w-full lg:w-1/4 space-y-8">
@@ -1177,6 +1176,7 @@ const UpcomingTripsPage = () => {
                   <span>Filters</span>
                 </div>
 
+                {/* Destination Filter */}
                 <div className="mb-8">
                   <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Destinations</h4>
                   <div className="space-y-3">
@@ -1197,6 +1197,7 @@ const UpcomingTripsPage = () => {
                   </div>
                 </div>
 
+                {/* Price Filter */}
                 <div className="mb-8">
                   <div className="flex justify-between items-center mb-4">
                     <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest">Max Budget</h4>
@@ -1217,6 +1218,7 @@ const UpcomingTripsPage = () => {
                   </div>
                 </div>
 
+                {/* Duration Filter */}
                 <div>
                   <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Duration</h4>
                   <div className="space-y-3">
@@ -1247,7 +1249,7 @@ const UpcomingTripsPage = () => {
               {schedule.length > 0 ? (
                   <div className="space-y-12">
                     {schedule.map((item, idx) => (
-                        <div key={idx} className="relative pl-6 md:pl-0">
+                        <div key={idx} className="relative pl-8 md:pl-0">
                           {/* Date Marker for Mobile */}
                           <div className="md:hidden absolute left-0 top-0 bottom-0 w-0.5 bg-gray-200"></div>
                           <div className="md:hidden absolute left-[-5px] top-0 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-white"></div>
@@ -1255,7 +1257,7 @@ const UpcomingTripsPage = () => {
                           <div className="flex flex-col md:flex-row gap-6 items-start">
                             {/* Date Column */}
                             <div className="md:w-32 shrink-0 md:text-right md:sticky md:top-32 self-start">
-                              <div className="text-2xl md:text-3xl font-serif font-bold text-gray-900 leading-none mb-1">
+                              <div className="text-3xl font-serif font-bold text-gray-900 leading-none mb-1">
                                 {item.date.getDate()}
                               </div>
                               <div className="text-sm font-bold text-emerald-600 uppercase tracking-widest mb-1">
@@ -1270,38 +1272,28 @@ const UpcomingTripsPage = () => {
                             <div className="flex-1 grid grid-cols-1 gap-4">
                               {item.tours.map(tour => (
                                   <div key={tour.id} className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-all group flex flex-col sm:flex-row gap-4">
-                                    <div className="w-full sm:w-32 h-40 sm:h-24 shrink-0 rounded-lg overflow-hidden bg-gray-100">
+                                    <div className="w-full sm:w-32 h-32 sm:h-24 shrink-0 rounded-lg overflow-hidden bg-gray-100">
                                       <img src={tour.image} alt={tour.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                     </div>
                                     <div className="flex-1 flex flex-col justify-between">
                                       <div>
                                         <div className="flex justify-between items-start">
-                                          <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full mb-2 inline-block">
-                                              {tour.duration}
-                                          </span>
+                                                                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full mb-2 inline-block">
+                                                                        {tour.duration}
+                                                                    </span>
                                           <div className="flex items-center text-xs text-gray-500">
                                             <Star className="w-3 h-3 text-orange-400 fill-current mr-1" />
                                             <span className="font-bold text-gray-900 mr-1">{tour.rating}</span>
                                             <span>({tour.reviews})</span>
                                           </div>
                                         </div>
-                                        <h4 className="font-bold text-gray-900 group-hover:text-emerald-700 transition-colors line-clamp-2 md:line-clamp-1">{tour.title}</h4>
+                                        <h4 className="font-bold text-gray-900 group-hover:text-emerald-700 transition-colors line-clamp-1">{tour.title}</h4>
                                         <div className="flex items-center text-xs text-gray-500 mt-1">
                                           <MapPin className="w-3 h-3 mr-1" /> {tour.location}
                                         </div>
                                       </div>
-
-                                      {/* Mobile-only Price/Action for vertical layout inside card */}
-                                      <div className="sm:hidden flex items-end justify-between mt-4 pt-4 border-t border-gray-100">
-                                        <div>
-                                          <span className="text-xs text-gray-400 line-through">₹{tour.oldPrice}</span>
-                                          <span className="text-lg font-bold text-gray-900 block">₹{tour.price.toLocaleString()}</span>
-                                        </div>
-                                        <a href={`https://wa.me/919999999999?text=Hi, I'm interested in the ${tour.title} trip`} target="_blank" rel="noopener noreferrer" className="bg-emerald-900 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase">Book</a>
-                                      </div>
-
                                     </div>
-                                    <div className="hidden sm:flex flex-col justify-between items-end sm:border-l sm:border-gray-100 sm:pl-4 min-w-[100px]">
+                                    <div className="flex sm:flex-col justify-between items-end sm:border-l sm:border-gray-100 sm:pl-4 min-w-[100px]">
                                       <div className="text-right">
                                         <span className="text-xs text-gray-400 line-through block">₹{tour.oldPrice}</span>
                                         <span className="text-lg font-bold text-gray-900 block">₹{tour.price.toLocaleString()}</span>
@@ -1354,6 +1346,423 @@ const UpcomingTripsPage = () => {
   );
 };
 
+const AboutPage = () => (
+    <div className="bg-white min-h-screen pt-20">
+      {/* Hero Section */}
+      <div className="relative bg-emerald-900 text-white overflow-hidden py-32">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+          <img src="https://images.unsplash.com/photo-1530789253388-582c481c54b0?q=80&w=2000&auto=format&fit=crop" className="w-full h-full object-cover" alt="Texture" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-900 via-emerald-900/90 to-transparent"></div>
+
+        <div className="container mx-auto px-8 lg:px-24 xl:px-32 relative z-10">
+          <div className="max-w-4xl">
+            <div className="flex items-center space-x-3 mb-6">
+              <span className="h-px w-8 bg-emerald-400"></span>
+              <span className="text-emerald-300 font-bold uppercase tracking-[0.2em] text-xs">Our Manifesto</span>
+            </div>
+            <h1 className="text-5xl md:text-7xl font-serif font-bold mb-8 leading-tight">
+              Travel isn't just movement. <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-200 to-teal-100 italic">It's a feeling.</span>
+            </h1>
+            <p className="text-xl text-emerald-100/90 leading-relaxed max-w-2xl font-light">
+              Humsafar was born from a simple belief: the best stories aren't found in guidebooks. They're found at the end of dirt roads, shared over chai with strangers who become family.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* The Journey Section - Timeline */}
+      <section className="py-24 bg-white relative">
+        <div className="container mx-auto px-8 lg:px-24 xl:px-32">
+          <div className="text-center mb-16">
+            <span className="text-emerald-600 font-bold uppercase tracking-widest text-xs">Our Journey</span>
+            <h2 className="text-3xl font-serif font-bold text-gray-900 mt-3">From a Dorm Room to the Himalayas</h2>
+          </div>
+
+          <div className="relative border-l-2 border-emerald-100 ml-4 md:ml-1/2 space-y-12">
+            {[
+              { year: '2019', title: 'The Idea', desc: 'Two friends, one hostel dorm, and a realization that travel had become too transactional.' },
+              { year: '2020', title: 'The First Trip', desc: 'We took 10 strangers to Spiti Valley. They came back as best friends. Humsafar was born.' },
+              { year: '2022', title: 'Growing the Family', desc: 'Expanded to Uttarakhand and Rajasthan. Our community touched 5,000 travelers.' },
+              { year: '2024', title: 'Going Global', desc: 'Launched international legs in Vietnam and Thailand. The spirit remains the same.' }
+            ].map((item, idx) => (
+                <div key={idx} className="relative pl-8 md:pl-0">
+                  <div className={`md:flex items-center justify-between ${idx % 2 === 0 ? 'flex-row-reverse' : ''} group`}>
+                    {/* Dot */}
+                    <div className="absolute left-[-9px] md:left-1/2 md:-ml-[9px] w-4 h-4 rounded-full bg-white border-4 border-emerald-500 group-hover:scale-125 transition-transform"></div>
+
+                    <div className="hidden md:block w-5/12"></div>
+                    <div className="md:w-5/12 mb-2">
+                      <span className="text-emerald-900 font-black text-5xl opacity-10 absolute -mt-4 -ml-4 z-0">{item.year}</span>
+                      <div className="relative z-10">
+                        <span className="text-emerald-600 font-bold text-sm mb-1 block">{item.year}</span>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
+                        <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Values Section */}
+      <section className="py-24 bg-gray-50">
+        <div className="container mx-auto px-8 lg:px-24 xl:px-32">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-6 text-emerald-700">
+                <Globe className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Sustainable Steps</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                We don't just visit; we respect. We partner with local homestays, minimize plastic use, and ensure 80% of our revenue stays within the local community.
+              </p>
+            </div>
+            <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-6 text-orange-700">
+                <Users className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Zero Solo</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                You might join us alone, but you'll never feel lonely. Our group dynamics are curated to turn strangers into lifelong travel companions.
+              </p>
+            </div>
+            <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 text-blue-700">
+                <Tent className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Raw & Real</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                We prioritize experiences over luxury. We'd rather have a billion-star view from a tent than a 5-star hotel room with no soul.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Team Section */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-8 lg:px-24 xl:px-32">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16">
+            <div>
+              <span className="text-emerald-600 font-bold uppercase tracking-widest text-xs mb-3 block">The Pack</span>
+              <h2 className="text-3xl font-serif font-bold text-gray-900">Meet the Explorers</h2>
+            </div>
+            <p className="text-gray-500 max-w-md mt-4 md:mt-0 text-sm">
+              We are a team of mountain lovers, beach bums, and road trippers dedicated to curating your perfect escape.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { name: 'Arjun Mehta', role: 'Founder & Lead Explorer', img: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&auto=format&fit=crop' },
+              { name: 'Sarah Jenkins', role: 'Community Manager', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop' },
+              { name: 'Dev Patel', role: 'Operations Head', img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop' },
+              { name: 'Ananya Singh', role: 'Experience Curator', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop' },
+            ].map((member, i) => (
+                <div key={i} className="group text-center">
+                  <div className="relative overflow-hidden rounded-2xl mb-4 aspect-[3/4]">
+                    <img src={member.img} alt={member.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-6">
+                      <div className="flex space-x-3 text-white">
+                        <Instagram className="w-4 h-4 cursor-pointer hover:text-emerald-400" />
+                        <Mail className="w-4 h-4 cursor-pointer hover:text-emerald-400" />
+                      </div>
+                    </div>
+                  </div>
+                  <h4 className="font-bold text-gray-900 text-lg">{member.name}</h4>
+                  <p className="text-emerald-600 text-xs uppercase tracking-widest font-medium">{member.role}</p>
+                </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Inquiry Form */}
+      <div className="bg-white">
+        <InquiryForms />
+      </div>
+    </div>
+);
+
+const BlogPage = () => (
+    <div className="bg-white min-h-screen pt-20">
+      {/* Blog Hero - Newsletter Themed */}
+      <div className="bg-gray-50 border-b border-gray-200 py-20">
+        <div className="container mx-auto px-8 lg:px-24 xl:px-32 text-center">
+          <span className="text-emerald-600 font-bold uppercase tracking-[0.2em] text-xs mb-4 block">The Humsafar Chronicle</span>
+          <h1 className="text-4xl md:text-6xl font-serif font-bold text-gray-900 mb-6">Stories from the Road,<br/>Delivered Weekly.</h1>
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto mb-8">
+            Join 15,000+ travelers who read our weekly newsletter for hidden gems, travel hacks, and inspiring stories.
+          </p>
+
+          {/* Quick Subscribe in Hero */}
+          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <input type="email" placeholder="Enter your email" className="flex-1 px-5 py-3 rounded-full border border-gray-300 focus:border-emerald-500 outline-none shadow-sm" />
+            <button className="bg-emerald-900 text-white px-8 py-3 rounded-full font-bold uppercase text-xs tracking-widest hover:bg-emerald-800 transition shadow-lg">
+              Join Free
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-8 lg:px-24 xl:px-32 py-16">
+
+        {/* Latest Post - Featured */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-serif font-bold text-gray-900 mb-8 flex items-center">
+            <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-1 rounded mr-3 uppercase tracking-wider">Latest Edition</span>
+            Fresh off the press
+          </h2>
+          <div className="group cursor-pointer grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-all">
+            <div className="overflow-hidden rounded-xl aspect-[16/9] lg:aspect-auto lg:h-80">
+              <img
+                  src={BLOG_POSTS[0].image}
+                  alt={BLOG_POSTS[0].title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+            </div>
+            <div className="py-2">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest">{BLOG_POSTS[0].category}</span>
+                <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                <span className="text-xs text-gray-400">{BLOG_POSTS[0].date}</span>
+              </div>
+              <h3 className="text-3xl font-bold font-serif text-gray-900 mb-4 group-hover:text-emerald-700 transition-colors">
+                {BLOG_POSTS[0].title}
+              </h3>
+              <p className="text-gray-600 leading-relaxed mb-6">
+                {BLOG_POSTS[0].excerpt}
+              </p>
+              <div className="flex gap-2 mb-6">
+                {BLOG_POSTS[0].tags.map(tag => (
+                    <span key={tag} className="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-md">#{tag}</span>
+                ))}
+              </div>
+              <button className="text-emerald-700 font-bold text-sm uppercase tracking-widest border-b-2 border-emerald-100 group-hover:border-emerald-700 transition-all pb-1">Read Full Issue</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Archive Grid */}
+        <div>
+          <h2 className="text-2xl font-serif font-bold text-gray-900 mb-8">Past Editions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {BLOG_POSTS.slice(1).map(post => (
+                <div key={post.id} className="group cursor-pointer flex flex-col h-full bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all">
+                  <div className="aspect-[3/2] overflow-hidden">
+                    <img
+                        src={post.image}
+                        alt={post.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">{post.category}</span>
+                      <span className="text-[10px] text-gray-400">{post.date}</span>
+                    </div>
+                    <h3 className="text-lg font-bold font-serif text-gray-900 mb-3 group-hover:text-emerald-700 transition-colors line-clamp-2">
+                      {post.title}
+                    </h3>
+                    <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3 flex-1">
+                      {post.excerpt}
+                    </p>
+                    <div className="pt-4 border-t border-gray-50 flex items-center justify-between">
+                      <span className="text-xs text-gray-400 font-medium">By {post.author}</span>
+                      <ArrowRight className="w-4 h-4 text-emerald-600 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all" />
+                    </div>
+                  </div>
+                </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+    </div>
+);
+
+const ExclusivePage = () => {
+  return (
+      <div className="bg-white min-h-screen pt-20">
+        {/* Exclusive Hero */}
+        <div className="relative bg-indigo-950 text-white overflow-hidden py-32">
+          <div className="absolute inset-0 opacity-40">
+            <img src="https://images.unsplash.com/photo-1542259659-4ab2b5e3066e?q=80&w=2000&auto=format&fit=crop" className="w-full h-full object-cover" alt="Exclusive Hero" />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-950 via-indigo-900/90 to-transparent"></div>
+          <div className="container mx-auto px-8 lg:px-24 xl:px-32 relative z-10">
+            <div className="max-w-4xl">
+              <span className="text-indigo-300 font-bold uppercase tracking-[0.2em] text-xs mb-4 block">Humsafar Exclusive</span>
+              <h1 className="text-5xl md:text-7xl font-serif font-bold mb-8 leading-tight">
+                Redefining <br/>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-200 to-purple-100 italic">The Art of Living.</span>
+              </h1>
+              <p className="text-xl text-indigo-100/90 leading-relaxed max-w-2xl font-light">
+                Explore our curated collection of niche travel concepts designed for the modern nomad. From productivity-focused retreats to surprise adventures.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-8 lg:px-24 xl:px-32 py-24 space-y-32">
+
+          {/* Work & Lifestyle Blends */}
+          <div>
+            <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-gray-100 pb-8">
+              <div>
+                <h2 className="text-3xl font-serif font-bold text-gray-900 mb-2">Work & Lifestyle Blends</h2>
+                <p className="text-gray-500 text-sm">Because your office can be anywhere with a view.</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-gray-50 rounded-2xl p-8 hover:bg-white hover:shadow-xl transition-all border border-gray-100 group">
+                <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Wifi className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Workation</h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Working from a vacation destination. We guarantee high-speed WiFi, ergonomic chairs, and "golden hour" views for your Zoom calls.
+                </p>
+                <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest">Plugs & Peaks</span>
+              </div>
+              <div className="bg-gray-50 rounded-2xl p-8 hover:bg-white hover:shadow-xl transition-all border border-gray-100 group">
+                <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Briefcase className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Bleisure</h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Business + Leisure. Extend your business trip for a few fun days. We provide "After 5 PM" itineraries and weekend add-ons to business hubs.
+                </p>
+                <span className="text-xs font-bold text-purple-600 uppercase tracking-widest">Work Hard, Play Hard</span>
+              </div>
+              <div className="bg-gray-50 rounded-2xl p-8 hover:bg-white hover:shadow-xl transition-all border border-gray-100 group">
+                <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Home className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Flexcation</h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Longer stays (2+ weeks) for families who can work/study remotely. Villa rentals with kitchenettes and separate rooms for calls.
+                </p>
+                <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest">Home Away From Home</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Niche Concepts */}
+          <div>
+            <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-gray-100 pb-8">
+              <div>
+                <h2 className="text-3xl font-serif font-bold text-gray-900 mb-2">The Niche Collection</h2>
+                <p className="text-gray-500 text-sm">Specialized trips for specific milestones.</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="relative group overflow-hidden rounded-2xl aspect-[4/5] cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1513279922550-250c2129b13a?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Blind Booking" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 p-8 text-white">
+                  <Gift className="w-8 h-8 mb-4 text-yellow-400" />
+                  <h3 className="text-2xl font-bold mb-2">Blind Booking</h3>
+                  <p className="text-sm text-gray-300 mb-4 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">Set a budget, fill a survey, and don't know the destination until you arrive at the airport. Sell the thrill of surprise.</p>
+                  <span className="text-xs font-bold uppercase tracking-widest border-b border-yellow-400 pb-1">Mystery Trip</span>
+                </div>
+              </div>
+              <div className="relative group overflow-hidden rounded-2xl aspect-[4/5] cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1516939884455-1445c8652f83?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Solomoon" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 p-8 text-white">
+                  <User className="w-8 h-8 mb-4 text-pink-400" />
+                  <h3 className="text-2xl font-bold mb-2">Solomoon</h3>
+                  <p className="text-sm text-gray-300 mb-4 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">Celebrate yourself. Solo-friendly dining, empowerment workshops, and high safety standards for your personal milestone.</p>
+                  <span className="text-xs font-bold uppercase tracking-widest border-b border-pink-400 pb-1">Uni-Trip</span>
+                </div>
+              </div>
+              <div className="relative group overflow-hidden rounded-2xl aspect-[4/5] cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Minimoon" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 p-8 text-white">
+                  <Heart className="w-8 h-8 mb-4 text-red-400" />
+                  <h3 className="text-2xl font-bold mb-2">Minimoon</h3>
+                  <p className="text-sm text-gray-300 mb-4 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">A short (2-3 day) luxury escape for couples who can't take a long honeymoon yet but need an immediate break.</p>
+                  <span className="text-xs font-bold uppercase tracking-widest border-b border-red-400 pb-1">Quick Romance</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* New Concepts: Staycation & Skillcation */}
+          <div>
+            <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-gray-100 pb-8">
+              <div>
+                <h2 className="text-3xl font-serif font-bold text-gray-900 mb-2">New Concepts</h2>
+                <p className="text-gray-500 text-sm">Redefining how you spend your free time.</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+              {/* Staycation */}
+              <div className="flex flex-col md:flex-row gap-8 items-start bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-all">
+                <div className="w-full md:w-1/3 aspect-square rounded-xl overflow-hidden bg-gray-100 shrink-0">
+                  <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Staycation" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <BedDouble className="w-5 h-5 text-indigo-600" />
+                    <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest">Staycation</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Rediscover Your Backyard.</h3>
+                  <p className="text-sm text-gray-500 italic mb-4">Luxury is Closer Than You Think.</p>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                    Why spend hours in transit? Handpicked local properties—hidden boutique hotels, luxury resorts, or heritage homes—within a 2-hour radius. Zero travel stress, upgraded living, and local immersion.
+                  </p>
+                  <button className="text-indigo-700 font-bold text-sm hover:underline">Book a Local Escape</button>
+                </div>
+              </div>
+
+              {/* Skillcation */}
+              <div className="flex flex-col md:flex-row gap-8 items-start bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-all">
+                <div className="w-full md:w-1/3 aspect-square rounded-xl overflow-hidden bg-gray-100 shrink-0">
+                  <img src="https://images.unsplash.com/photo-1452860606245-08befc0ff44b?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Skillcation" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Palette className="w-5 h-5 text-orange-600" />
+                    <span className="text-xs font-bold text-orange-600 uppercase tracking-widest">Skillcation</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Learn. Create. Travel.</h3>
+                  <p className="text-sm text-gray-500 italic mb-4">Upgrade Yourself on Vacation.</p>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                    Transform your holiday into a masterclass. Pottery in a village, surfing on the coast, or tribal cuisine. Hands-on workshops, cultural depth, and tangible creations to take home.
+                  </p>
+                  <button className="text-orange-700 font-bold text-sm hover:underline">Find a Workshop</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        {/* Inquiry CTA */}
+        <div className="bg-indigo-50 py-24 text-center">
+          <div className="container mx-auto px-8">
+            <Anchor className="w-12 h-12 text-indigo-900 mx-auto mb-6" />
+            <h2 className="text-3xl font-serif font-bold text-indigo-900 mb-4">Intrigued by the unconventional?</h2>
+            <p className="text-indigo-700/80 mb-8 max-w-xl mx-auto">These experiences are custom crafted. Reach out to our specialized "Exclusive" team to design your unique itinerary.</p>
+            <button onClick={() => document.getElementById('forms')?.scrollIntoView({ behavior: 'smooth' })} className="bg-indigo-900 text-white px-8 py-4 rounded-xl font-bold uppercase tracking-widest text-sm hover:bg-indigo-800 transition shadow-lg">
+              Request Exclusive Plan
+            </button>
+          </div>
+        </div>
+      </div>
+  );
+};
+
 // --- MAIN APP COMPONENT ---
 
 export default function App() {
@@ -1375,7 +1784,7 @@ export default function App() {
   };
 
   return (
-      <div className="min-h-screen bg-white font-sans text-gray-900 scroll-smooth selection:bg-emerald-100 selection:text-emerald-900 overflow-x-hidden w-full">
+      <div className="min-h-screen bg-white font-sans text-gray-900 scroll-smooth selection:bg-emerald-100 selection:text-emerald-900">
         <CustomStyles />
 
         <Header
@@ -1423,10 +1832,10 @@ export default function App() {
             href="https://wa.me/919999999999"
             target="_blank"
             rel="noopener noreferrer"
-            className="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-[#25D366] text-white p-3 md:p-4 rounded-full shadow-2xl hover:bg-[#20bd5a] transition-transform transform hover:scale-110 z-50 flex items-center justify-center group"
+            className="fixed bottom-8 right-8 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:bg-[#20bd5a] transition-transform transform hover:scale-110 z-50 flex items-center justify-center group"
             aria-label="Chat on WhatsApp"
         >
-          <MessageCircle className="w-6 h-6 md:w-8 md:h-8 group-hover:rotate-12 transition-transform" />
+          <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
         </a>
       </div>
   );
