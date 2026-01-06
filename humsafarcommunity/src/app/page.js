@@ -106,9 +106,7 @@ const CustomStyles = () => (
 const getNextSaturdays = (count = 4) => {
   const dates = [];
   let d = new Date();
-  // Calculate days until next Saturday (6 is Saturday)
   d.setDate(d.getDate() + (6 - d.getDay() + 7) % 7);
-  // Ensure we don't show today if today is Saturday but the trip time has passed (simplified to just next week if today)
   if (d.getTime() <= new Date().getTime()) d.setDate(d.getDate() + 7);
 
   for (let i = 0; i < count; i++) {
@@ -119,9 +117,7 @@ const getNextSaturdays = (count = 4) => {
 };
 
 // --- MOCK DATA ---
-
 const TOURS = [
-  // UPDATED FROM PDF
   {
     id: 1,
     title: "Manali Kasol: Solang, Atal Tunnel & Sissu",
@@ -129,7 +125,7 @@ const TOURS = [
     region: "himachal",
     type: "group",
     duration: "6 Days / 5 Nights",
-    price: 6999, // Quad Sharing Pricing
+    price: 6999,
     oldPrice: "9,500",
     image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=800&auto=format&fit=crop",
     rating: 4.8,
@@ -145,21 +141,8 @@ const TOURS = [
       { day: 5, title: "Kasol Sightseeing & Departure", desc: "Visit Manikaran Gurudwara and soak in the beauty of Parvati Valley. Explore local markets and Israeli vintage cafes. Optional Water Trek/Chalal Trek. Evening departure for Delhi. Overnight travel." },
       { day: 6, title: "Delhi Arrival", desc: "Reach Delhi by early morning. The group parts ways with fond memories. Trip ends." }
     ],
-    inclusions: [
-      "AC Volvo / Traveller for Delhi to Delhi",
-      "Accommodations on sharing basis (3 Star Stays)",
-      "Meal Plan: MAP (3 Breakfast & 3 Dinner)",
-      "Trip Lead & Local Sightseeing",
-      "All kinds of Permits, Toll Taxes, Parking",
-      "Music Night & Bonfire"
-    ],
-    exclusions: [
-      "Adventure activities (Paragliding, Rafting, etc.)",
-      "Lunch and other meals not mentioned",
-      "Personal expenses & Entry tickets",
-      "Heater charges / Early check-in",
-      "Any transport not mentioned in inclusions"
-    ]
+    inclusions: ["AC Volvo / Traveller", "Accommodations (3 Star)", "Meal Plan: MAP", "Trip Lead", "Permits & Taxes", "Music Night"],
+    exclusions: ["Adventure activities", "Lunch", "Personal expenses", "Heater charges", "Any transport not mentioned"]
   },
   {
     id: 4,
@@ -176,13 +159,6 @@ const TOURS = [
     bestseller: true,
     interestedCount: 350,
     highlights: ["Guptkashi Stay", "Trek to Kedarnath", "Sonprayag", "Ganga Aarti"],
-    itinerary: [
-      { day: 1, title: "Haridwar to Guptkashi", desc: "Drive from Haridwar to Guptkashi. View the Mandakini river. Overnight stay." },
-      { day: 2, title: "Trek to Kedarnath", desc: "Drive to Sonprayag, take local jeep to Gaurikund. Start 16km trek to Kedarnath. Evening Aarti." },
-      { day: 3, title: "Darshan & Return", desc: "Morning Darshan at Kedarnath Temple. Trek down to Gaurikund and drive back to Guptkashi." },
-      { day: 4, title: "Guptkashi to Rishikesh", desc: "Drive back towards Rishikesh. Evening Ganga Aarti at Triveni Ghat." },
-      { day: 5, title: "Departure", desc: "Drop at Haridwar Railway Station/Bus Stand." }
-    ],
     inclusions: ["Transportation", "Accommodation", "Meals (Breakfast & Dinner)", "Yatra Registration Assistance"],
     exclusions: ["Pony/Palki charges", "Lunch", "Personal expenses"]
   },
@@ -201,17 +177,8 @@ const TOURS = [
     bestseller: true,
     interestedCount: 89,
     highlights: ["Hanoi City Tour", "Ha Long Bay Cruise", "Ninh Binh", "Local Cuisine"],
-    itinerary: [
-      { day: 1, title: "Arrival in Hanoi", desc: "Airport pickup. Check-in. Welcome dinner with Egg Coffee." },
-      { day: 2, title: "Hanoi City Tour", desc: "Visit Train Street, Ho Chi Minh Mausoleum, and Old Quarter." },
-      { day: 3, title: "Ha Long Bay Cruise", desc: "Drive to Ha Long. Board cruise. Kayaking and island visits. Stay on cruise." },
-      { day: 4, title: "Ninh Binh Excursion", desc: "Boat ride in Tam Coc (Halong Bay on land). Cycling through rice paddies." },
-      { day: 5, title: "Free Day / Shopping", desc: "Leisure day to explore local markets or take a cooking class." },
-      { day: 6, title: "Hanoi Nightlife", desc: "Experience the vibrant nightlife of Ta Hien Beer Street." },
-      { day: 7, title: "Departure", desc: "Transfer to airport." }
-    ],
-    inclusions: ["Airport Transfers", "3 Star Hotels", "Ha Long Bay Cruise", "Breakfast", "English Speaking Guide"],
-    exclusions: ["International Flights", "Visa Fees", "Lunch & Dinner (except welcome dinner)", "Tips"]
+    inclusions: ["Airport Transfers", "3 Star Hotels", "Ha Long Bay Cruise", "Breakfast", "Guide"],
+    exclusions: ["International Flights", "Visa Fees", "Lunch & Dinner", "Tips"]
   },
   {
     id: 13,
@@ -228,15 +195,7 @@ const TOURS = [
     bestseller: true,
     interestedCount: 156,
     highlights: ["Munnar Tea Gardens", "Alleppey Houseboat", "Cochin Tour", "Kathakali Show"],
-    itinerary: [
-      { day: 1, title: "Arrival in Cochin", desc: "Pickup from airport. Transfer to Munnar. En route Cheeyappara Waterfalls." },
-      { day: 2, title: "Munnar Sightseeing", desc: "Visit Tea Museum, Mattupetty Dam, and Eravikulam National Park." },
-      { day: 3, title: "Thekkady", desc: "Drive to Thekkady. Spice plantation tour and Periyar Lake boating." },
-      { day: 4, title: "Alleppey Houseboat", desc: "Drive to Alleppey. Check-in to Houseboat. Cruise through backwaters." },
-      { day: 5, title: "Cochin Sightseeing", desc: "Chinese Fishing Nets, Jewish Synagogue, St. Francis Church." },
-      { day: 6, title: "Departure", desc: "Drop at Cochin Airport." }
-    ],
-    inclusions: ["AC Vehicle", "Accommodation", "Houseboat Stay with all meals", "Breakfast in hotels"],
+    inclusions: ["AC Vehicle", "Accommodation", "Houseboat Stay with meals", "Breakfast"],
     exclusions: ["Airfare", "Entry tickets", "Lunch & Dinner in hotels"]
   },
   {
@@ -254,17 +213,7 @@ const TOURS = [
     bestseller: false,
     interestedCount: 210,
     highlights: ["Key Monastery", "Chandratal Lake", "Kunzum Pass", "World's Highest Post Office"],
-    itinerary: [
-      { day: 1, title: "Shimla Transfer", desc: "Reach Shimla. Transfer to Narkanda. Acclimatization." },
-      { day: 2, title: "Narkanda to Kalpa", desc: "Drive through Kinnaur Valley. View Kinner Kailash peak." },
-      { day: 3, title: "Kalpa to Kaza", desc: "Enter Spiti Valley via Nako and Tabo. Visit Tabo Monastery." },
-      { day: 4, title: "Kaza Sightseeing", desc: "Key Monastery, Kibber, Chicham Bridge." },
-      { day: 5, title: "Highest Villages", desc: "Hikkim (Post Office), Komic (Highest village), Langza (Buddha Statue)." },
-      { day: 6, title: "Kaza to Kalpa", desc: "Return journey begins. Overnight in Kalpa." },
-      { day: 7, title: "Kalpa to Shimla", desc: "Drive back to Shimla." },
-      { day: 8, title: "Departure", desc: "Departure from Shimla." }
-    ],
-    inclusions: ["Tempo Traveller", "Homestays/Hotels", "Breakfast & Dinner", "Oxygen Cylinder backup"],
+    inclusions: ["Tempo Traveller", "Homestays", "Breakfast & Dinner", "Oxygen Cylinder"],
     exclusions: ["Lunch", "Monastery Entry Fees", "Personal Gear"]
   },
   {
@@ -282,12 +231,6 @@ const TOURS = [
     bestseller: false,
     interestedCount: 78,
     highlights: ["Jalori Pass", "Serolsar Lake", "Jibhi Waterfall", "Chehni Kothi"],
-    itinerary: [
-      { day: 1, title: "Delhi to Jibhi", desc: "Overnight journey from Delhi." },
-      { day: 2, title: "Jibhi Local", desc: "Arrival. Jibhi Waterfall and Mini Thailand." },
-      { day: 3, title: "Jalori Pass Trek", desc: "Drive to Jalori Pass. Trek to Serolsar Lake (5km)." },
-      { day: 4, title: "Departure", desc: "Visit Chehni Kothi. Evening departure to Delhi." }
-    ],
     inclusions: ["Transport", "Cottage Stay", "Meals (MAP)", "Guide"],
     exclusions: ["Lunch", "Personal Expenses"]
   },
@@ -305,13 +248,8 @@ const TOURS = [
     reviews: 450,
     bestseller: false,
     interestedCount: 500,
-    highlights: ["River Rafting (16km)", "Cliff Jumping", "Bonfire & Music", "Jungle Camping"],
-    itinerary: [
-      { day: 1, title: "Arrival & Camping", desc: "Check in to jungle camps. Lunch. Sports activities. Bonfire dinner." },
-      { day: 2, title: "Rafting", desc: "16km River Rafting with Cliff Jumping and Body Surfing. Cafe hopping in Tapovan." },
-      { day: 3, title: "Departure", desc: "Morning breakfast. Checkout." }
-    ],
-    inclusions: ["Camping", "All Meals (Veg/Non-Veg)", "Rafting Charges", "Bonfire"],
+    highlights: ["River Rafting", "Cliff Jumping", "Bonfire & Music", "Jungle Camping"],
+    inclusions: ["Camping", "All Meals", "Rafting Charges", "Bonfire"],
     exclusions: ["Transport to Rishikesh", "Alcohol"]
   },
   {
@@ -329,13 +267,6 @@ const TOURS = [
     bestseller: false,
     interestedCount: 134,
     highlights: ["Skiing Experience", "Joshimath Tour", "Nanda Devi View", "Cable Car Ride"],
-    itinerary: [
-      { day: 1, title: "Rishikesh to Joshimath", desc: "Scenic drive via Devprayag." },
-      { day: 2, title: "Auli Visit", desc: "Cable car ride. Skiing basics." },
-      { day: 3, title: "Skiing & Trekking", desc: "Gorson Bugyal Trek. More skiing." },
-      { day: 4, title: "Return to Rishikesh", desc: "Drive back. Overnight in Rishikesh." },
-      { day: 5, title: "Departure", desc: "Checkout." }
-    ],
     inclusions: ["Transport", "Stay", "Meals", "Skiing Equipment"],
     exclusions: ["Cable Car Ticket", "Personal Porter"]
   },
@@ -353,14 +284,7 @@ const TOURS = [
     reviews: 134,
     bestseller: false,
     interestedCount: 98,
-    highlights: ["City Palace", "Lake Pichola Boat Ride", "Jag Dish Temple", "Monsoon Palace"],
-    itinerary: [
-      { day: 1, title: "Arrival Udaipur", desc: "Pickup. Lake Pichola boat ride evening." },
-      { day: 2, title: "Udaipur Sightseeing", desc: "City Palace, Saheliyon ki Bari, Karni Mata Ropeway." },
-      { day: 3, title: "Mount Abu Transfer", desc: "Drive to Mt Abu. Nakki Lake sunset." },
-      { day: 4, title: "Dilwara Temples", desc: "Visit famous Jain temples. Guru Shikhar view." },
-      { day: 5, title: "Departure", desc: "Drop at Udaipur/Abu Road station." }
-    ],
+    highlights: ["City Palace", "Lake Pichola", "Jag Dish Temple", "Monsoon Palace"],
     inclusions: ["AC Car", "Hotels", "Breakfast"],
     exclusions: ["Entry Tickets", "Lunch/Dinner"]
   },
@@ -379,12 +303,6 @@ const TOURS = [
     bestseller: true,
     interestedCount: 180,
     highlights: ["Sam Sand Dunes", "Jeep Safari", "Jaisalmer Fort", "Gadisar Lake"],
-    itinerary: [
-      { day: 1, title: "Arrival", desc: "Check in. Visit Gadisar Lake evening." },
-      { day: 2, title: "Jaisalmer Fort", desc: "Golden Fort, Patwon Ki Haveli. Evening Sam Dunes." },
-      { day: 3, title: "Desert Safari", desc: "Jeep Safari, Camel Ride, Cultural Show." },
-      { day: 4, title: "Departure", desc: "Drop at Railway Station." }
-    ],
     inclusions: ["Stay (Hotel + Camp)", "Camel/Jeep Safari", "Breakfast & Dinner"],
     exclusions: ["Train Tickets", "Personal Expenses"]
   },
@@ -403,13 +321,6 @@ const TOURS = [
     bestseller: false,
     interestedCount: 45,
     highlights: ["Burj Khalifa", "Desert Safari BBQ", "Dubai Mall", "Marina Cruise"],
-    itinerary: [
-      { day: 1, title: "Dubai Arrival", desc: "Airport pickup. Dhow Cruise Dinner." },
-      { day: 2, title: "City Tour", desc: "Burj Khalifa 124th Floor, Dubai Mall." },
-      { day: 3, title: "Desert Safari", desc: "Dune Bashing, BBQ Dinner, Belly Dance." },
-      { day: 4, title: "Abu Dhabi Day Trip", desc: "Ferrari World, Grand Mosque." },
-      { day: 5, title: "Departure", desc: "Drop at Airport." }
-    ],
     inclusions: ["Visa", "4 Star Stay", "Transfers", "Tours"],
     exclusions: ["Flights", "Dirham Tax", "Tips"]
   },
@@ -427,15 +338,7 @@ const TOURS = [
     reviews: 89,
     bestseller: false,
     interestedCount: 112,
-    highlights: ["Phi Phi Island Tour", "Phuket Beaches", "Coral Island", "Bangkok City Tour"],
-    itinerary: [
-      { day: 1, title: "Phuket Arrival", desc: "Airport pickup. Check in. Fantasea Show." },
-      { day: 2, title: "Phi Phi Island", desc: "Big Boat tour with Lunch. Snorkeling." },
-      { day: 3, title: "Phuket City Tour", desc: "Big Buddha, Wat Chalong. Flight to Bangkok." },
-      { day: 4, title: "Bangkok", desc: "Coral Island tour with lunch." },
-      { day: 5, title: "City Temples", desc: "Golden Buddha, Marble Temple. Shopping." },
-      { day: 6, title: "Departure", desc: "Drop at Airport." }
-    ],
+    highlights: ["Phi Phi Island", "Phuket Beaches", "Coral Island", "Bangkok City Tour"],
     inclusions: ["Hotels", "Tours", "Transfers", "Breakfast"],
     exclusions: ["Flights", "Visa on Arrival", "National Park Fees"]
   },
@@ -454,15 +357,6 @@ const TOURS = [
     bestseller: false,
     interestedCount: 230,
     highlights: ["North Goa Beaches", "Fort Aguada", "Dudhsagar Trek", "Casino Night"],
-    itinerary: [
-      { day: 1, title: "Arrival", desc: "Pickup from Airport/Station. Check in to Villa/Hotel." },
-      { day: 2, title: "North Goa", desc: "Calangute, Baga, Fort Aguada." },
-      { day: 3, title: "South Goa", desc: "Old Goa Churches, Miramar Beach." },
-      { day: 4, title: "Dudhsagar", desc: "Jeep Safari to Dudhsagar Waterfalls." },
-      { day: 5, title: "Leisure", desc: "Free day for shopping or Casino." },
-      { day: 6, title: "Parties", desc: "Explore famous clubs of Goa." },
-      { day: 7, title: "Departure", desc: "Drop at Airport/Station." }
-    ],
     inclusions: ["Stay with Breakfast", "Scooty Rental Assistance", "Transfers"],
     exclusions: ["Flights/Train", "Lunch/Dinner", "Petrol", "Entry Fees"]
   },
@@ -480,16 +374,7 @@ const TOURS = [
     reviews: 42,
     bestseller: true,
     interestedCount: 65,
-    highlights: ["Double Decker Bridge", "Umngot River", "Mawlynnong Village", "Seven Sisters Falls"],
-    itinerary: [
-      { day: 1, title: "Guwahati Arrival", desc: "Pickup. Drive to Shillong. Umiam Lake stop." },
-      { day: 2, title: "Cherrapunji", desc: "Drive to Cherrapunji. Visit Falls. Caving." },
-      { day: 3, title: "Double Decker Trek", desc: "Trek to Nongriat Double Decker Living Root Bridge." },
-      { day: 4, title: "Mawlynnong & Dawki", desc: "Cleanest village. Crystal clear Umngot river boating." },
-      { day: 5, title: "Jowai", desc: "Krang Suri Waterfalls." },
-      { day: 6, title: "Shillong Local", desc: "Don Bosco Museum, Police Bazaar." },
-      { day: 7, title: "Departure", desc: "Drop at Guwahati Airport." }
-    ],
+    highlights: ["Double Decker Bridge", "Umngot River", "Mawlynnong", "Seven Sisters Falls"],
     inclusions: ["Transport", "Stay", "Breakfast", "Guide"],
     exclusions: ["Lunch/Dinner", "Entry Fees"]
   }
@@ -499,86 +384,26 @@ const BLOG_POSTS = [
   {
     id: 1,
     title: "Edition 24: The Secret Valleys of Himachal",
-    excerpt: "In this week's edition, we explore the untouched Tirthan Valley, discuss sustainable trekking practices, and share a traveler's photo essay from Spiti.",
-    author: "Humsafar Team",
-    date: "Oct 15, 2024",
+    excerpt: "In this week's edition, we explore the untouched Tirthan Valley, discuss sustainable trekking practices.",
     category: "Weekly Newsletter",
     image: "https://www.captureatrip.com/_next/image?url=https%3A%2F%2Fd1zvcmhypeawxj.cloudfront.net%2Flocation%2FHimachal%20Pradesh%2Fblogs%2Fvalleys-in-himachal-pradesh-0f17b32df1-ur5kwb-webp-e682fd219c-1752056379292.webp&w=3840&q=75",
-    tags: ["Himachal", "Trekking", "Sustainability"]
+    date: "Oct 15, 2024"
   },
   {
     id: 2,
-    title: "Edition 23: Backpacking Vietnam on a Budget",
-    excerpt: "A complete breakdown of costs for a 10-day Vietnam trip. Plus, top 5 hostels in Hanoi and a guide to the Ha Giang Loop.",
-    author: "Rahul Verma",
-    date: "Oct 08, 2024",
+    title: "Edition 23: Backpacking Vietnam",
+    excerpt: "A complete breakdown of costs for a 10-day Vietnam trip. Plus, top 5 hostels in Hanoi.",
     category: "International Guide",
     image: "https://images.unsplash.com/photo-1504457047772-27faf1c00561?q=80&w=800&auto=format&fit=crop",
-    tags: ["Vietnam", "Budget Travel", "Food"]
+    date: "Oct 08, 2024"
   },
   {
     id: 3,
     title: "Edition 22: The Rise of Workations",
-    excerpt: "Why digital nomads are flocking to Goa and Manali. Best cafes with WiFi, co-living spaces, and how to balance work with wanderlust.",
-    author: "Aditi Sharma",
-    date: "Oct 01, 2024",
+    excerpt: "Why digital nomads are flocking to Goa and Manali. Best cafes with WiFi.",
     category: "Lifestyle",
     image: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?q=80&w=800&auto=format&fit=crop",
-    tags: ["Workation", "Digital Nomad", "Goa"]
-  },
-  {
-    id: 4,
-    title: "Edition 21: Chasing Monsoons in Meghalaya",
-    excerpt: "Why you should visit the wettest place on earth during the rains. Living root bridges, waterfalls, and the warm Khasi hospitality.",
-    author: "Humsafar Team",
-    date: "Sep 24, 2024",
-    category: "Weekly Newsletter",
-    image: "https://www.nativeplanet.com/img/2014/06/27-new1-meghalaya-cover.jpg",
-    tags: ["Meghalaya", "North East", "Monsoon"]
-  },
-  {
-    id: 5,
-    title: "Edition 20: 5 Weekend Getaways from Delhi",
-    excerpt: "Escape the city chaos. From Landour's colonial charm to the wildlife of Jim Corbett, here are our top picks for the long weekend.",
-    author: "Humsafar Team",
-    date: "Sep 17, 2024",
-    category: "Weekly Newsletter",
-    image: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=800&auto=format&fit=crop",
-    tags: ["Weekend Trip", "Delhi", "Uttarakhand"]
-  }
-];
-
-// --- TEAM DATA ---
-const TEAM_MEMBERS = [
-  {
-    name: "Dhananjay Parashar",
-    role: "Co-Founder",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop",
-    bio: "Passionate about exploring the unseen paths of the Himalayas. Believes in sustainable tourism and community building.",
-    contact: {
-      email: "dhananjay@humsafar.com",
-      phone: "+91 98765 43210"
-    }
-  },
-  {
-    name: "Mohit Yogi",
-    role: "Co-Founder",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
-    bio: "An avid trekker and photographer. Mohit ensures every trip is picture-perfect and logistically flawless.",
-    contact: {
-      email: "mohit@humsafar.com",
-      phone: "+91 98765 43211"
-    }
-  },
-  {
-    name: "Abhay Tank",
-    role: "Executive Manager",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&auto=format&fit=crop",
-    bio: "The operational backbone of Humsafar. Abhay manages the chaos so you can enjoy the calm.",
-    contact: {
-      email: "abhay@humsafar.com",
-      phone: "+91 98765 43212"
-    }
+    date: "Oct 01, 2024"
   }
 ];
 
@@ -587,18 +412,12 @@ const TEAM_MEMBERS = [
 const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, searchTerm, setSearchTerm }) => {
   const menuItems = [
     { id: 'home', label: 'Explore' },
-    {
-      id: 'upcoming',
-      label: 'Upcoming Tours',
-      action: () => onNavigate('upcoming')
-    },
-    { id: 'custom', label: 'Custom Trips' }, // Added Custom Option
-    // Exclusive Tab Removed
+    { id: 'upcoming', label: 'Upcoming Tours', action: () => onNavigate('upcoming') },
+    { id: 'custom', label: 'Custom Trips' },
     { id: 'blog', label: 'Blog' },
-    // { id: 'about', label: 'About Us' }, // Commented out About Us
   ];
 
-  const hasDarkHero = ['home', 'trip-detail'].includes(currentPage); // Transparent header for detail page too
+  const hasDarkHero = ['home', 'trip-detail'].includes(currentPage);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -609,8 +428,9 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
 
   return (
       <nav className={`fixed w-full z-50 transition-all duration-300 border-b border-transparent ${isScrolled ? 'bg-white/95 backdrop-blur-md py-4 border-gray-100 shadow-sm' : hasDarkHero ? 'bg-transparent py-6' : 'bg-white py-4 border-gray-100 shadow-sm'}`}>
-        <div className="container mx-auto px-8 lg:px-24 xl:px-32 flex justify-between items-center gap-4">
-          {/* Brand Logo */}
+        {/* RESPONSIVE: px-4 on mobile, px-8/24 on desktop */}
+        <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32 flex justify-between items-center gap-4">
+
           <div
               onClick={() => onNavigate('home')}
               className={`flex flex-col items-start leading-none group cursor-pointer shrink-0 ${isScrolled || !hasDarkHero ? 'text-emerald-950' : 'text-white'}`}
@@ -619,7 +439,6 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
             <span className="font-sans text-[0.65rem] font-bold tracking-[0.2em] uppercase opacity-80 group-hover:tracking-[0.3em] transition-all duration-300">Community</span>
           </div>
 
-          {/* Search Bar */}
           <div className={`hidden md:flex flex-1 max-w-md mx-4 transition-all duration-500 transform ${isScrolled ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
             <form onSubmit={handleSearchSubmit} className="relative w-full group">
               <input
@@ -635,8 +454,7 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
             </form>
           </div>
 
-          {/* Desktop Menu */}
-          <div className={`hidden md:flex items-center space-x-6 lg:space-x-8 text-sm font-semibold tracking-wide shrink-0 ${isScrolled || !hasDarkHero ? 'text-gray-600' : 'text-white/90'}`}>
+          <div className={`hidden md:flex items-center space-x-4 lg:space-x-8 text-sm font-semibold tracking-wide shrink-0 ${isScrolled || !hasDarkHero ? 'text-gray-600' : 'text-white/90'}`}>
             {menuItems.map((item) => (
                 <button
                     key={item.id}
@@ -651,7 +469,6 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
                 >
                   {item.label}
                   {item.id === 'custom' && <span className="absolute -top-3 -right-3 bg-orange-500 text-white text-[8px] px-1.5 py-0.5 rounded-full uppercase">New</span>}
-                  <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-500 transition-all group-hover:w-full ${currentPage === item.id ? 'w-full' : ''}`}></span>
                 </button>
             ))}
 
@@ -665,13 +482,11 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
             </a>
           </div>
 
-          {/* Mobile Toggle */}
           <button onClick={toggleMenu} className={`md:hidden p-2 ${isScrolled || !hasDarkHero ? 'text-emerald-950' : 'text-white'}`}>
             {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
 
-        {/* Mobile Menu Overlay */}
         {isMenuOpen && (
             <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-2xl p-6 flex flex-col space-y-6 text-gray-800 animate-in slide-in-from-top-5 border-t border-gray-100 h-screen overflow-y-auto pb-32">
               {menuItems.map(item => (
@@ -701,7 +516,7 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
 };
 
 const Hero = ({ searchTerm, setSearchTerm, onSearch }) => (
-    <section id="home" className="relative h-[92vh] flex items-center justify-center text-center text-white bg-emerald-950 overflow-hidden">
+    <section id="home" className="relative min-h-[92vh] flex items-center justify-center text-center text-white bg-emerald-950 overflow-hidden pb-12 md:pb-0">
       <div className="absolute inset-0 opacity-80">
         <img
             src="https://www.snowvalleyresorts.com/wp-content/uploads/featurd-image-min-1240x696.webp"
@@ -712,29 +527,34 @@ const Hero = ({ searchTerm, setSearchTerm, onSearch }) => (
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"></div>
       <div className="absolute inset-0 bg-emerald-900/20 mix-blend-multiply"></div>
 
-      <div className="relative z-10 container mx-auto px-8 lg:px-24 xl:px-32 pt-20">
+      {/* RESPONSIVE: Padding adjusted */}
+      <div className="relative z-10 container mx-auto px-4 md:px-8 lg:px-24 xl:px-32 pt-20">
         <div className="inline-block mb-4 px-4 py-1.5 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-xs font-bold uppercase tracking-[0.2em]">
           Explore the Unseen
         </div>
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold mb-8 leading-tight tracking-tight drop-shadow-lg">
+        {/* RESPONSIVE: Text sizes reduced for mobile */}
+        <h1 className="text-4xl md:text-7xl lg:text-8xl font-serif font-bold mb-8 leading-tight tracking-tight drop-shadow-lg">
           Find Your <span className="italic text-emerald-300">Wild.</span>
         </h1>
-        <p className="text-lg md:text-xl mb-12 font-medium max-w-2xl mx-auto text-gray-100 leading-relaxed drop-shadow-md">
+        <p className="text-base md:text-xl mb-12 font-medium max-w-2xl mx-auto text-gray-100 leading-relaxed drop-shadow-md px-4">
           Curated expeditions for the modern explorer. Join the community that travels deeper.
         </p>
 
-        <form onSubmit={onSearch} className="max-w-4xl mx-auto bg-white rounded-full p-2 pl-6 flex items-center shadow-2xl transform transition-all hover:scale-[1.01]">
-          <Search className="text-gray-400 w-5 h-5 mr-3" />
-          <input
-              type="text"
-              placeholder="Where is your soul calling? (e.g. Spiti, Kerala)"
-              className="flex-1 py-4 bg-transparent text-gray-800 placeholder-gray-400 outline-none text-lg font-medium"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        {/* RESPONSIVE FIX: Form changes to flex-col on mobile to stack input and button */}
+        <form onSubmit={onSearch} className="max-w-4xl mx-auto bg-white rounded-3xl md:rounded-full p-2 pl-4 md:pl-6 flex flex-col md:flex-row items-center shadow-2xl transform transition-all hover:scale-[1.01] gap-2 md:gap-0">
+          <div className="flex items-center w-full md:w-auto flex-1">
+            <Search className="text-gray-400 w-5 h-5 mr-3 shrink-0" />
+            <input
+                type="text"
+                placeholder="Where is your soul calling?"
+                className="flex-1 py-3 md:py-4 bg-transparent text-gray-800 placeholder-gray-400 outline-none text-base md:text-lg font-medium w-full"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
           <button
               type="submit"
-              className="bg-emerald-900 hover:bg-emerald-800 text-white px-8 py-4 rounded-full font-bold transition-all shadow-md hover:shadow-lg flex items-center gap-2"
+              className="w-full md:w-auto bg-emerald-900 hover:bg-emerald-800 text-white px-8 py-3 md:py-4 rounded-xl md:rounded-full font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
           >
             Search <ArrowRight className="w-4 h-4" />
           </button>
@@ -753,27 +573,28 @@ const FilterBar = ({ selectedRegion, setSelectedRegion, selectedType, setSelecte
     { id: 'other', label: 'Rest of India' },
   ];
 
-  // Added Custom Option
   const types = [
     { id: 'all', label: 'All Types' },
     { id: 'group', label: 'Group' },
     { id: 'corporate', label: 'Corporate' },
-    { id: 'custom', label: 'Custom / Private' },
+    { id: 'custom', label: 'Custom' },
     { id: 'educational', label: 'Educational' },
   ];
 
   return (
-      <div className="container mx-auto px-8 lg:px-24 xl:px-32 -mt-20 relative z-30">
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100/50 backdrop-blur-sm">
+      // RESPONSIVE: px-4 and margin adjustment (-mt-10 on mobile vs -mt-20 on desktop)
+      <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32 -mt-10 md:-mt-20 relative z-30">
+        <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-100/50 backdrop-blur-sm">
           <div className="flex flex-col lg:flex-row gap-8 justify-between items-start">
-            <div className="w-full">
+            <div className="w-full overflow-hidden">
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Destinations</h3>
-              <div className="flex flex-wrap gap-3">
+              {/* RESPONSIVE: Scrollable on very small screens if needed, otherwise wraps */}
+              <div className="flex flex-wrap gap-2 md:gap-3">
                 {regions.map(r => (
                     <button
                         key={r.id}
                         onClick={() => setSelectedRegion(r.id)}
-                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all border ${selectedRegion === r.id ? 'bg-emerald-900 text-white border-emerald-900 shadow-lg' : 'bg-white text-gray-600 border-gray-200 hover:border-emerald-300 hover:text-emerald-700'}`}
+                        className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all border ${selectedRegion === r.id ? 'bg-emerald-900 text-white border-emerald-900 shadow-lg' : 'bg-white text-gray-600 border-gray-200 hover:border-emerald-300 hover:text-emerald-700'}`}
                     >
                       {r.label}
                     </button>
@@ -781,14 +602,14 @@ const FilterBar = ({ selectedRegion, setSelectedRegion, selectedType, setSelecte
               </div>
             </div>
 
-            <div className="w-full lg:w-auto min-w-[300px]">
+            <div className="w-full lg:w-auto lg:min-w-[300px]">
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Experience Type</h3>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2 md:gap-3">
                 {types.map(t => (
                     <button
                         key={t.id}
                         onClick={() => setSelectedType(t.id)}
-                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all border ${selectedType === t.id ? 'bg-orange-500 text-white border-orange-500 shadow-lg' : 'bg-white text-gray-600 border-gray-200 hover:border-orange-300 hover:text-orange-600'}`}
+                        className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all border ${selectedType === t.id ? 'bg-orange-500 text-white border-orange-500 shadow-lg' : 'bg-white text-gray-600 border-gray-200 hover:border-orange-300 hover:text-orange-600'}`}
                     >
                       {t.label}
                     </button>
@@ -801,12 +622,15 @@ const FilterBar = ({ selectedRegion, setSelectedRegion, selectedType, setSelecte
   );
 };
 
+
+
 const TourCard = ({ tour, onViewDetails }) => {
   return (
       <div
           onClick={() => onViewDetails(tour.id)}
           className="group bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full relative cursor-pointer"
       >
+        {/* IMAGE SECTION */}
         <div className="relative aspect-[4/3] w-full overflow-hidden">
           <img
               src={tour.image}
@@ -814,16 +638,13 @@ const TourCard = ({ tour, onViewDetails }) => {
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
-          <div className="absolute top-3 left-3 flex gap-2">
-            {tour.bestseller && (
+          {tour.bestseller && (
+              <div className="absolute top-3 left-3">
                 <span className="bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded shadow-sm flex items-center uppercase tracking-wide">
-              Bestseller
-            </span>
-            )}
-          </div>
-          <div className="absolute top-3 right-3 p-2 bg-white/20 backdrop-blur-md rounded-full hover:bg-white transition-colors group/heart">
-            <Heart className="w-4 h-4 text-white group-hover/heart:text-red-500 transition-colors" />
-          </div>
+                  Bestseller
+                </span>
+              </div>
+          )}
           <div className="absolute bottom-3 left-3 text-white">
             <div className="flex items-center text-xs font-medium">
               <MapPin className="w-3 h-3 mr-1" /> {tour.location}
@@ -831,7 +652,10 @@ const TourCard = ({ tour, onViewDetails }) => {
           </div>
         </div>
 
-        <div className="p-5 flex flex-col flex-1">
+        {/* CONTENT SECTION */}
+        <div className="p-4 md:p-5 flex flex-col flex-1">
+
+          {/* RATING & DURATION */}
           <div className="flex justify-between items-center mb-3">
             <div className="flex items-center text-emerald-700 bg-emerald-50 px-2 py-1 rounded text-xs font-bold">
               <Clock className="w-3 h-3 mr-1" /> {tour.duration}
@@ -843,28 +667,28 @@ const TourCard = ({ tour, onViewDetails }) => {
             </div>
           </div>
 
-          <h3 className="text-lg font-sans font-bold text-gray-900 leading-snug mb-2 group-hover:text-emerald-700 transition-colors line-clamp-2">
+          {/* TITLE */}
+          <h3 className="text-base md:text-lg font-sans font-bold text-gray-900 leading-snug mb-3 group-hover:text-emerald-700 transition-colors line-clamp-2">
             {tour.title}
           </h3>
 
-          <div className="flex items-center text-xs text-gray-500 mb-3">
-            <Users className="w-3 h-3 mr-1 text-gray-400" />
-            <span className="font-medium text-emerald-600">{tour.interestedCount || 40}+ people interested</span>
-          </div>
-
+          {/* RESTORED: HIGHLIGHT TAGS */}
           <div className="mb-4">
             <div className="flex flex-wrap gap-2">
               {tour.highlights && tour.highlights.slice(0, 3).map((h, i) => (
-                  <span key={i} className="text-[10px] text-gray-600 bg-gray-100 px-2 py-1 rounded-md border border-gray-200">
+                  <span key={i} className="text-[10px] text-gray-600 bg-gray-100 px-2 py-1 rounded-md border border-gray-200 whitespace-nowrap">
                         {h}
                     </span>
               ))}
               {tour.highlights && tour.highlights.length > 3 && (
-                  <span className="text-[10px] text-emerald-600 font-medium px-1 py-1">+More</span>
+                  <span className="text-[10px] text-emerald-600 font-bold px-1 py-1 flex items-center">
+                    +{tour.highlights.length - 3} More
+                  </span>
               )}
             </div>
           </div>
 
+          {/* PRICE & BUTTON SECTION */}
           <div className="mt-auto pt-4 border-t border-dashed border-gray-200 flex items-end justify-between">
             <div>
               <div className="flex items-center gap-2">
@@ -872,12 +696,12 @@ const TourCard = ({ tour, onViewDetails }) => {
                 <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1 rounded">SAVE 25%</span>
               </div>
               <div className="flex items-baseline gap-1">
-                <p className="text-xl font-bold text-gray-900">₹{tour.price.toLocaleString()}</p>
+                <p className="text-lg md:text-xl font-bold text-gray-900">₹{tour.price.toLocaleString()}</p>
                 <p className="text-xs text-gray-500 font-medium">/ person</p>
               </div>
             </div>
-            <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wide transition-all shadow-md hover:shadow-lg">
-              View Deal
+            <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-lg font-bold text-xs uppercase tracking-wide transition-all shadow-md">
+              View
             </button>
           </div>
         </div>
@@ -885,7 +709,6 @@ const TourCard = ({ tour, onViewDetails }) => {
   );
 };
 
-// --- RESTORED: InquiryForms Component ---
 const InquiryForms = () => {
   const [activeTab, setActiveTab] = useState('retail');
 
@@ -898,82 +721,70 @@ const InquiryForms = () => {
   };
 
   return (
-      <section id="forms" className="py-24 bg-white relative overflow-hidden">
+      <section id="forms" className="py-12 md:py-24 bg-white relative overflow-hidden">
         <div className="absolute inset-0 bg-scribble pointer-events-none opacity-50"></div>
-        <div className="absolute top-20 right-0 w-96 h-96 bg-emerald-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
-        <div className="absolute top-20 left-0 w-96 h-96 bg-purple-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
-
-        <div className="container mx-auto px-4 lg:px-12 relative z-10">
+        <div className="container mx-auto px-4 md:px-8 lg:px-12 relative z-10">
           <div className="max-w-7xl mx-auto bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-gray-100">
 
-            <div className="md:w-4/12 bg-emerald-900 p-12 text-white flex flex-col justify-between relative overflow-hidden">
-              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
-              <div className="relative z-10 space-y-12">
+            <div className="md:w-4/12 bg-emerald-900 p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden">
+              <div className="relative z-10 space-y-8 md:space-y-12">
                 <div>
-                  <h3 className="text-4xl font-serif font-bold mb-4">Let's Plan Your<br/>Next Escape.</h3>
-                  <p className="text-emerald-200 text-lg leading-relaxed">Whether it's a solo soul-search or a corporate retreat, we craft journeys that linger in your memory.</p>
+                  <h3 className="text-3xl md:text-4xl font-serif font-bold mb-4">Let's Plan Your<br/>Next Escape.</h3>
+                  <p className="text-emerald-200 text-sm md:text-lg leading-relaxed">Whether it's a solo soul-search or a corporate retreat, we craft journeys that linger in your memory.</p>
                 </div>
-                <div className="space-y-8">
+                <div className="space-y-6 md:space-y-8">
+                  {/* Contact details remain same */}
                   <div className="flex items-center group">
-                    <div className="bg-emerald-800/50 w-12 h-12 rounded-xl flex items-center justify-center mr-5 group-hover:bg-emerald-700 transition-colors border border-emerald-700/30">
+                    <div className="bg-emerald-800/50 w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mr-5 border border-emerald-700/30">
                       <Phone className="w-5 h-5 text-emerald-300" />
                     </div>
                     <div>
                       <p className="text-[10px] text-emerald-400 uppercase tracking-widest font-bold mb-1">Talk to an Expert</p>
-                      <p className="font-medium text-lg tracking-wide">+91 62684 96389</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center group">
-                    <div className="bg-emerald-800/50 w-12 h-12 rounded-xl flex items-center justify-center mr-5 group-hover:bg-emerald-700 transition-colors border border-emerald-700/30">
-                      <Mail className="w-5 h-5 text-emerald-300" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-emerald-400 uppercase tracking-widest font-bold mb-1">Write to Us</p>
-                      <p className="font-medium text-lg tracking-wide">hello@humsafar.com</p>
+                      <p className="font-medium text-base md:text-lg tracking-wide">+91 62684 96389</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="md:w-8/12 p-12 lg:p-16 bg-gray-50/30">
-              <div className="flex space-x-8 mb-10 border-b-2 border-gray-100">
+            {/* RESPONSIVE: Padding reduced on mobile */}
+            <div className="md:w-8/12 p-6 md:p-12 lg:p-16 bg-gray-50/30">
+              <div className="flex space-x-6 md:space-x-8 mb-8 md:mb-10 border-b-2 border-gray-100 overflow-x-auto">
                 <button
                     onClick={() => setActiveTab('retail')}
-                    className={`pb-4 font-bold text-sm uppercase tracking-widest transition-all relative px-2 ${activeTab === 'retail' ? 'text-emerald-900 border-b-2 border-emerald-900 -mb-[2px]' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`pb-4 font-bold text-xs md:text-sm uppercase tracking-widest transition-all whitespace-nowrap px-2 ${activeTab === 'retail' ? 'text-emerald-900 border-b-2 border-emerald-900 -mb-[2px]' : 'text-gray-400'}`}
                 >
                   Plan A Trip
                 </button>
                 <button
                     onClick={() => setActiveTab('b2b')}
-                    className={`pb-4 font-bold text-sm uppercase tracking-widest transition-all relative px-2 ${activeTab === 'b2b' ? 'text-emerald-900 border-b-2 border-emerald-900 -mb-[2px]' : 'text-gray-400 hover:text-gray-600'}`}
+                    className={`pb-4 font-bold text-xs md:text-sm uppercase tracking-widest transition-all whitespace-nowrap px-2 ${activeTab === 'b2b' ? 'text-emerald-900 border-b-2 border-emerald-900 -mb-[2px]' : 'text-gray-400'}`}
                 >
                   Partner With Us
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-3 group">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Full Name</label>
-                    <input name="name" required type="text" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. John Doe" />
+              <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                  <div className="space-y-2 md:space-y-3">
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Full Name</label>
+                    <input name="name" required type="text" className="w-full px-0 py-2 md:py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none font-medium" placeholder="e.g. John Doe" />
                   </div>
-                  <div className="space-y-3 group">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Phone Number</label>
-                    <input name="phone" required type="tel" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. +91 98765..." />
+                  <div className="space-y-2 md:space-y-3">
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Phone Number</label>
+                    <input name="phone" required type="tel" className="w-full px-0 py-2 md:py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none font-medium" placeholder="e.g. +91 98765..." />
                   </div>
                 </div>
-                <div className="space-y-3 group">
-                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Destination Interest</label>
-                  <input name="interest" required type="text" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. Spiti Valley, Kerala..." />
+                <div className="space-y-2 md:space-y-3">
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Destination Interest</label>
+                  <input name="interest" required type="text" className="w-full px-0 py-2 md:py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none font-medium" placeholder="e.g. Spiti Valley, Kerala..." />
                 </div>
-                <div className="space-y-3 group">
-                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Tell us more</label>
-                  <textarea name="message" rows="3" className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none transition-all text-gray-800 placeholder-gray-400 resize-none" placeholder="Group size, specific requirements..."></textarea>
+                <div className="space-y-2 md:space-y-3">
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Tell us more</label>
+                  <textarea name="message" rows="3" className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:border-emerald-600 outline-none resize-none" placeholder="Group size, etc..."></textarea>
                 </div>
                 <div className="pt-4 flex items-center justify-between">
-                  <p className="text-xs text-gray-400 hidden md:block">We usually respond within 2 hours.</p>
-                  <button type="submit" className="bg-emerald-900 text-white font-bold py-4 px-10 rounded-xl hover:bg-emerald-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 flex items-center gap-3 w-full md:w-auto justify-center">
+                  <button type="submit" className="bg-emerald-900 text-white font-bold py-4 px-10 rounded-xl hover:bg-emerald-800 transition-all w-full md:w-auto flex items-center justify-center gap-3">
                     Send Inquiry <ArrowRight className="w-5 h-5" />
                   </button>
                 </div>
@@ -985,17 +796,17 @@ const InquiryForms = () => {
   );
 };
 
-// --- RESTORED: Footer ---
 const Footer = ({ onNavigate }) => (
-    <footer className="bg-gray-950 text-gray-400 py-20 border-t border-gray-900">
-      <div className="container mx-auto px-8 lg:px-24 xl:px-32">
+    <footer className="bg-gray-950 text-gray-400 py-12 md:py-20 border-t border-gray-900">
+      {/* RESPONSIVE: px-4 on mobile */}
+      <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-20 mb-16">
           <div className="lg:col-span-1">
             <div onClick={() => onNavigate('home')} className="flex flex-col items-start leading-none mb-6 text-white cursor-pointer">
               <span className="font-serif font-black text-2xl tracking-tight">Humsafar</span>
               <span className="font-sans text-[0.65rem] font-bold tracking-[0.2em] uppercase opacity-60">Community</span>
             </div>
-            <p className="text-sm leading-relaxed mb-8 text-gray-500">Building a community of travelers who seek stories, adventures, and meaningful connections across India and the world.</p>
+            <p className="text-sm leading-relaxed mb-8 text-gray-500">Building a community of travelers who seek stories, adventures, and meaningful connections.</p>
             <div className="flex space-x-4">
               <a href="#" className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center hover:bg-emerald-900 hover:text-white transition-all"><Instagram className="w-5 h-5" /></a>
               <a href="#" className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all"><Facebook className="w-5 h-5" /></a>
@@ -1006,82 +817,72 @@ const Footer = ({ onNavigate }) => (
               <h4 className="text-white font-bold mb-6 tracking-widest uppercase text-xs">Destinations</h4>
               <ul className="space-y-4 text-sm font-medium">
                 {['Himachal Pradesh', 'Uttarakhand', 'Rajasthan', 'International'].map(item => (
-                    <li key={item}><button onClick={() => onNavigate('home')} className="hover:text-emerald-400 transition-colors">{item}</button></li>
+                    <li key={item}><button onClick={() => onNavigate('home')} className="hover:text-emerald-400 transition-colors text-left">{item}</button></li>
                 ))}
               </ul>
             </div>
             <div>
               <h4 className="text-white font-bold mb-6 tracking-widest uppercase text-xs">Company</h4>
               <ul className="space-y-4 text-sm font-medium">
-                {/* Commented out About Us links
-                <li><button onClick={() => onNavigate('about')} className="hover:text-emerald-400 transition-colors">About Us</button></li>
-                */}
                 <li><button onClick={() => onNavigate('custom')} className="hover:text-emerald-400 transition-colors">Custom Trips</button></li>
-                {/* <li><button onClick={() => onNavigate('about')} className="hover:text-emerald-400 transition-colors">Contact</button></li> */}
               </ul>
             </div>
           </div>
           <div>
             <h4 className="text-white font-bold mb-6 tracking-widest uppercase text-xs">Newsletter</h4>
-            <p className="text-xs mb-6 text-gray-500">Join our newsletter for exclusive deals and travel stories.</p>
             <div className="flex flex-col gap-3">
               <input type="email" placeholder="Your email address" className="bg-gray-900 text-white px-5 py-3 rounded-lg outline-none w-full text-sm border border-gray-800 focus:border-emerald-600 transition" />
               <button className="bg-emerald-900 px-5 py-3 rounded-lg hover:bg-emerald-800 transition text-white font-bold text-sm uppercase tracking-wide">Subscribe</button>
             </div>
           </div>
         </div>
-        <div className="pt-8 border-t border-gray-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-600">
-          <p>© {new Date().getFullYear()} Humsafar Community. All rights reserved.</p>
+        <div className="pt-8 border-t border-gray-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-600 text-center md:text-left">
+          <p>© {new Date().getFullYear()} Humsafar Tours and Travels. All rights reserved.</p>
           <p className="flex items-center">Made with <Heart className="w-3 h-3 inline text-emerald-700 mx-1 fill-current" /> in India</p>
         </div>
       </div>
     </footer>
 );
 
-// --- NEW TRIP DETAIL PAGE ---
 const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
   const tour = TOURS.find(t => t.id === tourId) || TOURS[0];
   const upcomingSaturdays = useMemo(() => getNextSaturdays(5), []);
   const [activeDate, setActiveDate] = useState(upcomingSaturdays[0]);
   const [expandedDay, setExpandedDay] = useState(0);
-  const [travelerCount, setTravelerCount] = useState(1); // New State for traveler count
-  const [sharingType, setSharingType] = useState('Quad'); // NEW: Sharing Type State
+  const [travelerCount, setTravelerCount] = useState(1);
+  const [sharingType, setSharingType] = useState('Quad');
 
   const sharingOptions = [
-    { type: 'Quad', label: 'Quad Sharing', surCharge: 0 },
-    { type: 'Triple', label: 'Triple Sharing', surCharge: 1500 },
-    { type: 'Double', label: 'Double Sharing', surCharge: 3000 },
+    { type: 'Quad', label: 'Quad', surCharge: 0 },
+    { type: 'Triple', label: 'Triple', surCharge: 1500 },
+    { type: 'Double', label: 'Double', surCharge: 3000 },
   ];
 
-  // Dynamic Price Calculation
   const selectedOption = sharingOptions.find(o => o.type === sharingType);
   const currentPricePerPerson = tour.price + selectedOption.surCharge;
   const totalPrice = currentPricePerPerson * travelerCount;
 
-  // Dynamic WhatsApp Message with All Details
   const whatsappMsg = `Hi Humsafar Team, I am interested in the *${tour.title}*.%0A%0A🗓 *Trip Date:* ${activeDate.toDateString()}%0A🏨 *Sharing:* ${sharingType} Sharing%0A👥 *People:* ${travelerCount}%0A💰 *Total Approx Price:* ₹${totalPrice.toLocaleString()}%0A⏳ *Duration:* ${tour.duration}%0A%0APlease share more details.`;
   const whatsappLink = `https://wa.me/${CONTACT_NUMBER}?text=${whatsappMsg}`;
 
-  // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0,0);
   }, [tourId]);
 
   return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 pb-20 md:pb-0">
         {/* Sticky Mobile Bottom Bar */}
         <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 z-50 flex items-center justify-between shadow-[0_-5px_20px_rgba(0,0,0,0.1)]">
           <div>
             <p className="text-xs text-gray-400 line-through">₹{tour.oldPrice}</p>
             <p className="text-xl font-bold text-gray-900">₹{totalPrice.toLocaleString()}</p>
           </div>
-          <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="bg-emerald-900 text-white px-8 py-3 rounded-xl font-bold uppercase tracking-widest text-xs flex items-center gap-2">
-            Book Now <MessageCircle className="w-4 h-4" />
+          <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="bg-emerald-900 text-white px-6 py-3 rounded-xl font-bold uppercase tracking-widest text-xs flex items-center gap-2">
+            Book <MessageCircle className="w-4 h-4" />
           </a>
         </div>
 
-        {/* Hero Section */}
-        <div className="relative h-[60vh] lg:h-[70vh]">
+        <div className="relative h-[50vh] lg:h-[70vh]">
           <img src={tour.image} alt={tour.title} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
           <div className="absolute top-24 left-4 lg:left-24 z-20">
@@ -1089,35 +890,34 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
               <ArrowRight className="w-4 h-4 rotate-180" /> Back
             </button>
           </div>
-          <div className="absolute bottom-0 left-0 w-full p-8 lg:p-24 pb-12 text-white">
-            <div className="container mx-auto px-4 lg:px-8 xl:px-8">
+          {/* RESPONSIVE: Padding adjusted */}
+          <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 lg:p-24 pb-8 md:pb-12 text-white">
+            <div className="container mx-auto px-2 md:px-8">
               <div className="flex gap-2 mb-4">
-                <span className="bg-emerald-600 text-white px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider">{tour.region}</span>
-                <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider flex items-center gap-1"><Clock className="w-3 h-3"/> {tour.duration}</span>
+                <span className="bg-emerald-600 text-white px-3 py-1 rounded-md text-[10px] md:text-xs font-bold uppercase tracking-wider">{tour.region}</span>
+                <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-md text-[10px] md:text-xs font-bold uppercase tracking-wider flex items-center gap-1"><Clock className="w-3 h-3"/> {tour.duration}</span>
               </div>
-              <h1 className="text-4xl md:text-6xl font-serif font-bold mb-4 leading-tight">{tour.title}</h1>
-              <div className="flex flex-wrap items-center gap-6 text-sm font-medium text-emerald-100">
+              <h1 className="text-3xl md:text-6xl font-serif font-bold mb-4 leading-tight">{tour.title}</h1>
+              <div className="flex flex-wrap items-center gap-4 md:gap-6 text-xs md:text-sm font-medium text-emerald-100">
                 <span className="flex items-center gap-1"><MapPin className="w-4 h-4"/> {tour.location}</span>
-                <span className="flex items-center gap-1"><Star className="w-4 h-4 text-orange-400 fill-current"/> {tour.rating} ({tour.reviews} Reviews)</span>
-                <span className="flex items-center gap-1"><Users className="w-4 h-4"/> {tour.interestedCount}+ Interested</span>
+                <span className="flex items-center gap-1"><Star className="w-4 h-4 text-orange-400 fill-current"/> {tour.rating} ({tour.reviews})</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Adjusted Padding to match Home Page */}
-        <div className="container mx-auto px-8 lg:px-24 xl:px-32 py-12 grid grid-cols-1 lg:grid-cols-3 gap-12 pb-24">
-          {/* Left Content: Itinerary & Details */}
-          <div className="lg:col-span-2 space-y-12">
+        {/* RESPONSIVE: Container padding */}
+        <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32 py-8 md:py-12 grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 pb-24">
+          <div className="lg:col-span-2 space-y-8 md:space-y-12">
 
             {/* Highlights */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-              <h2 className="text-2xl font-serif font-bold text-gray-900 mb-6">Trip Highlights</h2>
+            <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
+              <h2 className="text-xl md:text-2xl font-serif font-bold text-gray-900 mb-6">Trip Highlights</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {tour.highlights.map((h, i) => (
                     <div key={i} className="flex items-start gap-3">
                       <div className="bg-emerald-100 p-1.5 rounded-full mt-0.5"><Check className="w-3 h-3 text-emerald-700" /></div>
-                      <span className="text-gray-700 font-medium">{h}</span>
+                      <span className="text-gray-700 font-medium text-sm md:text-base">{h}</span>
                     </div>
                 ))}
               </div>
@@ -1125,7 +925,7 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
 
             {/* Itinerary */}
             <div>
-              <h2 className="text-2xl font-serif font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <h2 className="text-xl md:text-2xl font-serif font-bold text-gray-900 mb-6 flex items-center gap-3">
                 <MapIcon className="w-6 h-6 text-emerald-600"/> Detailed Itinerary
               </h2>
               <div className="space-y-4">
@@ -1133,18 +933,18 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
                     <div key={i} className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all">
                       <button
                           onClick={() => setExpandedDay(expandedDay === i ? -1 : i)}
-                          className="w-full flex items-center justify-between p-6 text-left"
+                          className="w-full flex items-center justify-between p-4 md:p-6 text-left"
                       >
                         <div className="flex items-center gap-4">
-                                        <span className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg ${expandedDay === i ? 'bg-emerald-900 text-white' : 'bg-emerald-100 text-emerald-900'}`}>
-                                            D{day.day}
-                                        </span>
-                          <h3 className="font-bold text-gray-900 text-lg">{day.title}</h3>
+                            <span className={`flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-bold text-sm md:text-lg ${expandedDay === i ? 'bg-emerald-900 text-white' : 'bg-emerald-100 text-emerald-900'}`}>
+                                D{day.day}
+                            </span>
+                          <h3 className="font-bold text-gray-900 text-base md:text-lg">{day.title}</h3>
                         </div>
                         {expandedDay === i ? <ChevronUp className="text-gray-400"/> : <ChevronDown className="text-gray-400"/>}
                       </button>
                       {expandedDay === i && (
-                          <div className="px-6 pb-6 pl-[5.5rem] text-gray-600 leading-relaxed border-t border-gray-50 pt-4">
+                          <div className="px-6 pb-6 pl-[4.5rem] md:pl-[5.5rem] text-sm md:text-base text-gray-600 leading-relaxed border-t border-gray-50 pt-4">
                             {day.desc}
                           </div>
                       )}
@@ -1157,7 +957,7 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
 
             {/* Inclusions & Exclusions */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
                 <h3 className="font-bold text-emerald-800 mb-4 uppercase tracking-widest text-xs">What's Included</h3>
                 <ul className="space-y-3">
                   {tour.inclusions ? tour.inclusions.map((item, i) => (
@@ -1167,7 +967,7 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
                   )) : <li>Standard Inclusions</li>}
                 </ul>
               </div>
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
                 <h3 className="font-bold text-red-800 mb-4 uppercase tracking-widest text-xs">What's Excluded</h3>
                 <ul className="space-y-3">
                   {tour.exclusions ? tour.exclusions.map((item, i) => (
@@ -1182,7 +982,7 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
           </div>
 
           {/* Right Sidebar: Booking Card */}
-          <div className="lg:col-span-1">
+          <div className="hidden md:block lg:col-span-1">
             <div className="sticky top-32 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
               <div className="bg-emerald-900 p-6 text-white text-center">
                 <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">Total Trip Cost</p>
@@ -1208,7 +1008,6 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
                   ))}
                 </div>
 
-                {/* NEW: Sharing Type Selection */}
                 <h4 className="font-bold text-gray-900 mb-4 text-sm uppercase tracking-widest">Occupancy Type</h4>
                 <div className="grid grid-cols-3 gap-2 mb-6">
                   {sharingOptions.map((option) => (
@@ -1225,30 +1024,11 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
                   ))}
                 </div>
 
-
-                {/* Traveler Counter */}
                 <h4 className="font-bold text-gray-900 mb-4 text-sm uppercase tracking-widest">Number of Travelers</h4>
                 <div className="flex items-center justify-between bg-gray-50 rounded-xl p-3 mb-6 border border-gray-200">
-                  <button
-                      onClick={() => setTravelerCount(Math.max(1, travelerCount - 1))}
-                      className="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center text-emerald-800 hover:bg-emerald-50 transition-colors"
-                  >
-                    <Minus className="w-4 h-4" />
-                  </button>
+                  <button onClick={() => setTravelerCount(Math.max(1, travelerCount - 1))} className="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center text-emerald-800 hover:bg-emerald-50"><Minus className="w-4 h-4" /></button>
                   <span className="font-bold text-xl text-gray-900">{travelerCount}</span>
-                  <button
-                      onClick={() => setTravelerCount(travelerCount + 1)}
-                      className="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center text-emerald-800 hover:bg-emerald-50 transition-colors"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
-                </div>
-
-                <div className="bg-orange-50 p-4 rounded-xl mb-6 flex items-start gap-3">
-                  <Info className="w-5 h-5 text-orange-500 shrink-0" />
-                  <p className="text-xs text-orange-800 leading-relaxed">
-                    <span className="font-bold">Fast Filling!</span> {tour.interestedCount} people viewed this in the last 24 hours. Limited seats available for upcoming batch.
-                  </p>
+                  <button onClick={() => setTravelerCount(travelerCount + 1)} className="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center text-emerald-800 hover:bg-emerald-50"><Plus className="w-4 h-4" /></button>
                 </div>
 
                 <a
@@ -1260,15 +1040,6 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
                   Book on WhatsApp <MessageCircle className="w-5 h-5" />
                 </a>
                 <p className="text-center text-xs text-gray-400">No payment needed to enquire.</p>
-
-                <div className="mt-6 pt-6 border-t border-gray-100 space-y-3">
-                  <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" /> Safe & Secure Booking
-                  </div>
-                  <div className="flex items-center gap-3 text-sm text-gray-600">
-                    <Users className="w-4 h-4 text-emerald-600" /> Small Group Sizes
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -1277,7 +1048,6 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
   );
 };
 
-// --- UPDATED UPCOMING TRIPS PAGE ---
 const UpcomingTripsPage = ({ onNavigate }) => {
   const [selectedDestinations, setSelectedDestinations] = useState([]);
   const [priceRange, setPriceRange] = useState(60000);
@@ -1291,13 +1061,8 @@ const UpcomingTripsPage = ({ onNavigate }) => {
       const availableTours = TOURS.filter((tour, index) => {
         const matchesDest = selectedDestinations.length === 0 || selectedDestinations.includes(tour.location);
         const matchesPrice = tour.price <= priceRange;
-        const days = parseInt(tour.duration);
-        const isShort = days <= 5;
-        const matchesDuration = selectedDurations.length === 0 ||
-            (selectedDurations.includes('short') && isShort) ||
-            (selectedDurations.includes('long') && !isShort);
         const isScheduled = (date.getTime() + index) % 3 === 0;
-        return matchesDest && matchesPrice && matchesDuration && isScheduled;
+        return matchesDest && matchesPrice && isScheduled;
       });
       return { date, tours: availableTours };
     }).filter(item => item.tours.length > 0);
@@ -1307,24 +1072,25 @@ const UpcomingTripsPage = ({ onNavigate }) => {
 
   return (
       <div className="bg-gray-50 min-h-screen pt-20">
-        <div className="bg-white border-b border-gray-200 py-12">
-          <div className="container mx-auto px-8 lg:px-24 xl:px-32">
-            <h1 className="text-4xl font-serif font-bold text-gray-900 mb-4">Upcoming Departures</h1>
-            <p className="text-gray-500 max-w-2xl">Plan your weekends with our scheduled group departures. Fixed dates (Every Saturday), like-minded travelers.</p>
+        <div className="bg-white border-b border-gray-200 py-8 md:py-12">
+          {/* RESPONSIVE: px-4 */}
+          <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32">
+            <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">Upcoming Departures</h1>
+            <p className="text-gray-500 max-w-2xl text-sm md:text-base">Plan your weekends with our scheduled group departures. Fixed dates (Every Saturday), like-minded travelers.</p>
           </div>
         </div>
 
-        <div className="container mx-auto px-4 lg:px-24 xl:px-32 py-12">
+        <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32 py-12">
           <div className="flex flex-col lg:flex-row gap-12">
             {/* Filters */}
             <div className="w-full lg:w-1/4 space-y-8">
-              <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm sticky top-28">
+              <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm lg:sticky lg:top-28">
                 <div className="flex items-center gap-2 mb-6 text-gray-900 font-bold border-b border-gray-100 pb-4">
                   <Filter className="w-5 h-5" /> <span>Filters</span>
                 </div>
                 <div className="mb-6">
                   <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Destinations</h4>
-                  <div className="space-y-2">{uniqueRegions.map(r => (
+                  <div className="space-y-2 grid grid-cols-2 lg:grid-cols-1 gap-2 lg:gap-0">{uniqueRegions.map(r => (
                       <label key={r} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer"><input type="checkbox" checked={selectedDestinations.includes(r)} onChange={()=>toggleDestination(r)} className="accent-emerald-600"/> {r}</label>
                   ))}</div>
                 </div>
@@ -1332,35 +1098,33 @@ const UpcomingTripsPage = ({ onNavigate }) => {
                   <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Max Price: ₹{priceRange}</h4>
                   <input type="range" min="5000" max="60000" step="1000" value={priceRange} onChange={(e) => setPriceRange(Number(e.target.value))} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600" />
                 </div>
-                <button onClick={()=>onNavigate('custom')} className="w-full py-3 border border-emerald-600 text-emerald-700 font-bold rounded-lg text-xs uppercase tracking-widest hover:bg-emerald-50 transition">
-                  Create Custom Trip
-                </button>
               </div>
             </div>
 
             <div className="w-full lg:w-3/4">
               {schedule.map((item, idx) => (
-                  <div key={idx} className="relative pl-8 md:pl-0 mb-12">
+                  <div key={idx} className="relative mb-12">
+                    {/* RESPONSIVE: Stack on mobile, side-by-side on MD+ */}
                     <div className="flex flex-col md:flex-row gap-6 items-start">
-                      <div className="md:w-32 shrink-0 md:text-right md:sticky md:top-32 self-start">
+                      <div className="md:w-32 shrink-0 md:text-right md:sticky md:top-32 self-start flex items-center md:block gap-4 md:gap-0 border-b md:border-none border-gray-200 w-full md:w-auto pb-2 md:pb-0">
                         <div className="text-3xl font-serif font-bold text-gray-900 leading-none mb-1">{item.date.getDate()}</div>
                         <div className="text-sm font-bold text-emerald-600 uppercase tracking-widest mb-1">{item.date.toLocaleString('default', { month: 'short' })}</div>
                         <div className="text-xs text-gray-400 font-medium">{item.date.toLocaleString('default', { weekday: 'long' })}</div>
                       </div>
-                      <div className="flex-1 grid grid-cols-1 gap-4">
+                      <div className="flex-1 grid grid-cols-1 gap-4 w-full">
                         {item.tours.map(tour => (
                             <div key={tour.id} onClick={() => onNavigate('trip-detail', tour.id)} className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-all group flex flex-col sm:flex-row gap-4 cursor-pointer">
-                              <div className="w-full sm:w-32 h-32 sm:h-24 shrink-0 rounded-lg overflow-hidden bg-gray-100">
+                              <div className="w-full sm:w-32 h-48 sm:h-24 shrink-0 rounded-lg overflow-hidden bg-gray-100">
                                 <img src={tour.image} alt={tour.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                               </div>
                               <div className="flex-1">
                                 <h4 className="font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">{tour.title}</h4>
                                 <div className="flex items-center text-xs text-gray-500 mt-1"><MapPin className="w-3 h-3 mr-1" /> {tour.location}</div>
-                                <div className="flex items-center text-xs text-emerald-600 mt-2 font-medium"><Users className="w-3 h-3 mr-1" /> {tour.interestedCount}+ interested for this date</div>
+                                <div className="flex items-center text-xs text-emerald-600 mt-2 font-medium"><Users className="w-3 h-3 mr-1" /> {tour.interestedCount}+ interested</div>
                               </div>
-                              <div className="text-right">
+                              <div className="text-left sm:text-right flex items-center justify-between sm:block border-t sm:border-0 border-gray-100 pt-3 sm:pt-0">
                                 <span className="text-lg font-bold text-gray-900 block">₹{tour.price.toLocaleString()}</span>
-                                <button className="mt-2 text-xs font-bold text-white bg-emerald-900 px-3 py-2 rounded-md">View Details</button>
+                                <button className="sm:mt-2 text-xs font-bold text-white bg-emerald-900 px-3 py-2 rounded-md">View Details</button>
                               </div>
                             </div>
                         ))}
@@ -1375,20 +1139,19 @@ const UpcomingTripsPage = ({ onNavigate }) => {
   );
 };
 
-// --- CUSTOM TRIP PAGE ---
 const CustomTripPage = () => (
     <div className="min-h-screen bg-white pt-20">
-      <div className="relative bg-orange-50 py-24">
-        <div className="container mx-auto px-8 lg:px-24 text-center">
+      <div className="relative bg-orange-50 py-16 md:py-24">
+        <div className="container mx-auto px-4 md:px-8 lg:px-24 text-center">
           <span className="text-orange-600 font-bold uppercase tracking-[0.2em] text-xs mb-4 block">Design Your Own</span>
-          <h1 className="text-4xl md:text-6xl font-serif font-bold text-gray-900 mb-6">Your Rules. Your Route.</h1>
-          <p className="text-gray-500 text-lg max-w-2xl mx-auto mb-8">
+          <h1 className="text-3xl md:text-6xl font-serif font-bold text-gray-900 mb-6">Your Rules. Your Route.</h1>
+          <p className="text-gray-500 text-base md:text-lg max-w-2xl mx-auto mb-8">
             Don't like waking up early? Want a private villa? Travelling with a massive group? We craft bespoke itineraries just for you.
           </p>
         </div>
       </div>
-      <div className="container mx-auto px-4 lg:px-24 py-12">
-        <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12">
+      <div className="container mx-auto px-4 md:px-8 lg:px-24 py-12">
+        <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-8">Tell us what you need</h2>
           <form className="space-y-6" onSubmit={(e) => {
             e.preventDefault();
@@ -1455,28 +1218,30 @@ const HomePage = ({ onSearch, setSearchTerm, searchTerm, onNavigate }) => {
 
         <div className="relative bg-white overflow-hidden">
           <div className="absolute inset-0 bg-scribble pointer-events-none" />
-          <section id="tours" className="py-24 min-h-[600px] relative z-10">
-            <div className="container mx-auto px-8 lg:px-24 xl:px-32">
+          <section id="tours" className="py-16 md:py-24 min-h-[600px] relative z-10">
+            {/* RESPONSIVE: px-4 on mobile */}
+            <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32">
               {!isDefaultView ? (
                   <div>
-                    <h2 className="text-4xl font-serif font-bold text-gray-900 mb-12">Your Selection</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <h2 className="text-2xl md:text-4xl font-serif font-bold text-gray-900 mb-8 md:mb-12">Your Selection</h2>
+                    {/* RESPONSIVE: Single column on mobile */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
                       {filteredTours.map(tour => <TourCard key={tour.id} tour={tour} onViewDetails={(id) => onNavigate('trip-detail', id)} />)}
                     </div>
                   </div>
               ) : (
-                  <div className="space-y-24">
+                  <div className="space-y-16 md:space-y-24">
                     <div>
-                      <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
+                      <div className="flex flex-col md:flex-row justify-between items-start mb-6 md:mb-10 gap-4">
                         <div>
-                          <span className="text-emerald-600 font-bold uppercase tracking-widest text-xs mb-3 block">Traveler Favorites</span>
-                          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900">Bestselling Collections</h2>
+                          <span className="text-emerald-600 font-bold uppercase tracking-widest text-xs mb-2 md:mb-3 block">Traveler Favorites</span>
+                          <h2 className="text-2xl md:text-4xl font-serif font-bold text-gray-900">Bestselling Collections</h2>
                         </div>
                         <button onClick={() => {setSelectedRegion('all'); setSelectedType('all')}} className="hidden md:flex items-center text-emerald-900 font-bold hover:text-emerald-700 transition text-sm uppercase tracking-wider group">
                           See All <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </button>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                         {bestsellers.map(tour => <TourCard key={tour.id} tour={tour} onViewDetails={(id) => onNavigate('trip-detail', id)} />)}
                       </div>
                     </div>
@@ -1485,12 +1250,10 @@ const HomePage = ({ onSearch, setSearchTerm, searchTerm, onNavigate }) => {
             </div>
           </section>
         </div>
-        {/* FeatureSection Removed */}
       </>
   );
 };
 
-// --- SEARCH RESULTS PAGE ---
 const SearchResultsPage = ({ searchTerm, setSearchTerm, onNavigate }) => {
   const filteredTours = TOURS.filter(tour => {
     const term = searchTerm.toLowerCase();
@@ -1502,7 +1265,7 @@ const SearchResultsPage = ({ searchTerm, setSearchTerm, onNavigate }) => {
   return (
       <div className="bg-gray-50 min-h-screen pt-20">
         <div className="bg-white border-b border-gray-200 py-12">
-          <div className="container mx-auto px-8 lg:px-24 xl:px-32">
+          <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32">
             <h1 className="text-3xl font-serif font-bold text-gray-900 mb-4">Search Results</h1>
             <div className="max-w-2xl relative">
               <input
@@ -1516,9 +1279,9 @@ const SearchResultsPage = ({ searchTerm, setSearchTerm, onNavigate }) => {
             </div>
           </div>
         </div>
-        <div className="container mx-auto px-8 lg:px-24 xl:px-32 py-12">
+        <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32 py-12">
           {filteredTours.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
                 {filteredTours.map(tour => <TourCard key={tour.id} tour={tour} onViewDetails={(id) => onNavigate('trip-detail', id)} />)}
               </div>
           ) : (
@@ -1531,28 +1294,27 @@ const SearchResultsPage = ({ searchTerm, setSearchTerm, onNavigate }) => {
   );
 };
 
-// --- RESTORED: Blog Page ---
 const BlogPage = () => (
     <div className="bg-white min-h-screen pt-20">
-      <div className="bg-gray-50 border-b border-gray-200 py-20">
-        <div className="container mx-auto px-8 lg:px-24 xl:px-32 text-center">
+      <div className="bg-gray-50 border-b border-gray-200 py-16 md:py-20">
+        <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32 text-center">
           <span className="text-emerald-600 font-bold uppercase tracking-[0.2em] text-xs mb-4 block">The Humsafar Chronicle</span>
-          <h1 className="text-4xl md:text-6xl font-serif font-bold text-gray-900 mb-6">Stories from the Road,<br/>Delivered Weekly.</h1>
-          <p className="text-gray-500 text-lg max-w-2xl mx-auto mb-8">Join 15,000+ travelers who read our weekly newsletter for hidden gems, travel hacks, and inspiring stories.</p>
+          <h1 className="text-3xl md:text-6xl font-serif font-bold text-gray-900 mb-6">Stories from the Road,<br/>Delivered Weekly.</h1>
+          <p className="text-gray-500 text-base md:text-lg max-w-2xl mx-auto mb-8">Join 15,000+ travelers who read our weekly newsletter for hidden gems, travel hacks, and inspiring stories.</p>
           <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
             <input type="email" placeholder="Enter your email" className="flex-1 px-5 py-3 rounded-full border border-gray-300 focus:border-emerald-500 outline-none shadow-sm" />
             <button className="bg-emerald-900 text-white px-8 py-3 rounded-full font-bold uppercase text-xs tracking-widest hover:bg-emerald-800 transition shadow-lg">Join Free</button>
           </div>
         </div>
       </div>
-      <div className="container mx-auto px-8 lg:px-24 xl:px-32 py-16">
+      <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32 py-12 md:py-16">
         <div className="mb-16">
           <h2 className="text-2xl font-serif font-bold text-gray-900 mb-8 flex items-center"><span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-1 rounded mr-3 uppercase tracking-wider">Latest Edition</span>Fresh off the press</h2>
-          <div className="group cursor-pointer grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-all">
+          <div className="group cursor-pointer grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-white rounded-2xl border border-gray-100 p-4 md:p-6 shadow-sm hover:shadow-md transition-all">
             <div className="overflow-hidden rounded-xl aspect-[16/9] lg:aspect-auto lg:h-80"><img src={BLOG_POSTS[0].image} alt={BLOG_POSTS[0].title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" /></div>
             <div className="py-2">
               <div className="flex items-center gap-3 mb-4"><span className="text-xs font-bold text-emerald-600 uppercase tracking-widest">{BLOG_POSTS[0].category}</span><span className="w-1 h-1 bg-gray-300 rounded-full"></span><span className="text-xs text-gray-400">{BLOG_POSTS[0].date}</span></div>
-              <h3 className="text-3xl font-bold font-serif text-gray-900 mb-4 group-hover:text-emerald-700 transition-colors">{BLOG_POSTS[0].title}</h3>
+              <h3 className="text-2xl md:text-3xl font-bold font-serif text-gray-900 mb-4 group-hover:text-emerald-700 transition-colors">{BLOG_POSTS[0].title}</h3>
               <p className="text-gray-600 leading-relaxed mb-6">{BLOG_POSTS[0].excerpt}</p>
               <button className="text-emerald-700 font-bold text-sm uppercase tracking-widest border-b-2 border-emerald-100 group-hover:border-emerald-700 transition-all pb-1">Read Full Issue</button>
             </div>
@@ -1560,7 +1322,7 @@ const BlogPage = () => (
         </div>
         <div>
           <h2 className="text-2xl font-serif font-bold text-gray-900 mb-8">Past Editions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {BLOG_POSTS.slice(1).map(post => (
                 <div key={post.id} className="group cursor-pointer flex flex-col h-full bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all">
                   <div className="aspect-[3/2] overflow-hidden"><img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" /></div>
@@ -1577,19 +1339,14 @@ const BlogPage = () => (
     </div>
 );
 
-
-// --- MAIN APP COMPONENT ---
-
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
-  const [selectedTourId, setSelectedTourId] = useState(null); // State for Detail Page
+  const [selectedTourId, setSelectedTourId] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // HISTORY API SUPPORT: Browser Back Button
   useEffect(() => {
-    // Check if there is a state on initial load
     if (window.history.state) {
       setCurrentPage(window.history.state.page || 'home');
       if (window.history.state.id) setSelectedTourId(window.history.state.id);
@@ -1600,7 +1357,6 @@ export default function App() {
         setCurrentPage(event.state.page);
         if (event.state.id) setSelectedTourId(event.state.id);
       } else {
-        // Fallback to home if no state is present
         setCurrentPage('home');
       }
     };
@@ -1609,21 +1365,17 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // SCROLL LISTENER
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // UPDATED NAVIGATE FUNCTION WITH HISTORY PUSH
   const navigate = (page, id = null) => {
     window.scrollTo(0, 0);
     setCurrentPage(page);
     if(id) setSelectedTourId(id);
     setIsMenuOpen(false);
-
-    // Push new state to browser history
     window.history.pushState({ page, id }, '', `#${page}`);
   };
 
@@ -1640,9 +1392,7 @@ export default function App() {
     upcoming: <UpcomingTripsPage onNavigate={navigate} />,
     custom: <CustomTripPage />,
     'trip-detail': <TripDetailPage tourId={selectedTourId} onBack={() => window.history.back()} onNavigate={navigate} />,
-    // about: <AboutPage />, // Commented out
     blog: <BlogPage />,
-    // ExclusivePage Removed
   };
 
   const CurrentPageComponent = pageComponents[currentPage] || pageComponents['home'];
@@ -1665,7 +1415,6 @@ export default function App() {
 
         <Footer onNavigate={navigate} />
 
-        {/* Floating WhatsApp Button - Hidden on Trip Detail page to avoid clutter with booking bar */}
         {currentPage !== 'trip-detail' && (
             <a
                 href={WHATSAPP_BASE}
