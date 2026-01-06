@@ -87,17 +87,8 @@ const CustomStyles = () => (
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    .animate-blob {
-      animation: blob 7s infinite;
-    }
-    .animation-delay-2000 {
-      animation-delay: 2s;
-    }
-    @keyframes blob {
-      0% { transform: translate(0px, 0px) scale(1); }
-      33% { transform: translate(30px, -50px) scale(1.1); }
-      66% { transform: translate(-20px, 20px) scale(0.9); }
-      100% { transform: translate(0px, 0px) scale(1); }
+    .animate-bounce-slow {
+      animation: bounce 3s infinite;
     }
   `}} />
 );
@@ -380,33 +371,6 @@ const TOURS = [
   }
 ];
 
-const BLOG_POSTS = [
-  {
-    id: 1,
-    title: "Edition 24: The Secret Valleys of Himachal",
-    excerpt: "In this week's edition, we explore the untouched Tirthan Valley, discuss sustainable trekking practices.",
-    category: "Weekly Newsletter",
-    image: "https://www.captureatrip.com/_next/image?url=https%3A%2F%2Fd1zvcmhypeawxj.cloudfront.net%2Flocation%2FHimachal%20Pradesh%2Fblogs%2Fvalleys-in-himachal-pradesh-0f17b32df1-ur5kwb-webp-e682fd219c-1752056379292.webp&w=3840&q=75",
-    date: "Oct 15, 2024"
-  },
-  {
-    id: 2,
-    title: "Edition 23: Backpacking Vietnam",
-    excerpt: "A complete breakdown of costs for a 10-day Vietnam trip. Plus, top 5 hostels in Hanoi.",
-    category: "International Guide",
-    image: "https://images.unsplash.com/photo-1504457047772-27faf1c00561?q=80&w=800&auto=format&fit=crop",
-    date: "Oct 08, 2024"
-  },
-  {
-    id: 3,
-    title: "Edition 22: The Rise of Workations",
-    excerpt: "Why digital nomads are flocking to Goa and Manali. Best cafes with WiFi.",
-    category: "Lifestyle",
-    image: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?q=80&w=800&auto=format&fit=crop",
-    date: "Oct 01, 2024"
-  }
-];
-
 // --- COMPONENTS ---
 
 const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, searchTerm, setSearchTerm }) => {
@@ -428,7 +392,6 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
 
   return (
       <nav className={`fixed w-full z-50 transition-all duration-300 border-b border-transparent ${isScrolled ? 'bg-white/95 backdrop-blur-md py-4 border-gray-100 shadow-sm' : hasDarkHero ? 'bg-transparent py-6' : 'bg-white py-4 border-gray-100 shadow-sm'}`}>
-        {/* RESPONSIVE: px-4 on mobile, px-8/24 on desktop */}
         <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32 flex justify-between items-center gap-4">
 
           <div
@@ -527,12 +490,10 @@ const Hero = ({ searchTerm, setSearchTerm, onSearch }) => (
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"></div>
       <div className="absolute inset-0 bg-emerald-900/20 mix-blend-multiply"></div>
 
-      {/* RESPONSIVE: Padding adjusted */}
       <div className="relative z-10 container mx-auto px-4 md:px-8 lg:px-24 xl:px-32 pt-20">
         <div className="inline-block mb-4 px-4 py-1.5 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-xs font-bold uppercase tracking-[0.2em]">
           Explore the Unseen
         </div>
-        {/* RESPONSIVE: Text sizes reduced for mobile */}
         <h1 className="text-4xl md:text-7xl lg:text-8xl font-serif font-bold mb-8 leading-tight tracking-tight drop-shadow-lg">
           Find Your <span className="italic text-emerald-300">Wild.</span>
         </h1>
@@ -540,7 +501,6 @@ const Hero = ({ searchTerm, setSearchTerm, onSearch }) => (
           Curated expeditions for the modern explorer. Join the community that travels deeper.
         </p>
 
-        {/* RESPONSIVE FIX: Form changes to flex-col on mobile to stack input and button */}
         <form onSubmit={onSearch} className="max-w-4xl mx-auto bg-white rounded-3xl md:rounded-full p-2 pl-4 md:pl-6 flex flex-col md:flex-row items-center shadow-2xl transform transition-all hover:scale-[1.01] gap-2 md:gap-0">
           <div className="flex items-center w-full md:w-auto flex-1">
             <Search className="text-gray-400 w-5 h-5 mr-3 shrink-0" />
@@ -582,13 +542,11 @@ const FilterBar = ({ selectedRegion, setSelectedRegion, selectedType, setSelecte
   ];
 
   return (
-      // RESPONSIVE: px-4 and margin adjustment (-mt-10 on mobile vs -mt-20 on desktop)
       <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32 -mt-10 md:-mt-20 relative z-30">
         <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-100/50 backdrop-blur-sm">
           <div className="flex flex-col lg:flex-row gap-8 justify-between items-start">
             <div className="w-full overflow-hidden">
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Destinations</h3>
-              {/* RESPONSIVE: Scrollable on very small screens if needed, otherwise wraps */}
               <div className="flex flex-wrap gap-2 md:gap-3">
                 {regions.map(r => (
                     <button
@@ -630,7 +588,6 @@ const TourCard = ({ tour, onViewDetails }) => {
           onClick={() => onViewDetails(tour.id)}
           className="group bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full relative cursor-pointer"
       >
-        {/* IMAGE SECTION */}
         <div className="relative aspect-[4/3] w-full overflow-hidden">
           <img
               src={tour.image}
@@ -652,10 +609,7 @@ const TourCard = ({ tour, onViewDetails }) => {
           </div>
         </div>
 
-        {/* CONTENT SECTION */}
         <div className="p-4 md:p-5 flex flex-col flex-1">
-
-          {/* RATING & DURATION */}
           <div className="flex justify-between items-center mb-3">
             <div className="flex items-center text-emerald-700 bg-emerald-50 px-2 py-1 rounded text-xs font-bold">
               <Clock className="w-3 h-3 mr-1" /> {tour.duration}
@@ -667,12 +621,10 @@ const TourCard = ({ tour, onViewDetails }) => {
             </div>
           </div>
 
-          {/* TITLE */}
           <h3 className="text-base md:text-lg font-sans font-bold text-gray-900 leading-snug mb-3 group-hover:text-emerald-700 transition-colors line-clamp-2">
             {tour.title}
           </h3>
 
-          {/* RESTORED: HIGHLIGHT TAGS */}
           <div className="mb-4">
             <div className="flex flex-wrap gap-2">
               {tour.highlights && tour.highlights.slice(0, 3).map((h, i) => (
@@ -688,7 +640,6 @@ const TourCard = ({ tour, onViewDetails }) => {
             </div>
           </div>
 
-          {/* PRICE & BUTTON SECTION */}
           <div className="mt-auto pt-4 border-t border-dashed border-gray-200 flex items-end justify-between">
             <div>
               <div className="flex items-center gap-2">
@@ -733,7 +684,6 @@ const InquiryForms = () => {
                   <p className="text-emerald-200 text-sm md:text-lg leading-relaxed">Whether it's a solo soul-search or a corporate retreat, we craft journeys that linger in your memory.</p>
                 </div>
                 <div className="space-y-6 md:space-y-8">
-                  {/* Contact details remain same */}
                   <div className="flex items-center group">
                     <div className="bg-emerald-800/50 w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mr-5 border border-emerald-700/30">
                       <Phone className="w-5 h-5 text-emerald-300" />
@@ -747,7 +697,6 @@ const InquiryForms = () => {
               </div>
             </div>
 
-            {/* RESPONSIVE: Padding reduced on mobile */}
             <div className="md:w-8/12 p-6 md:p-12 lg:p-16 bg-gray-50/30">
               <div className="flex space-x-6 md:space-x-8 mb-8 md:mb-10 border-b-2 border-gray-100 overflow-x-auto">
                 <button
@@ -798,7 +747,6 @@ const InquiryForms = () => {
 
 const Footer = ({ onNavigate }) => (
     <footer className="bg-gray-950 text-gray-400 py-12 md:py-20 border-t border-gray-900">
-      {/* RESPONSIVE: px-4 on mobile */}
       <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-20 mb-16">
           <div className="lg:col-span-1">
@@ -845,7 +793,9 @@ const Footer = ({ onNavigate }) => (
 );
 
 const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
-  const tour = TOURS.find(t => t.id === tourId) || TOURS[0];
+  // FIND THE TOUR. Memoize to prevent re-calculations.
+  const tour = useMemo(() => TOURS.find(t => t.id === tourId) || TOURS[0], [tourId]);
+
   const upcomingSaturdays = useMemo(() => getNextSaturdays(5), []);
   const [activeDate, setActiveDate] = useState(upcomingSaturdays[0]);
   const [expandedDay, setExpandedDay] = useState(0);
@@ -862,8 +812,9 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
   const currentPricePerPerson = tour.price + selectedOption.surCharge;
   const totalPrice = currentPricePerPerson * travelerCount;
 
-  const whatsappMsg = `Hi Humsafar Team, I am interested in the *${tour.title}*.%0A%0A🗓 *Trip Date:* ${activeDate.toDateString()}%0A🏨 *Sharing:* ${sharingType} Sharing%0A👥 *People:* ${travelerCount}%0A💰 *Total Approx Price:* ₹${totalPrice.toLocaleString()}%0A⏳ *Duration:* ${tour.duration}%0A%0APlease share more details.`;
-  const whatsappLink = `https://wa.me/${CONTACT_NUMBER}?text=${whatsappMsg}`;
+  // DYNAMIC MESSAGE: Uses EncodeURIComponent for safety across all devices/itineraries
+  const msg = `Hi Humsafar Team, I am interested in the *${tour.title}*.\n\n🗓 *Trip Date:* ${activeDate.toDateString()}\n🏨 *Sharing:* ${sharingType} Sharing\n👥 *People:* ${travelerCount}\n💰 *Total Approx Price:* ₹${totalPrice.toLocaleString()}\n⏳ *Duration:* ${tour.duration}\n\nPlease share more details.`;
+  const whatsappLink = `https://wa.me/${CONTACT_NUMBER}?text=${encodeURIComponent(msg)}`;
 
   useEffect(() => {
     window.scrollTo(0,0);
@@ -871,14 +822,22 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
 
   return (
       <div className="min-h-screen bg-gray-50 pb-20 md:pb-0">
-        {/* Sticky Mobile Bottom Bar - kept for quick access, but form is now visible below content */}
-        <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 z-50 flex items-center justify-between shadow-[0_-5px_20px_rgba(0,0,0,0.1)]">
-          <div>
-            <p className="text-xs text-gray-400 line-through">₹{tour.oldPrice}</p>
-            <p className="text-xl font-bold text-gray-900">₹{totalPrice.toLocaleString()}</p>
+
+        {/* === STICKY MOBILE BOTTOM BAR (FIXED & DATA RICH) === */}
+        <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 shadow-[0_-5px_20px_rgba(0,0,0,0.1)] px-4 py-3 pb-6 flex items-center justify-between">
+          <div className="flex flex-col">
+            <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wider mb-0.5">
+              {travelerCount} Pax • {sharingType} • {activeDate.toLocaleDateString('default', { month: 'short', day: 'numeric' })}
+            </span>
+            <div className="flex items-baseline gap-1">
+              <span className="text-xl font-bold text-gray-900">₹{totalPrice.toLocaleString()}</span>
+              {tour.oldPrice && (
+                  <span className="text-xs text-gray-400 line-through">₹{(parseInt(tour.oldPrice.replace(/,/g, '')) * travelerCount).toLocaleString()}</span>
+              )}
+            </div>
           </div>
-          <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="bg-emerald-900 text-white px-6 py-3 rounded-xl font-bold uppercase tracking-widest text-xs flex items-center gap-2">
-            Book <MessageCircle className="w-4 h-4" />
+          <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="bg-emerald-900 text-white px-5 py-3 rounded-xl font-bold uppercase tracking-widest text-xs flex items-center gap-2 shadow-lg active:scale-95 transition-transform">
+            Book on WhatsApp <MessageCircle className="w-4 h-4" />
           </a>
         </div>
 
@@ -979,9 +938,7 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
 
           </div>
 
-          {/* Booking Card - Updated for Mobile Visibility */}
-          {/* Changes: Removed 'hidden' class, added margin bottom for mobile so it doesn't get hidden behind the fixed bottom bar */}
-          <div className="lg:col-span-1 mb-24 lg:mb-0">
+          <div className="lg:col-span-1 mb-24 md:mb-0">
             <div className="sticky top-32 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
               <div className="bg-emerald-900 p-6 text-white text-center">
                 <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">Total Trip Cost</p>
@@ -1072,7 +1029,6 @@ const UpcomingTripsPage = ({ onNavigate }) => {
   return (
       <div className="bg-gray-50 min-h-screen pt-20">
         <div className="bg-white border-b border-gray-200 py-8 md:py-12">
-          {/* RESPONSIVE: px-4 */}
           <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32">
             <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">Upcoming Departures</h1>
             <p className="text-gray-500 max-w-2xl text-sm md:text-base">Plan your weekends with our scheduled group departures. Fixed dates (Every Saturday), like-minded travelers.</p>
@@ -1081,7 +1037,6 @@ const UpcomingTripsPage = ({ onNavigate }) => {
 
         <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32 py-12">
           <div className="flex flex-col lg:flex-row gap-12">
-            {/* Filters */}
             <div className="w-full lg:w-1/4 space-y-8">
               <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm lg:sticky lg:top-28">
                 <div className="flex items-center gap-2 mb-6 text-gray-900 font-bold border-b border-gray-100 pb-4">
@@ -1103,7 +1058,6 @@ const UpcomingTripsPage = ({ onNavigate }) => {
             <div className="w-full lg:w-3/4">
               {schedule.map((item, idx) => (
                   <div key={idx} className="relative mb-12">
-                    {/* RESPONSIVE: Stack on mobile, side-by-side on MD+ */}
                     <div className="flex flex-col md:flex-row gap-6 items-start">
                       <div className="md:w-32 shrink-0 md:text-right md:sticky md:top-32 self-start flex items-center md:block gap-4 md:gap-0 border-b md:border-none border-gray-200 w-full md:w-auto pb-2 md:pb-0">
                         <div className="text-3xl font-serif font-bold text-gray-900 leading-none mb-1">{item.date.getDate()}</div>
@@ -1218,12 +1172,10 @@ const HomePage = ({ onSearch, setSearchTerm, searchTerm, onNavigate }) => {
         <div className="relative bg-white overflow-hidden">
           <div className="absolute inset-0 bg-scribble pointer-events-none" />
           <section id="tours" className="py-16 md:py-24 min-h-[600px] relative z-10">
-            {/* RESPONSIVE: px-4 on mobile */}
             <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32">
               {!isDefaultView ? (
                   <div>
                     <h2 className="text-2xl md:text-4xl font-serif font-bold text-gray-900 mb-8 md:mb-12">Your Selection</h2>
-                    {/* RESPONSIVE: Single column on mobile */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
                       {filteredTours.map(tour => <TourCard key={tour.id} tour={tour} onViewDetails={(id) => onNavigate('trip-detail', id)} />)}
                     </div>
@@ -1390,7 +1342,7 @@ export default function App() {
     search: <SearchResultsPage searchTerm={searchTerm} setSearchTerm={setSearchTerm} onNavigate={navigate} />,
     upcoming: <UpcomingTripsPage onNavigate={navigate} />,
     custom: <CustomTripPage />,
-    'trip-detail': <TripDetailPage tourId={selectedTourId} onBack={() => window.history.back()} onNavigate={navigate} />,
+    'trip-detail': <TripDetailPage key={selectedTourId} tourId={selectedTourId} onBack={() => window.history.back()} onNavigate={navigate} />,
     blog: <BlogPage />,
   };
 
