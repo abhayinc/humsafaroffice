@@ -371,6 +371,34 @@ const TOURS = [
   }
 ];
 
+const BLOG_POSTS = [
+  {
+    id: 1,
+    title: "Edition 24: The Secret Valleys of Himachal",
+    excerpt: "In this week's edition, we explore the untouched Tirthan Valley, discuss sustainable trekking practices.",
+    category: "Weekly Newsletter",
+    // FIXED: Changed image URL to a reliable source
+    image: "https://images.unsplash.com/photo-1605649487215-476786e5b497?q=80&w=800&auto=format&fit=crop",
+    date: "Oct 15, 2024"
+  },
+  {
+    id: 2,
+    title: "Edition 23: Backpacking Vietnam",
+    excerpt: "A complete breakdown of costs for a 10-day Vietnam trip. Plus, top 5 hostels in Hanoi.",
+    category: "International Guide",
+    image: "https://images.unsplash.com/photo-1504457047772-27faf1c00561?q=80&w=800&auto=format&fit=crop",
+    date: "Oct 08, 2024"
+  },
+  {
+    id: 3,
+    title: "Edition 22: The Rise of Workations",
+    excerpt: "Why digital nomads are flocking to Goa and Manali. Best cafes with WiFi.",
+    category: "Lifestyle",
+    image: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?q=80&w=800&auto=format&fit=crop",
+    date: "Oct 01, 2024"
+  }
+];
+
 // --- COMPONENTS ---
 
 const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, searchTerm, setSearchTerm }) => {
