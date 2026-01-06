@@ -519,7 +519,7 @@ const Hero = ({ searchTerm, setSearchTerm, onSearch }) => (
     <section id="home" className="relative min-h-[92vh] flex items-center justify-center text-center text-white bg-emerald-950 overflow-hidden pb-12 md:pb-0">
       <div className="absolute inset-0 opacity-80">
         <img
-            src="https://www.snowvalleyresorts.com/wp-content/uploads/featurd-image-min-1240x696.webp"
+            src="https://s7ap1.scene7.com/is/image/incredibleindia/cityscape-of-shimla-himachal-pradesh-city-1-hero?qlt=82&ts=1742171983523"
             alt="Travel Background"
             className="w-full h-full object-cover"
         />
