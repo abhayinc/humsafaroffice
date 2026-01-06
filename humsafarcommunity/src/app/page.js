@@ -24,6 +24,7 @@ import {
   Tag,
   Filter,
   ChevronDown,
+  ChevronUp,
   Check,
   Quote,
   Smile,
@@ -35,14 +36,27 @@ import {
   Gift,
   Palette,
   BedDouble,
-  Anchor
+  Anchor,
+  Info,
+  Linkedin,
+  Twitter,
+  Mountain,
+  Plus,
+  Minus
 } from 'lucide-react';
+
+// --- CONFIGURATION ---
+const CONTACT_NUMBER = "916268496389";
+const WHATSAPP_BASE = `https://wa.me/${CONTACT_NUMBER}`;
 
 // --- CUSTOM STYLES ---
 const CustomStyles = () => (
     <style dangerouslySetInnerHTML={{ __html: `
     .bg-scribble {
       background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l2 2' stroke='%23000' stroke-width='1' fill='none' opacity='0.02'/%3E%3C/svg%3E");
+    }
+    .bg-topography {
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     }
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
@@ -67,27 +81,85 @@ const CustomStyles = () => (
       background: #d1fae5;
       border-radius: 2px;
     }
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .animate-blob {
+      animation: blob 7s infinite;
+    }
+    .animation-delay-2000 {
+      animation-delay: 2s;
+    }
+    @keyframes blob {
+      0% { transform: translate(0px, 0px) scale(1); }
+      33% { transform: translate(30px, -50px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.9); }
+      100% { transform: translate(0px, 0px) scale(1); }
+    }
   `}} />
 );
+
+// --- HELPER FUNCTIONS ---
+const getNextSaturdays = (count = 4) => {
+  const dates = [];
+  let d = new Date();
+  // Calculate days until next Saturday (6 is Saturday)
+  d.setDate(d.getDate() + (6 - d.getDay() + 7) % 7);
+  // Ensure we don't show today if today is Saturday but the trip time has passed (simplified to just next week if today)
+  if (d.getTime() <= new Date().getTime()) d.setDate(d.getDate() + 7);
+
+  for (let i = 0; i < count; i++) {
+    dates.push(new Date(d));
+    d.setDate(d.getDate() + 7);
+  }
+  return dates;
+};
 
 // --- MOCK DATA ---
 
 const TOURS = [
-  // Himachal
+  // UPDATED FROM PDF
   {
     id: 1,
-    title: "Manali & Kasol Backpacking",
+    title: "Manali Kasol: Solang, Atal Tunnel & Sissu",
     location: "Himachal Pradesh",
     region: "himachal",
     type: "group",
     duration: "6 Days / 5 Nights",
-    price: 7999,
-    oldPrice: "10,500",
+    price: 6999, // Quad Sharing Pricing
+    oldPrice: "9,500",
     image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=800&auto=format&fit=crop",
     rating: 4.8,
     reviews: 245,
     bestseller: true,
-    highlights: ["Hadimba Temple", "Solang Valley", "Manikaran Sahib", "Mall Road Shopping"]
+    interestedCount: 124,
+    highlights: ["Solang Valley", "Atal Tunnel", "Sissu", "Manikaran Gurudwara", "Kasol Cafe Hopping", "Hadimba Devi Temple"],
+    itinerary: [
+      { day: 1, title: "Delhi to Manali", desc: "Start your journey from Delhi to Manali (approx 560 KMS). Board an AC Semi Sleeper Traveller/Volvo at the predetermined spot. Overnight journey through scenic views towards the Himalayas." },
+      { day: 2, title: "Arrival & Sightseeing in Manali", desc: "Reach Manali and complete check-in. Visit the mystical Hadimba Devi Temple (heart of Manali), explore Mall Road for cafes/shopping, visit Van Vihar, and the Tibetan Monastery. Dinner and overnight stay in Manali." },
+      { day: 3, title: "Solang Valley - Atal Tunnel - Sissu", desc: "Full day excursion. Visit Solang Valley (Snow Valley) for adventure sports like skiing, zipline, zorbing (own cost). Pass through the Atal Tunnel to reach Sissu. Enjoy Sissu Lake/Koksar activities. Return to Manali for dinner and overnight stay." },
+      { day: 4, title: "Kullu - Manikaran - Kasol", desc: "Visit the Paragliding point (Asia's highest) and River Rafting in Beas River (own cost). Explore a Shawl factory. Proceed to Kasol. Check-in to Kasol Camp. Enjoy a Bonfire & Musical Night. Dinner and overnight stay." },
+      { day: 5, title: "Kasol Sightseeing & Departure", desc: "Visit Manikaran Gurudwara and soak in the beauty of Parvati Valley. Explore local markets and Israeli vintage cafes. Optional Water Trek/Chalal Trek. Evening departure for Delhi. Overnight travel." },
+      { day: 6, title: "Delhi Arrival", desc: "Reach Delhi by early morning. The group parts ways with fond memories. Trip ends." }
+    ],
+    inclusions: [
+      "AC Volvo / Traveller for Delhi to Delhi",
+      "Accommodations on sharing basis (3 Star Stays)",
+      "Meal Plan: MAP (3 Breakfast & 3 Dinner)",
+      "Trip Lead & Local Sightseeing",
+      "All kinds of Permits, Toll Taxes, Parking",
+      "Music Night & Bonfire"
+    ],
+    exclusions: [
+      "Adventure activities (Paragliding, Rafting, etc.)",
+      "Lunch and other meals not mentioned",
+      "Personal expenses & Entry tickets",
+      "Heater charges / Early check-in",
+      "Any transport not mentioned in inclusions"
+    ]
   },
   {
     id: 4,
@@ -98,11 +170,21 @@ const TOURS = [
     duration: "5 Days / 4 Nights",
     price: 10500,
     oldPrice: "14,000",
-    image: "https://images.unsplash.com/photo-1643194562477-84d4939b4f2c?q=80&w=800&auto=format&fit=crop",
+    image: "https://badrinath-kedarnath.gov.in/css_js_2024/img/kedarnath-4k.jpg",
     rating: 5.0,
     reviews: 189,
     bestseller: true,
-    highlights: ["Guptkashi Stay", "Trek to Kedarnath", "Sonprayag", "Ganga Aarti"]
+    interestedCount: 350,
+    highlights: ["Guptkashi Stay", "Trek to Kedarnath", "Sonprayag", "Ganga Aarti"],
+    itinerary: [
+      { day: 1, title: "Haridwar to Guptkashi", desc: "Drive from Haridwar to Guptkashi. View the Mandakini river. Overnight stay." },
+      { day: 2, title: "Trek to Kedarnath", desc: "Drive to Sonprayag, take local jeep to Gaurikund. Start 16km trek to Kedarnath. Evening Aarti." },
+      { day: 3, title: "Darshan & Return", desc: "Morning Darshan at Kedarnath Temple. Trek down to Gaurikund and drive back to Guptkashi." },
+      { day: 4, title: "Guptkashi to Rishikesh", desc: "Drive back towards Rishikesh. Evening Ganga Aarti at Triveni Ghat." },
+      { day: 5, title: "Departure", desc: "Drop at Haridwar Railway Station/Bus Stand." }
+    ],
+    inclusions: ["Transportation", "Accommodation", "Meals (Breakfast & Dinner)", "Yatra Registration Assistance"],
+    exclusions: ["Pony/Palki charges", "Lunch", "Personal expenses"]
   },
   {
     id: 9,
@@ -117,7 +199,19 @@ const TOURS = [
     rating: 4.8,
     reviews: 86,
     bestseller: true,
-    highlights: ["Hanoi City Tour", "Ha Long Bay Cruise", "Ninh Binh", "Local Cuisine"]
+    interestedCount: 89,
+    highlights: ["Hanoi City Tour", "Ha Long Bay Cruise", "Ninh Binh", "Local Cuisine"],
+    itinerary: [
+      { day: 1, title: "Arrival in Hanoi", desc: "Airport pickup. Check-in. Welcome dinner with Egg Coffee." },
+      { day: 2, title: "Hanoi City Tour", desc: "Visit Train Street, Ho Chi Minh Mausoleum, and Old Quarter." },
+      { day: 3, title: "Ha Long Bay Cruise", desc: "Drive to Ha Long. Board cruise. Kayaking and island visits. Stay on cruise." },
+      { day: 4, title: "Ninh Binh Excursion", desc: "Boat ride in Tam Coc (Halong Bay on land). Cycling through rice paddies." },
+      { day: 5, title: "Free Day / Shopping", desc: "Leisure day to explore local markets or take a cooking class." },
+      { day: 6, title: "Hanoi Nightlife", desc: "Experience the vibrant nightlife of Ta Hien Beer Street." },
+      { day: 7, title: "Departure", desc: "Transfer to airport." }
+    ],
+    inclusions: ["Airport Transfers", "3 Star Hotels", "Ha Long Bay Cruise", "Breakfast", "English Speaking Guide"],
+    exclusions: ["International Flights", "Visa Fees", "Lunch & Dinner (except welcome dinner)", "Tips"]
   },
   {
     id: 13,
@@ -132,7 +226,18 @@ const TOURS = [
     rating: 4.9,
     reviews: 120,
     bestseller: true,
-    highlights: ["Munnar Tea Gardens", "Alleppey Houseboat", "Cochin Tour", "Kathakali Show"]
+    interestedCount: 156,
+    highlights: ["Munnar Tea Gardens", "Alleppey Houseboat", "Cochin Tour", "Kathakali Show"],
+    itinerary: [
+      { day: 1, title: "Arrival in Cochin", desc: "Pickup from airport. Transfer to Munnar. En route Cheeyappara Waterfalls." },
+      { day: 2, title: "Munnar Sightseeing", desc: "Visit Tea Museum, Mattupetty Dam, and Eravikulam National Park." },
+      { day: 3, title: "Thekkady", desc: "Drive to Thekkady. Spice plantation tour and Periyar Lake boating." },
+      { day: 4, title: "Alleppey Houseboat", desc: "Drive to Alleppey. Check-in to Houseboat. Cruise through backwaters." },
+      { day: 5, title: "Cochin Sightseeing", desc: "Chinese Fishing Nets, Jewish Synagogue, St. Francis Church." },
+      { day: 6, title: "Departure", desc: "Drop at Cochin Airport." }
+    ],
+    inclusions: ["AC Vehicle", "Accommodation", "Houseboat Stay with all meals", "Breakfast in hotels"],
+    exclusions: ["Airfare", "Entry tickets", "Lunch & Dinner in hotels"]
   },
   {
     id: 2,
@@ -143,11 +248,24 @@ const TOURS = [
     duration: "8 Days / 7 Nights",
     price: 18500,
     oldPrice: "24,000",
-    image: "https://images.unsplash.com/photo-1626714485834-0322e75e1176?q=80&w=800&auto=format&fit=crop",
+    image: "https://himalayaexpert.com/uploads/exp-img/spiti-valley-expedition.webp",
     rating: 4.9,
     reviews: 310,
     bestseller: false,
-    highlights: ["Key Monastery", "Chandratal Lake", "Kunzum Pass", "World's Highest Post Office"]
+    interestedCount: 210,
+    highlights: ["Key Monastery", "Chandratal Lake", "Kunzum Pass", "World's Highest Post Office"],
+    itinerary: [
+      { day: 1, title: "Shimla Transfer", desc: "Reach Shimla. Transfer to Narkanda. Acclimatization." },
+      { day: 2, title: "Narkanda to Kalpa", desc: "Drive through Kinnaur Valley. View Kinner Kailash peak." },
+      { day: 3, title: "Kalpa to Kaza", desc: "Enter Spiti Valley via Nako and Tabo. Visit Tabo Monastery." },
+      { day: 4, title: "Kaza Sightseeing", desc: "Key Monastery, Kibber, Chicham Bridge." },
+      { day: 5, title: "Highest Villages", desc: "Hikkim (Post Office), Komic (Highest village), Langza (Buddha Statue)." },
+      { day: 6, title: "Kaza to Kalpa", desc: "Return journey begins. Overnight in Kalpa." },
+      { day: 7, title: "Kalpa to Shimla", desc: "Drive back to Shimla." },
+      { day: 8, title: "Departure", desc: "Departure from Shimla." }
+    ],
+    inclusions: ["Tempo Traveller", "Homestays/Hotels", "Breakfast & Dinner", "Oxygen Cylinder backup"],
+    exclusions: ["Lunch", "Monastery Entry Fees", "Personal Gear"]
   },
   {
     id: 3,
@@ -162,7 +280,16 @@ const TOURS = [
     rating: 4.7,
     reviews: 95,
     bestseller: false,
-    highlights: ["Jalori Pass", "Serolsar Lake", "Jibhi Waterfall", "Chehni Kothi"]
+    interestedCount: 78,
+    highlights: ["Jalori Pass", "Serolsar Lake", "Jibhi Waterfall", "Chehni Kothi"],
+    itinerary: [
+      { day: 1, title: "Delhi to Jibhi", desc: "Overnight journey from Delhi." },
+      { day: 2, title: "Jibhi Local", desc: "Arrival. Jibhi Waterfall and Mini Thailand." },
+      { day: 3, title: "Jalori Pass Trek", desc: "Drive to Jalori Pass. Trek to Serolsar Lake (5km)." },
+      { day: 4, title: "Departure", desc: "Visit Chehni Kothi. Evening departure to Delhi." }
+    ],
+    inclusions: ["Transport", "Cottage Stay", "Meals (MAP)", "Guide"],
+    exclusions: ["Lunch", "Personal Expenses"]
   },
   {
     id: 5,
@@ -177,7 +304,15 @@ const TOURS = [
     rating: 4.6,
     reviews: 450,
     bestseller: false,
-    highlights: ["River Rafting (16km)", "Cliff Jumping", "Bonfire & Music", "Jungle Camping"]
+    interestedCount: 500,
+    highlights: ["River Rafting (16km)", "Cliff Jumping", "Bonfire & Music", "Jungle Camping"],
+    itinerary: [
+      { day: 1, title: "Arrival & Camping", desc: "Check in to jungle camps. Lunch. Sports activities. Bonfire dinner." },
+      { day: 2, title: "Rafting", desc: "16km River Rafting with Cliff Jumping and Body Surfing. Cafe hopping in Tapovan." },
+      { day: 3, title: "Departure", desc: "Morning breakfast. Checkout." }
+    ],
+    inclusions: ["Camping", "All Meals (Veg/Non-Veg)", "Rafting Charges", "Bonfire"],
+    exclusions: ["Transport to Rishikesh", "Alcohol"]
   },
   {
     id: 6,
@@ -192,7 +327,17 @@ const TOURS = [
     rating: 4.8,
     reviews: 78,
     bestseller: false,
-    highlights: ["Skiing Experience", "Joshimath Tour", "Nanda Devi View", "Cable Car Ride"]
+    interestedCount: 134,
+    highlights: ["Skiing Experience", "Joshimath Tour", "Nanda Devi View", "Cable Car Ride"],
+    itinerary: [
+      { day: 1, title: "Rishikesh to Joshimath", desc: "Scenic drive via Devprayag." },
+      { day: 2, title: "Auli Visit", desc: "Cable car ride. Skiing basics." },
+      { day: 3, title: "Skiing & Trekking", desc: "Gorson Bugyal Trek. More skiing." },
+      { day: 4, title: "Return to Rishikesh", desc: "Drive back. Overnight in Rishikesh." },
+      { day: 5, title: "Departure", desc: "Checkout." }
+    ],
+    inclusions: ["Transport", "Stay", "Meals", "Skiing Equipment"],
+    exclusions: ["Cable Car Ticket", "Personal Porter"]
   },
   {
     id: 7,
@@ -207,7 +352,17 @@ const TOURS = [
     rating: 4.7,
     reviews: 134,
     bestseller: false,
-    highlights: ["City Palace", "Lake Pichola Boat Ride", "Jag Dish Temple", "Monsoon Palace"]
+    interestedCount: 98,
+    highlights: ["City Palace", "Lake Pichola Boat Ride", "Jag Dish Temple", "Monsoon Palace"],
+    itinerary: [
+      { day: 1, title: "Arrival Udaipur", desc: "Pickup. Lake Pichola boat ride evening." },
+      { day: 2, title: "Udaipur Sightseeing", desc: "City Palace, Saheliyon ki Bari, Karni Mata Ropeway." },
+      { day: 3, title: "Mount Abu Transfer", desc: "Drive to Mt Abu. Nakki Lake sunset." },
+      { day: 4, title: "Dilwara Temples", desc: "Visit famous Jain temples. Guru Shikhar view." },
+      { day: 5, title: "Departure", desc: "Drop at Udaipur/Abu Road station." }
+    ],
+    inclusions: ["AC Car", "Hotels", "Breakfast"],
+    exclusions: ["Entry Tickets", "Lunch/Dinner"]
   },
   {
     id: 8,
@@ -222,7 +377,16 @@ const TOURS = [
     rating: 4.9,
     reviews: 212,
     bestseller: true,
-    highlights: ["Sam Sand Dunes", "Jeep Safari", "Jaisalmer Fort", "Gadisar Lake"]
+    interestedCount: 180,
+    highlights: ["Sam Sand Dunes", "Jeep Safari", "Jaisalmer Fort", "Gadisar Lake"],
+    itinerary: [
+      { day: 1, title: "Arrival", desc: "Check in. Visit Gadisar Lake evening." },
+      { day: 2, title: "Jaisalmer Fort", desc: "Golden Fort, Patwon Ki Haveli. Evening Sam Dunes." },
+      { day: 3, title: "Desert Safari", desc: "Jeep Safari, Camel Ride, Cultural Show." },
+      { day: 4, title: "Departure", desc: "Drop at Railway Station." }
+    ],
+    inclusions: ["Stay (Hotel + Camp)", "Camel/Jeep Safari", "Breakfast & Dinner"],
+    exclusions: ["Train Tickets", "Personal Expenses"]
   },
   {
     id: 10,
@@ -233,11 +397,21 @@ const TOURS = [
     duration: "5 Days / 4 Nights",
     price: 55000,
     oldPrice: "65,000",
-    image: "https://images.unsplash.com/photo-1512453979798-5ea932a23644?q=80&w=800&auto=format&fit=crop",
+    image: "https://www.thrillophilia.com/blog/wp-content/uploads/2025/09/shutterstock_1291548640-1-1.jpg",
     rating: 4.9,
     reviews: 56,
     bestseller: false,
-    highlights: ["Burj Khalifa", "Desert Safari BBQ", "Dubai Mall", "Marina Cruise"]
+    interestedCount: 45,
+    highlights: ["Burj Khalifa", "Desert Safari BBQ", "Dubai Mall", "Marina Cruise"],
+    itinerary: [
+      { day: 1, title: "Dubai Arrival", desc: "Airport pickup. Dhow Cruise Dinner." },
+      { day: 2, title: "City Tour", desc: "Burj Khalifa 124th Floor, Dubai Mall." },
+      { day: 3, title: "Desert Safari", desc: "Dune Bashing, BBQ Dinner, Belly Dance." },
+      { day: 4, title: "Abu Dhabi Day Trip", desc: "Ferrari World, Grand Mosque." },
+      { day: 5, title: "Departure", desc: "Drop at Airport." }
+    ],
+    inclusions: ["Visa", "4 Star Stay", "Transfers", "Tours"],
+    exclusions: ["Flights", "Dirham Tax", "Tips"]
   },
   {
     id: 11,
@@ -252,7 +426,18 @@ const TOURS = [
     rating: 4.7,
     reviews: 89,
     bestseller: false,
-    highlights: ["Phi Phi Island Tour", "Phuket Beaches", "Coral Island", "Bangkok City Tour"]
+    interestedCount: 112,
+    highlights: ["Phi Phi Island Tour", "Phuket Beaches", "Coral Island", "Bangkok City Tour"],
+    itinerary: [
+      { day: 1, title: "Phuket Arrival", desc: "Airport pickup. Check in. Fantasea Show." },
+      { day: 2, title: "Phi Phi Island", desc: "Big Boat tour with Lunch. Snorkeling." },
+      { day: 3, title: "Phuket City Tour", desc: "Big Buddha, Wat Chalong. Flight to Bangkok." },
+      { day: 4, title: "Bangkok", desc: "Coral Island tour with lunch." },
+      { day: 5, title: "City Temples", desc: "Golden Buddha, Marble Temple. Shopping." },
+      { day: 6, title: "Departure", desc: "Drop at Airport." }
+    ],
+    inclusions: ["Hotels", "Tours", "Transfers", "Breakfast"],
+    exclusions: ["Flights", "Visa on Arrival", "National Park Fees"]
   },
   {
     id: 12,
@@ -267,7 +452,19 @@ const TOURS = [
     rating: 4.6,
     reviews: 156,
     bestseller: false,
-    highlights: ["North Goa Beaches", "Fort Aguada", "Dudhsagar Trek", "Casino Night"]
+    interestedCount: 230,
+    highlights: ["North Goa Beaches", "Fort Aguada", "Dudhsagar Trek", "Casino Night"],
+    itinerary: [
+      { day: 1, title: "Arrival", desc: "Pickup from Airport/Station. Check in to Villa/Hotel." },
+      { day: 2, title: "North Goa", desc: "Calangute, Baga, Fort Aguada." },
+      { day: 3, title: "South Goa", desc: "Old Goa Churches, Miramar Beach." },
+      { day: 4, title: "Dudhsagar", desc: "Jeep Safari to Dudhsagar Waterfalls." },
+      { day: 5, title: "Leisure", desc: "Free day for shopping or Casino." },
+      { day: 6, title: "Parties", desc: "Explore famous clubs of Goa." },
+      { day: 7, title: "Departure", desc: "Drop at Airport/Station." }
+    ],
+    inclusions: ["Stay with Breakfast", "Scooty Rental Assistance", "Transfers"],
+    exclusions: ["Flights/Train", "Lunch/Dinner", "Petrol", "Entry Fees"]
   },
   {
     id: 14,
@@ -278,11 +475,23 @@ const TOURS = [
     duration: "7 Days / 6 Nights",
     price: 22000,
     oldPrice: "28,000",
-    image: "https://images.unsplash.com/photo-1588665727192-3c2ae2b62788?q=80&w=800&auto=format&fit=crop",
+    image: "https://hblimg.mmtcdn.com/content/hubble/img/cherrapunji/mmt/destination/m_destination-cherrapunji-landscape_l_400_640.jpg",
     rating: 5.0,
     reviews: 42,
     bestseller: true,
-    highlights: ["Double Decker Bridge", "Umngot River", "Mawlynnong Village", "Seven Sisters Falls"]
+    interestedCount: 65,
+    highlights: ["Double Decker Bridge", "Umngot River", "Mawlynnong Village", "Seven Sisters Falls"],
+    itinerary: [
+      { day: 1, title: "Guwahati Arrival", desc: "Pickup. Drive to Shillong. Umiam Lake stop." },
+      { day: 2, title: "Cherrapunji", desc: "Drive to Cherrapunji. Visit Falls. Caving." },
+      { day: 3, title: "Double Decker Trek", desc: "Trek to Nongriat Double Decker Living Root Bridge." },
+      { day: 4, title: "Mawlynnong & Dawki", desc: "Cleanest village. Crystal clear Umngot river boating." },
+      { day: 5, title: "Jowai", desc: "Krang Suri Waterfalls." },
+      { day: 6, title: "Shillong Local", desc: "Don Bosco Museum, Police Bazaar." },
+      { day: 7, title: "Departure", desc: "Drop at Guwahati Airport." }
+    ],
+    inclusions: ["Transport", "Stay", "Breakfast", "Guide"],
+    exclusions: ["Lunch/Dinner", "Entry Fees"]
   }
 ];
 
@@ -294,7 +503,7 @@ const BLOG_POSTS = [
     author: "Humsafar Team",
     date: "Oct 15, 2024",
     category: "Weekly Newsletter",
-    image: "https://images.unsplash.com/photo-1605649487215-476786814a60?q=80&w=800&auto=format&fit=crop",
+    image: "https://www.captureatrip.com/_next/image?url=https%3A%2F%2Fd1zvcmhypeawxj.cloudfront.net%2Flocation%2FHimachal%20Pradesh%2Fblogs%2Fvalleys-in-himachal-pradesh-0f17b32df1-ur5kwb-webp-e682fd219c-1752056379292.webp&w=3840&q=75",
     tags: ["Himachal", "Trekking", "Sustainability"]
   },
   {
@@ -324,7 +533,7 @@ const BLOG_POSTS = [
     author: "Humsafar Team",
     date: "Sep 24, 2024",
     category: "Weekly Newsletter",
-    image: "https://images.unsplash.com/photo-1588665727192-3c2ae2b62788?q=80&w=800&auto=format&fit=crop",
+    image: "https://www.nativeplanet.com/img/2014/06/27-new1-meghalaya-cover.jpg",
     tags: ["Meghalaya", "North East", "Monsoon"]
   },
   {
@@ -339,6 +548,40 @@ const BLOG_POSTS = [
   }
 ];
 
+// --- TEAM DATA ---
+const TEAM_MEMBERS = [
+  {
+    name: "Dhananjay Parashar",
+    role: "Co-Founder",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop",
+    bio: "Passionate about exploring the unseen paths of the Himalayas. Believes in sustainable tourism and community building.",
+    contact: {
+      email: "dhananjay@humsafar.com",
+      phone: "+91 98765 43210"
+    }
+  },
+  {
+    name: "Mohit Yogi",
+    role: "Co-Founder",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
+    bio: "An avid trekker and photographer. Mohit ensures every trip is picture-perfect and logistically flawless.",
+    contact: {
+      email: "mohit@humsafar.com",
+      phone: "+91 98765 43211"
+    }
+  },
+  {
+    name: "Abhay Tank",
+    role: "Executive Manager",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&auto=format&fit=crop",
+    bio: "The operational backbone of Humsafar. Abhay manages the chaos so you can enjoy the calm.",
+    contact: {
+      email: "abhay@humsafar.com",
+      phone: "+91 98765 43212"
+    }
+  }
+];
+
 // --- COMPONENTS ---
 
 const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, searchTerm, setSearchTerm }) => {
@@ -349,16 +592,14 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
       label: 'Upcoming Tours',
       action: () => onNavigate('upcoming')
     },
-    { id: 'exclusive', label: 'Exclusive' },
+    { id: 'custom', label: 'Custom Trips' }, // Added Custom Option
+    // Exclusive Tab Removed
     { id: 'blog', label: 'Blog' },
-    { id: 'about', label: 'About Us' },
+    // { id: 'about', label: 'About Us' }, // Commented out About Us
   ];
 
-  // Helper to determine if we are on a page with a dark hero section where header is transparent
-  // Modified: Only 'home' gets the transparent header over the hero image.
-  const hasDarkHero = ['home'].includes(currentPage);
+  const hasDarkHero = ['home', 'trip-detail'].includes(currentPage); // Transparent header for detail page too
 
-  // Function to handle search submit
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if(searchTerm.trim()){
@@ -378,7 +619,7 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
             <span className="font-sans text-[0.65rem] font-bold tracking-[0.2em] uppercase opacity-80 group-hover:tracking-[0.3em] transition-all duration-300">Community</span>
           </div>
 
-          {/* Search Bar - Only Visible When Scrolled or on specific pages, but now takes to a new page */}
+          {/* Search Bar */}
           <div className={`hidden md:flex flex-1 max-w-md mx-4 transition-all duration-500 transform ${isScrolled ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
             <form onSubmit={handleSearchSubmit} className="relative w-full group">
               <input
@@ -395,7 +636,7 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
           </div>
 
           {/* Desktop Menu */}
-          <div className={`hidden md:flex items-center space-x-8 text-sm font-semibold tracking-wide shrink-0 ${isScrolled || !hasDarkHero ? 'text-gray-600' : 'text-white/90'}`}>
+          <div className={`hidden md:flex items-center space-x-6 lg:space-x-8 text-sm font-semibold tracking-wide shrink-0 ${isScrolled || !hasDarkHero ? 'text-gray-600' : 'text-white/90'}`}>
             {menuItems.map((item) => (
                 <button
                     key={item.id}
@@ -409,12 +650,13 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
                     className={`hover:text-emerald-600 transition-colors relative group ${currentPage === item.id ? 'text-emerald-600' : ''}`}
                 >
                   {item.label}
+                  {item.id === 'custom' && <span className="absolute -top-3 -right-3 bg-orange-500 text-white text-[8px] px-1.5 py-0.5 rounded-full uppercase">New</span>}
                   <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-500 transition-all group-hover:w-full ${currentPage === item.id ? 'w-full' : ''}`}></span>
                 </button>
             ))}
 
             <a
-                href="https://wa.me/919999999999"
+                href={WHATSAPP_BASE}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`flex items-center px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl ${isScrolled || !hasDarkHero ? 'bg-emerald-900 text-white hover:bg-emerald-800' : 'bg-white text-emerald-900 hover:bg-gray-100'}`}
@@ -431,7 +673,7 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
 
         {/* Mobile Menu Overlay */}
         {isMenuOpen && (
-            <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-2xl p-6 flex flex-col space-y-6 text-gray-800 animate-in slide-in-from-top-5 border-t border-gray-100">
+            <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-2xl p-6 flex flex-col space-y-6 text-gray-800 animate-in slide-in-from-top-5 border-t border-gray-100 h-screen overflow-y-auto pb-32">
               {menuItems.map(item => (
                   <button
                       key={item.id}
@@ -443,12 +685,13 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
                           onNavigate(item.id);
                         }
                       }}
-                      className="font-serif font-bold text-2xl text-emerald-950 text-left"
+                      className="font-serif font-bold text-2xl text-emerald-950 text-left flex items-center justify-between"
                   >
                     {item.label}
+                    {item.id === 'custom' && <span className="bg-orange-100 text-orange-600 text-xs px-2 py-1 rounded-md uppercase tracking-wider font-sans">New</span>}
                   </button>
               ))}
-              <a href="https://wa.me/919999999999" className="bg-emerald-900 text-white py-4 rounded-xl flex justify-center items-center font-bold uppercase tracking-widest text-sm">
+              <a href={WHATSAPP_BASE} className="bg-emerald-900 text-white py-4 rounded-xl flex justify-center items-center font-bold uppercase tracking-widest text-sm">
                 <MessageCircle className="w-5 h-5 mr-2" /> WhatsApp Us
               </a>
             </div>
@@ -459,15 +702,13 @@ const Header = ({ isScrolled, toggleMenu, isMenuOpen, onNavigate, currentPage, s
 
 const Hero = ({ searchTerm, setSearchTerm, onSearch }) => (
     <section id="home" className="relative h-[92vh] flex items-center justify-center text-center text-white bg-emerald-950 overflow-hidden">
-      {/* Background Image - Lush Green Landscape */}
       <div className="absolute inset-0 opacity-80">
         <img
-            src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2000&auto=format&fit=crop"
+            src="https://www.snowvalleyresorts.com/wp-content/uploads/featurd-image-min-1240x696.webp"
             alt="Travel Background"
             className="w-full h-full object-cover"
         />
       </div>
-      {/* Gradient Overlays for Readability */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"></div>
       <div className="absolute inset-0 bg-emerald-900/20 mix-blend-multiply"></div>
 
@@ -482,7 +723,6 @@ const Hero = ({ searchTerm, setSearchTerm, onSearch }) => (
           Curated expeditions for the modern explorer. Join the community that travels deeper.
         </p>
 
-        {/* Main Search Bar - OTA Style */}
         <form onSubmit={onSearch} className="max-w-4xl mx-auto bg-white rounded-full p-2 pl-6 flex items-center shadow-2xl transform transition-all hover:scale-[1.01]">
           <Search className="text-gray-400 w-5 h-5 mr-3" />
           <input
@@ -513,10 +753,12 @@ const FilterBar = ({ selectedRegion, setSelectedRegion, selectedType, setSelecte
     { id: 'other', label: 'Rest of India' },
   ];
 
+  // Added Custom Option
   const types = [
     { id: 'all', label: 'All Types' },
     { id: 'group', label: 'Group' },
     { id: 'corporate', label: 'Corporate' },
+    { id: 'custom', label: 'Custom / Private' },
     { id: 'educational', label: 'Educational' },
   ];
 
@@ -524,7 +766,6 @@ const FilterBar = ({ selectedRegion, setSelectedRegion, selectedType, setSelecte
       <div className="container mx-auto px-8 lg:px-24 xl:px-32 -mt-20 relative z-30">
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100/50 backdrop-blur-sm">
           <div className="flex flex-col lg:flex-row gap-8 justify-between items-start">
-
             <div className="w-full">
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Destinations</h3>
               <div className="flex flex-wrap gap-3">
@@ -554,20 +795,18 @@ const FilterBar = ({ selectedRegion, setSelectedRegion, selectedType, setSelecte
                 ))}
               </div>
             </div>
-
           </div>
         </div>
       </div>
   );
 };
 
-const TourCard = ({ tour }) => {
-  const whatsappMsg = `Hi Humsafar Team, I am interested in the ${tour.title} package. Please share more details.`;
-  const whatsappLink = `https://wa.me/919999999999?text=${encodeURIComponent(whatsappMsg)}`;
-
+const TourCard = ({ tour, onViewDetails }) => {
   return (
-      <div className="group bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full relative">
-        {/* Image Section - 4:3 Ratio */}
+      <div
+          onClick={() => onViewDetails(tour.id)}
+          className="group bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full relative cursor-pointer"
+      >
         <div className="relative aspect-[4/3] w-full overflow-hidden">
           <img
               src={tour.image}
@@ -575,8 +814,6 @@ const TourCard = ({ tour }) => {
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
-
-          {/* Badges */}
           <div className="absolute top-3 left-3 flex gap-2">
             {tour.bestseller && (
                 <span className="bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded shadow-sm flex items-center uppercase tracking-wide">
@@ -584,12 +821,9 @@ const TourCard = ({ tour }) => {
             </span>
             )}
           </div>
-
-          {/* Wishlist Heart */}
-          <div className="absolute top-3 right-3 p-2 bg-white/20 backdrop-blur-md rounded-full cursor-pointer hover:bg-white transition-colors group/heart">
+          <div className="absolute top-3 right-3 p-2 bg-white/20 backdrop-blur-md rounded-full hover:bg-white transition-colors group/heart">
             <Heart className="w-4 h-4 text-white group-hover/heart:text-red-500 transition-colors" />
           </div>
-
           <div className="absolute bottom-3 left-3 text-white">
             <div className="flex items-center text-xs font-medium">
               <MapPin className="w-3 h-3 mr-1" /> {tour.location}
@@ -597,7 +831,6 @@ const TourCard = ({ tour }) => {
           </div>
         </div>
 
-        {/* Content Section */}
         <div className="p-5 flex flex-col flex-1">
           <div className="flex justify-between items-center mb-3">
             <div className="flex items-center text-emerald-700 bg-emerald-50 px-2 py-1 rounded text-xs font-bold">
@@ -610,11 +843,15 @@ const TourCard = ({ tour }) => {
             </div>
           </div>
 
-          <h3 className="text-lg font-sans font-bold text-gray-900 leading-snug mb-3 group-hover:text-emerald-700 transition-colors line-clamp-2">
+          <h3 className="text-lg font-sans font-bold text-gray-900 leading-snug mb-2 group-hover:text-emerald-700 transition-colors line-clamp-2">
             {tour.title}
           </h3>
 
-          {/* Highlights */}
+          <div className="flex items-center text-xs text-gray-500 mb-3">
+            <Users className="w-3 h-3 mr-1 text-gray-400" />
+            <span className="font-medium text-emerald-600">{tour.interestedCount || 40}+ people interested</span>
+          </div>
+
           <div className="mb-4">
             <div className="flex flex-wrap gap-2">
               {tour.highlights && tour.highlights.slice(0, 3).map((h, i) => (
@@ -628,7 +865,6 @@ const TourCard = ({ tour }) => {
             </div>
           </div>
 
-          {/* Price & Action */}
           <div className="mt-auto pt-4 border-t border-dashed border-gray-200 flex items-end justify-between">
             <div>
               <div className="flex items-center gap-2">
@@ -640,51 +876,43 @@ const TourCard = ({ tour }) => {
                 <p className="text-xs text-gray-500 font-medium">/ person</p>
               </div>
             </div>
-            <a
-                href={whatsappLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wide transition-all shadow-md hover:shadow-lg"
-            >
+            <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wide transition-all shadow-md hover:shadow-lg">
               View Deal
-            </a>
+            </button>
           </div>
         </div>
       </div>
   );
 };
 
-// Moved InquiryForms to be used in AboutPage
+// --- RESTORED: InquiryForms Component ---
 const InquiryForms = () => {
   const [activeTab, setActiveTab] = useState('retail');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Thank you! Your inquiry has been sent to our team. We will contact you on WhatsApp shortly.");
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+    const msg = `Hi Humsafar Team, I have an inquiry.%0A%0AName: ${data.name}%0APhone: ${data.phone}%0AInterest: ${data.interest}%0A%0AMessage: ${data.message}`;
+    window.open(`https://wa.me/${CONTACT_NUMBER}?text=${msg}`, '_blank');
   };
 
   return (
       <section id="forms" className="py-24 bg-white relative overflow-hidden">
         <div className="absolute inset-0 bg-scribble pointer-events-none opacity-50"></div>
-
-        {/* Subtle decorative circles */}
         <div className="absolute top-20 right-0 w-96 h-96 bg-emerald-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
         <div className="absolute top-20 left-0 w-96 h-96 bg-purple-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
 
         <div className="container mx-auto px-4 lg:px-12 relative z-10">
           <div className="max-w-7xl mx-auto bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-gray-100">
 
-            {/* Side Info Panel - Enhanced */}
             <div className="md:w-4/12 bg-emerald-900 p-12 text-white flex flex-col justify-between relative overflow-hidden">
-              {/* Pattern Overlay */}
               <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
-
               <div className="relative z-10 space-y-12">
                 <div>
                   <h3 className="text-4xl font-serif font-bold mb-4">Let's Plan Your<br/>Next Escape.</h3>
                   <p className="text-emerald-200 text-lg leading-relaxed">Whether it's a solo soul-search or a corporate retreat, we craft journeys that linger in your memory.</p>
                 </div>
-
                 <div className="space-y-8">
                   <div className="flex items-center group">
                     <div className="bg-emerald-800/50 w-12 h-12 rounded-xl flex items-center justify-center mr-5 group-hover:bg-emerald-700 transition-colors border border-emerald-700/30">
@@ -692,10 +920,9 @@ const InquiryForms = () => {
                     </div>
                     <div>
                       <p className="text-[10px] text-emerald-400 uppercase tracking-widest font-bold mb-1">Talk to an Expert</p>
-                      <p className="font-medium text-lg tracking-wide">+91 98765 43210</p>
+                      <p className="font-medium text-lg tracking-wide">+91 62684 96389</p>
                     </div>
                   </div>
-
                   <div className="flex items-center group">
                     <div className="bg-emerald-800/50 w-12 h-12 rounded-xl flex items-center justify-center mr-5 group-hover:bg-emerald-700 transition-colors border border-emerald-700/30">
                       <Mail className="w-5 h-5 text-emerald-300" />
@@ -705,25 +932,10 @@ const InquiryForms = () => {
                       <p className="font-medium text-lg tracking-wide">hello@humsafar.com</p>
                     </div>
                   </div>
-
-                  <div className="flex items-center group">
-                    <div className="bg-emerald-800/50 w-12 h-12 rounded-xl flex items-center justify-center mr-5 group-hover:bg-emerald-700 transition-colors border border-emerald-700/30">
-                      <MapPin className="w-5 h-5 text-emerald-300" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-emerald-400 uppercase tracking-widest font-bold mb-1">Visit HQ</p>
-                      <p className="font-medium text-lg leading-snug">Hauz Khas Village,<br/>New Delhi, India</p>
-                    </div>
-                  </div>
                 </div>
-              </div>
-
-              <div className="relative z-10 mt-12 pt-8 border-t border-emerald-800/50">
-                <p className="text-emerald-400 text-xs italic">"The journey of a thousand miles begins with a single step."</p>
               </div>
             </div>
 
-            {/* Form Area - Widened & Redesigned */}
             <div className="md:w-8/12 p-12 lg:p-16 bg-gray-50/30">
               <div className="flex space-x-8 mb-10 border-b-2 border-gray-100">
                 <button
@@ -744,37 +956,21 @@ const InquiryForms = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-3 group">
                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Full Name</label>
-                    <input required type="text" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. John Doe" />
+                    <input name="name" required type="text" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. John Doe" />
                   </div>
                   <div className="space-y-3 group">
                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Phone Number</label>
-                    <input required type="tel" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. +91 98765..." />
+                    <input name="phone" required type="tel" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. +91 98765..." />
                   </div>
                 </div>
-
-                {activeTab === 'b2b' && (
-                    <div className="space-y-3 group">
-                      <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Company / Agency Name</label>
-                      <input required type="text" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. Wanderlust Travels Pvt Ltd" />
-                    </div>
-                )}
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-3 group">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Destination Interest</label>
-                    <input required type="text" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. Spiti Valley, Kerala..." />
-                  </div>
-                  <div className="space-y-3 group">
-                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Travel Dates (Approx)</label>
-                    <input type="text" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. Mid December" />
-                  </div>
+                <div className="space-y-3 group">
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Destination Interest</label>
+                  <input name="interest" required type="text" className="w-full px-0 py-3 bg-transparent border-b-2 border-gray-200 focus:border-emerald-600 outline-none transition-colors text-gray-800 placeholder-gray-300 font-medium" placeholder="e.g. Spiti Valley, Kerala..." />
                 </div>
-
                 <div className="space-y-3 group">
                   <label className="text-xs font-bold text-gray-500 uppercase tracking-wider group-focus-within:text-emerald-600 transition-colors">Tell us more</label>
-                  <textarea rows="3" className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none transition-all text-gray-800 placeholder-gray-400 resize-none" placeholder="Group size, specific requirements, or just what you're dreaming of..."></textarea>
+                  <textarea name="message" rows="3" className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none transition-all text-gray-800 placeholder-gray-400 resize-none" placeholder="Group size, specific requirements..."></textarea>
                 </div>
-
                 <div className="pt-4 flex items-center justify-between">
                   <p className="text-xs text-gray-400 hidden md:block">We usually respond within 2 hours.</p>
                   <button type="submit" className="bg-emerald-900 text-white font-bold py-4 px-10 rounded-xl hover:bg-emerald-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 flex items-center gap-3 w-full md:w-auto justify-center">
@@ -789,102 +985,27 @@ const InquiryForms = () => {
   );
 };
 
-const FeatureSection = () => (
-    <section className="py-24 bg-emerald-950 relative overflow-hidden">
-      {/* Abstract Background Element */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-emerald-900/30 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-emerald-900/30 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="container mx-auto px-8 lg:px-24 xl:px-32 relative z-10">
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 items-center">
-
-          {/* Left Column - Features */}
-          <div className="space-y-12">
-            {/* Feature 1 */}
-            <div className="flex flex-col items-center text-center p-4 rounded-2xl transition-all duration-300 hover:bg-white/5">
-              <div className="bg-emerald-900/50 p-3 rounded-xl text-emerald-400 mb-3 shadow-sm border border-emerald-800">
-                <Users className="w-6 h-6" />
-              </div>
-              <h3 className="font-bold text-white mb-1 text-lg">Community First</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">Join a family of 10k+ travelers sharing stories and creating memories.</p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="flex flex-col items-center text-center p-4 rounded-2xl transition-all duration-300 hover:bg-white/5">
-              <div className="bg-emerald-900/50 p-3 rounded-xl text-orange-400 mb-3 shadow-sm border border-emerald-800">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <h3 className="font-bold text-white mb-1 text-lg">100% Safe</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">Verified stays, secure payments, and 24/7 on-trip support.</p>
-            </div>
-          </div>
-
-          {/* Center Column - Title Text */}
-          <div className="text-center relative">
-            <span className="text-emerald-400 font-bold uppercase tracking-[0.2em] text-xs mb-4 block">Why Choose Us</span>
-            <h2 className="text-4xl md:text-5xl font-serif font-bold text-white mb-6 leading-tight">
-              Redefining<br />how you <span className="italic text-emerald-400">travel.</span>
-            </h2>
-            <p className="text-gray-400 text-base leading-relaxed max-w-sm mx-auto">
-              We don't just plan trips; we curate immersive experiences that bring people together. Trusted by thousands of wanderers across the globe.
-            </p>
-          </div>
-
-          {/* Right Column - Features */}
-          <div className="space-y-12">
-            {/* Feature 3 */}
-            <div className="flex flex-col items-center text-center p-4 rounded-2xl transition-all duration-300 hover:bg-white/5">
-              <div className="bg-emerald-900/50 p-3 rounded-xl text-blue-400 mb-3 shadow-sm border border-emerald-800">
-                <Star className="w-6 h-6" />
-              </div>
-              <h3 className="font-bold text-white mb-1 text-lg">Top Rated</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">4.8/5 average rating across all platforms from happy travelers.</p>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="flex flex-col items-center text-center p-4 rounded-2xl transition-all duration-300 hover:bg-white/5">
-              <div className="bg-emerald-900/50 p-3 rounded-xl text-purple-400 mb-3 shadow-sm border border-emerald-800">
-                <MapIcon className="w-6 h-6" />
-              </div>
-              <h3 className="font-bold text-white mb-1 text-lg">Curated Trips</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">Handpicked itineraries designed for the best immersive experience.</p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-);
-
+// --- RESTORED: Footer ---
 const Footer = ({ onNavigate }) => (
     <footer className="bg-gray-950 text-gray-400 py-20 border-t border-gray-900">
       <div className="container mx-auto px-8 lg:px-24 xl:px-32">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-20 mb-16">
           <div className="lg:col-span-1">
-            <div
-                onClick={() => onNavigate('home')}
-                className="flex flex-col items-start leading-none mb-6 text-white cursor-pointer"
-            >
+            <div onClick={() => onNavigate('home')} className="flex flex-col items-start leading-none mb-6 text-white cursor-pointer">
               <span className="font-serif font-black text-2xl tracking-tight">Humsafar</span>
               <span className="font-sans text-[0.65rem] font-bold tracking-[0.2em] uppercase opacity-60">Community</span>
             </div>
-            <p className="text-sm leading-relaxed mb-8 text-gray-500">
-              Building a community of travelers who seek stories, adventures, and meaningful connections across India and the world.
-            </p>
+            <p className="text-sm leading-relaxed mb-8 text-gray-500">Building a community of travelers who seek stories, adventures, and meaningful connections across India and the world.</p>
             <div className="flex space-x-4">
               <a href="#" className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center hover:bg-emerald-900 hover:text-white transition-all"><Instagram className="w-5 h-5" /></a>
               <a href="#" className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all"><Facebook className="w-5 h-5" /></a>
             </div>
           </div>
-
           <div className="grid grid-cols-2 gap-8 lg:col-span-2">
             <div>
               <h4 className="text-white font-bold mb-6 tracking-widest uppercase text-xs">Destinations</h4>
               <ul className="space-y-4 text-sm font-medium">
-                {['Himachal Pradesh', 'Uttarakhand', 'Rajasthan', 'International', 'North East India'].map(item => (
+                {['Himachal Pradesh', 'Uttarakhand', 'Rajasthan', 'International'].map(item => (
                     <li key={item}><button onClick={() => onNavigate('home')} className="hover:text-emerald-400 transition-colors">{item}</button></li>
                 ))}
               </ul>
@@ -892,27 +1013,23 @@ const Footer = ({ onNavigate }) => (
             <div>
               <h4 className="text-white font-bold mb-6 tracking-widest uppercase text-xs">Company</h4>
               <ul className="space-y-4 text-sm font-medium">
+                {/* Commented out About Us links
                 <li><button onClick={() => onNavigate('about')} className="hover:text-emerald-400 transition-colors">About Us</button></li>
-                <li><button onClick={() => onNavigate('about')} className="hover:text-emerald-400 transition-colors">Partner Program</button></li>
-                <li><a href="#" className="hover:text-emerald-400 transition-colors">Terms & Conditions</a></li>
-                <li><a href="#" className="hover:text-emerald-400 transition-colors">Privacy Policy</a></li>
-                <li><button onClick={() => onNavigate('about')} className="hover:text-emerald-400 transition-colors">Contact</button></li>
+                */}
+                <li><button onClick={() => onNavigate('custom')} className="hover:text-emerald-400 transition-colors">Custom Trips</button></li>
+                {/* <li><button onClick={() => onNavigate('about')} className="hover:text-emerald-400 transition-colors">Contact</button></li> */}
               </ul>
             </div>
           </div>
-
           <div>
             <h4 className="text-white font-bold mb-6 tracking-widest uppercase text-xs">Newsletter</h4>
             <p className="text-xs mb-6 text-gray-500">Join our newsletter for exclusive deals and travel stories.</p>
             <div className="flex flex-col gap-3">
               <input type="email" placeholder="Your email address" className="bg-gray-900 text-white px-5 py-3 rounded-lg outline-none w-full text-sm border border-gray-800 focus:border-emerald-600 transition" />
-              <button className="bg-emerald-900 px-5 py-3 rounded-lg hover:bg-emerald-800 transition text-white font-bold text-sm uppercase tracking-wide">
-                Subscribe
-              </button>
+              <button className="bg-emerald-900 px-5 py-3 rounded-lg hover:bg-emerald-800 transition text-white font-bold text-sm uppercase tracking-wide">Subscribe</button>
             </div>
           </div>
         </div>
-
         <div className="pt-8 border-t border-gray-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-600">
           <p>© {new Date().getFullYear()} Humsafar Community. All rights reserved.</p>
           <p className="flex items-center">Made with <Heart className="w-3 h-3 inline text-emerald-700 mx-1 fill-current" /> in India</p>
@@ -921,10 +1038,460 @@ const Footer = ({ onNavigate }) => (
     </footer>
 );
 
-// --- NEW PAGE COMPONENTS ---
+// --- NEW TRIP DETAIL PAGE ---
+const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
+  const tour = TOURS.find(t => t.id === tourId) || TOURS[0];
+  const upcomingSaturdays = useMemo(() => getNextSaturdays(5), []);
+  const [activeDate, setActiveDate] = useState(upcomingSaturdays[0]);
+  const [expandedDay, setExpandedDay] = useState(0);
+  const [travelerCount, setTravelerCount] = useState(1); // New State for traveler count
+  const [sharingType, setSharingType] = useState('Quad'); // NEW: Sharing Type State
 
-const SearchResultsPage = ({ searchTerm, setSearchTerm }) => {
-  // Basic search filtering logic
+  const sharingOptions = [
+    { type: 'Quad', label: 'Quad Sharing', surCharge: 0 },
+    { type: 'Triple', label: 'Triple Sharing', surCharge: 1500 },
+    { type: 'Double', label: 'Double Sharing', surCharge: 3000 },
+  ];
+
+  // Dynamic Price Calculation
+  const selectedOption = sharingOptions.find(o => o.type === sharingType);
+  const currentPricePerPerson = tour.price + selectedOption.surCharge;
+  const totalPrice = currentPricePerPerson * travelerCount;
+
+  // Dynamic WhatsApp Message with All Details
+  const whatsappMsg = `Hi Humsafar Team, I am interested in the *${tour.title}*.%0A%0A🗓 *Trip Date:* ${activeDate.toDateString()}%0A🏨 *Sharing:* ${sharingType} Sharing%0A👥 *People:* ${travelerCount}%0A💰 *Total Approx Price:* ₹${totalPrice.toLocaleString()}%0A⏳ *Duration:* ${tour.duration}%0A%0APlease share more details.`;
+  const whatsappLink = `https://wa.me/${CONTACT_NUMBER}?text=${whatsappMsg}`;
+
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0,0);
+  }, [tourId]);
+
+  return (
+      <div className="min-h-screen bg-gray-50">
+        {/* Sticky Mobile Bottom Bar */}
+        <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 z-50 flex items-center justify-between shadow-[0_-5px_20px_rgba(0,0,0,0.1)]">
+          <div>
+            <p className="text-xs text-gray-400 line-through">₹{tour.oldPrice}</p>
+            <p className="text-xl font-bold text-gray-900">₹{totalPrice.toLocaleString()}</p>
+          </div>
+          <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="bg-emerald-900 text-white px-8 py-3 rounded-xl font-bold uppercase tracking-widest text-xs flex items-center gap-2">
+            Book Now <MessageCircle className="w-4 h-4" />
+          </a>
+        </div>
+
+        {/* Hero Section */}
+        <div className="relative h-[60vh] lg:h-[70vh]">
+          <img src={tour.image} alt={tour.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+          <div className="absolute top-24 left-4 lg:left-24 z-20">
+            <button onClick={onBack} className="bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white/40 transition flex items-center gap-2">
+              <ArrowRight className="w-4 h-4 rotate-180" /> Back
+            </button>
+          </div>
+          <div className="absolute bottom-0 left-0 w-full p-8 lg:p-24 pb-12 text-white">
+            <div className="container mx-auto px-4 lg:px-8 xl:px-8">
+              <div className="flex gap-2 mb-4">
+                <span className="bg-emerald-600 text-white px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider">{tour.region}</span>
+                <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider flex items-center gap-1"><Clock className="w-3 h-3"/> {tour.duration}</span>
+              </div>
+              <h1 className="text-4xl md:text-6xl font-serif font-bold mb-4 leading-tight">{tour.title}</h1>
+              <div className="flex flex-wrap items-center gap-6 text-sm font-medium text-emerald-100">
+                <span className="flex items-center gap-1"><MapPin className="w-4 h-4"/> {tour.location}</span>
+                <span className="flex items-center gap-1"><Star className="w-4 h-4 text-orange-400 fill-current"/> {tour.rating} ({tour.reviews} Reviews)</span>
+                <span className="flex items-center gap-1"><Users className="w-4 h-4"/> {tour.interestedCount}+ Interested</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Adjusted Padding to match Home Page */}
+        <div className="container mx-auto px-8 lg:px-24 xl:px-32 py-12 grid grid-cols-1 lg:grid-cols-3 gap-12 pb-24">
+          {/* Left Content: Itinerary & Details */}
+          <div className="lg:col-span-2 space-y-12">
+
+            {/* Highlights */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+              <h2 className="text-2xl font-serif font-bold text-gray-900 mb-6">Trip Highlights</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {tour.highlights.map((h, i) => (
+                    <div key={i} className="flex items-start gap-3">
+                      <div className="bg-emerald-100 p-1.5 rounded-full mt-0.5"><Check className="w-3 h-3 text-emerald-700" /></div>
+                      <span className="text-gray-700 font-medium">{h}</span>
+                    </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Itinerary */}
+            <div>
+              <h2 className="text-2xl font-serif font-bold text-gray-900 mb-6 flex items-center gap-3">
+                <MapIcon className="w-6 h-6 text-emerald-600"/> Detailed Itinerary
+              </h2>
+              <div className="space-y-4">
+                {tour.itinerary ? tour.itinerary.map((day, i) => (
+                    <div key={i} className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all">
+                      <button
+                          onClick={() => setExpandedDay(expandedDay === i ? -1 : i)}
+                          className="w-full flex items-center justify-between p-6 text-left"
+                      >
+                        <div className="flex items-center gap-4">
+                                        <span className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg ${expandedDay === i ? 'bg-emerald-900 text-white' : 'bg-emerald-100 text-emerald-900'}`}>
+                                            D{day.day}
+                                        </span>
+                          <h3 className="font-bold text-gray-900 text-lg">{day.title}</h3>
+                        </div>
+                        {expandedDay === i ? <ChevronUp className="text-gray-400"/> : <ChevronDown className="text-gray-400"/>}
+                      </button>
+                      {expandedDay === i && (
+                          <div className="px-6 pb-6 pl-[5.5rem] text-gray-600 leading-relaxed border-t border-gray-50 pt-4">
+                            {day.desc}
+                          </div>
+                      )}
+                    </div>
+                )) : (
+                    <div className="p-8 bg-gray-100 rounded-xl text-center text-gray-500">Itinerary details coming soon.</div>
+                )}
+              </div>
+            </div>
+
+            {/* Inclusions & Exclusions */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+                <h3 className="font-bold text-emerald-800 mb-4 uppercase tracking-widest text-xs">What's Included</h3>
+                <ul className="space-y-3">
+                  {tour.inclusions ? tour.inclusions.map((item, i) => (
+                      <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
+                        <Check className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" /> {item}
+                      </li>
+                  )) : <li>Standard Inclusions</li>}
+                </ul>
+              </div>
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+                <h3 className="font-bold text-red-800 mb-4 uppercase tracking-widest text-xs">What's Excluded</h3>
+                <ul className="space-y-3">
+                  {tour.exclusions ? tour.exclusions.map((item, i) => (
+                      <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
+                        <X className="w-4 h-4 text-red-400 shrink-0 mt-0.5" /> {item}
+                      </li>
+                  )) : <li>Standard Exclusions</li>}
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Right Sidebar: Booking Card */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-32 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+              <div className="bg-emerald-900 p-6 text-white text-center">
+                <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">Total Trip Cost</p>
+                <div className="flex items-baseline justify-center gap-2">
+                  <span className="text-3xl font-bold">₹{totalPrice.toLocaleString()}</span>
+                </div>
+                <p className="text-xs mt-2 opacity-80">{travelerCount} Person(s) • {sharingType} Sharing</p>
+              </div>
+
+              <div className="p-6">
+                <h4 className="font-bold text-gray-900 mb-4 text-sm uppercase tracking-widest">Select Departure Date</h4>
+                <div className="grid grid-cols-2 gap-3 mb-6">
+                  {upcomingSaturdays.map((date, i) => (
+                      <button
+                          key={i}
+                          onClick={() => setActiveDate(date)}
+                          className={`p-3 rounded-lg border text-sm text-center transition-all ${activeDate === date ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-bold ring-1 ring-emerald-600' : 'border-gray-200 text-gray-600 hover:border-emerald-300'}`}
+                      >
+                        <span className="block text-xs uppercase text-gray-400 font-bold">{date.toLocaleDateString('default', {month:'short'})}</span>
+                        <span className="text-lg font-bold">{date.getDate()}</span>
+                        <span className="block text-[10px] text-gray-400">Saturday</span>
+                      </button>
+                  ))}
+                </div>
+
+                {/* NEW: Sharing Type Selection */}
+                <h4 className="font-bold text-gray-900 mb-4 text-sm uppercase tracking-widest">Occupancy Type</h4>
+                <div className="grid grid-cols-3 gap-2 mb-6">
+                  {sharingOptions.map((option) => (
+                      <button
+                          key={option.type}
+                          onClick={() => setSharingType(option.type)}
+                          className={`py-2 px-1 rounded-lg border text-xs font-bold transition-all flex flex-col items-center justify-center ${sharingType === option.type ? 'bg-emerald-50 border-emerald-600 text-emerald-900 ring-1 ring-emerald-600' : 'border-gray-200 text-gray-600 hover:border-emerald-300'}`}
+                      >
+                        <span className="block mb-1">{option.type}</span>
+                        <span className="text-[10px] font-normal text-gray-400">
+                          {option.surCharge === 0 ? 'Base' : `+₹${option.surCharge.toLocaleString()}`}
+                        </span>
+                      </button>
+                  ))}
+                </div>
+
+
+                {/* Traveler Counter */}
+                <h4 className="font-bold text-gray-900 mb-4 text-sm uppercase tracking-widest">Number of Travelers</h4>
+                <div className="flex items-center justify-between bg-gray-50 rounded-xl p-3 mb-6 border border-gray-200">
+                  <button
+                      onClick={() => setTravelerCount(Math.max(1, travelerCount - 1))}
+                      className="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center text-emerald-800 hover:bg-emerald-50 transition-colors"
+                  >
+                    <Minus className="w-4 h-4" />
+                  </button>
+                  <span className="font-bold text-xl text-gray-900">{travelerCount}</span>
+                  <button
+                      onClick={() => setTravelerCount(travelerCount + 1)}
+                      className="w-10 h-10 bg-white rounded-lg shadow-sm flex items-center justify-center text-emerald-800 hover:bg-emerald-50 transition-colors"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="bg-orange-50 p-4 rounded-xl mb-6 flex items-start gap-3">
+                  <Info className="w-5 h-5 text-orange-500 shrink-0" />
+                  <p className="text-xs text-orange-800 leading-relaxed">
+                    <span className="font-bold">Fast Filling!</span> {tour.interestedCount} people viewed this in the last 24 hours. Limited seats available for upcoming batch.
+                  </p>
+                </div>
+
+                <a
+                    href={whatsappLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-emerald-600 text-white py-4 rounded-xl font-bold uppercase tracking-widest text-sm hover:bg-emerald-700 transition shadow-lg hover:shadow-xl flex items-center justify-center gap-2 mb-3"
+                >
+                  Book on WhatsApp <MessageCircle className="w-5 h-5" />
+                </a>
+                <p className="text-center text-xs text-gray-400">No payment needed to enquire.</p>
+
+                <div className="mt-6 pt-6 border-t border-gray-100 space-y-3">
+                  <div className="flex items-center gap-3 text-sm text-gray-600">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600" /> Safe & Secure Booking
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-gray-600">
+                    <Users className="w-4 h-4 text-emerald-600" /> Small Group Sizes
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  );
+};
+
+// --- UPDATED UPCOMING TRIPS PAGE ---
+const UpcomingTripsPage = ({ onNavigate }) => {
+  const [selectedDestinations, setSelectedDestinations] = useState([]);
+  const [priceRange, setPriceRange] = useState(60000);
+  const [selectedDurations, setSelectedDurations] = useState([]);
+
+  const upcomingDates = useMemo(() => getNextSaturdays(8), []);
+  const uniqueRegions = Array.from(new Set(TOURS.map(t => t.location)));
+
+  const schedule = useMemo(() => {
+    return upcomingDates.map(date => {
+      const availableTours = TOURS.filter((tour, index) => {
+        const matchesDest = selectedDestinations.length === 0 || selectedDestinations.includes(tour.location);
+        const matchesPrice = tour.price <= priceRange;
+        const days = parseInt(tour.duration);
+        const isShort = days <= 5;
+        const matchesDuration = selectedDurations.length === 0 ||
+            (selectedDurations.includes('short') && isShort) ||
+            (selectedDurations.includes('long') && !isShort);
+        const isScheduled = (date.getTime() + index) % 3 === 0;
+        return matchesDest && matchesPrice && matchesDuration && isScheduled;
+      });
+      return { date, tours: availableTours };
+    }).filter(item => item.tours.length > 0);
+  }, [upcomingDates, selectedDestinations, priceRange, selectedDurations]);
+
+  const toggleDestination = (dest) => setSelectedDestinations(prev => prev.includes(dest) ? prev.filter(d => d !== dest) : [...prev, dest]);
+
+  return (
+      <div className="bg-gray-50 min-h-screen pt-20">
+        <div className="bg-white border-b border-gray-200 py-12">
+          <div className="container mx-auto px-8 lg:px-24 xl:px-32">
+            <h1 className="text-4xl font-serif font-bold text-gray-900 mb-4">Upcoming Departures</h1>
+            <p className="text-gray-500 max-w-2xl">Plan your weekends with our scheduled group departures. Fixed dates (Every Saturday), like-minded travelers.</p>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 lg:px-24 xl:px-32 py-12">
+          <div className="flex flex-col lg:flex-row gap-12">
+            {/* Filters */}
+            <div className="w-full lg:w-1/4 space-y-8">
+              <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm sticky top-28">
+                <div className="flex items-center gap-2 mb-6 text-gray-900 font-bold border-b border-gray-100 pb-4">
+                  <Filter className="w-5 h-5" /> <span>Filters</span>
+                </div>
+                <div className="mb-6">
+                  <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Destinations</h4>
+                  <div className="space-y-2">{uniqueRegions.map(r => (
+                      <label key={r} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer"><input type="checkbox" checked={selectedDestinations.includes(r)} onChange={()=>toggleDestination(r)} className="accent-emerald-600"/> {r}</label>
+                  ))}</div>
+                </div>
+                <div className="mb-6">
+                  <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Max Price: ₹{priceRange}</h4>
+                  <input type="range" min="5000" max="60000" step="1000" value={priceRange} onChange={(e) => setPriceRange(Number(e.target.value))} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600" />
+                </div>
+                <button onClick={()=>onNavigate('custom')} className="w-full py-3 border border-emerald-600 text-emerald-700 font-bold rounded-lg text-xs uppercase tracking-widest hover:bg-emerald-50 transition">
+                  Create Custom Trip
+                </button>
+              </div>
+            </div>
+
+            <div className="w-full lg:w-3/4">
+              {schedule.map((item, idx) => (
+                  <div key={idx} className="relative pl-8 md:pl-0 mb-12">
+                    <div className="flex flex-col md:flex-row gap-6 items-start">
+                      <div className="md:w-32 shrink-0 md:text-right md:sticky md:top-32 self-start">
+                        <div className="text-3xl font-serif font-bold text-gray-900 leading-none mb-1">{item.date.getDate()}</div>
+                        <div className="text-sm font-bold text-emerald-600 uppercase tracking-widest mb-1">{item.date.toLocaleString('default', { month: 'short' })}</div>
+                        <div className="text-xs text-gray-400 font-medium">{item.date.toLocaleString('default', { weekday: 'long' })}</div>
+                      </div>
+                      <div className="flex-1 grid grid-cols-1 gap-4">
+                        {item.tours.map(tour => (
+                            <div key={tour.id} onClick={() => onNavigate('trip-detail', tour.id)} className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-all group flex flex-col sm:flex-row gap-4 cursor-pointer">
+                              <div className="w-full sm:w-32 h-32 sm:h-24 shrink-0 rounded-lg overflow-hidden bg-gray-100">
+                                <img src={tour.image} alt={tour.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">{tour.title}</h4>
+                                <div className="flex items-center text-xs text-gray-500 mt-1"><MapPin className="w-3 h-3 mr-1" /> {tour.location}</div>
+                                <div className="flex items-center text-xs text-emerald-600 mt-2 font-medium"><Users className="w-3 h-3 mr-1" /> {tour.interestedCount}+ interested for this date</div>
+                              </div>
+                              <div className="text-right">
+                                <span className="text-lg font-bold text-gray-900 block">₹{tour.price.toLocaleString()}</span>
+                                <button className="mt-2 text-xs font-bold text-white bg-emerald-900 px-3 py-2 rounded-md">View Details</button>
+                              </div>
+                            </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+  );
+};
+
+// --- CUSTOM TRIP PAGE ---
+const CustomTripPage = () => (
+    <div className="min-h-screen bg-white pt-20">
+      <div className="relative bg-orange-50 py-24">
+        <div className="container mx-auto px-8 lg:px-24 text-center">
+          <span className="text-orange-600 font-bold uppercase tracking-[0.2em] text-xs mb-4 block">Design Your Own</span>
+          <h1 className="text-4xl md:text-6xl font-serif font-bold text-gray-900 mb-6">Your Rules. Your Route.</h1>
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto mb-8">
+            Don't like waking up early? Want a private villa? Travelling with a massive group? We craft bespoke itineraries just for you.
+          </p>
+        </div>
+      </div>
+      <div className="container mx-auto px-4 lg:px-24 py-12">
+        <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">Tell us what you need</h2>
+          <form className="space-y-6" onSubmit={(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            const msg = `Hi Humsafar, I want a Custom Trip.%0A%0A📍 *Dest:* ${data.dest}%0A📅 *Date:* ${data.date}%0A👥 *Pax:* ${data.pax}%0A💰 *Budget:* ${data.budget}%0A📝 *Note:* ${data.note}`;
+            window.open(`https://wa.me/${CONTACT_NUMBER}?text=${msg}`, '_blank');
+          }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase text-gray-500">Destination</label>
+                <input name="dest" required type="text" className="w-full border-b-2 border-gray-200 py-3 focus:border-orange-500 outline-none font-medium" placeholder="e.g. Kashmir" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase text-gray-500">Approx Date</label>
+                <input name="date" required type="text" className="w-full border-b-2 border-gray-200 py-3 focus:border-orange-500 outline-none font-medium" placeholder="e.g. Next Month" />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase text-gray-500">Group Size</label>
+                <input name="pax" required type="number" className="w-full border-b-2 border-gray-200 py-3 focus:border-orange-500 outline-none font-medium" placeholder="e.g. 6" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase text-gray-500">Budget per person</label>
+                <input name="budget" type="text" className="w-full border-b-2 border-gray-200 py-3 focus:border-orange-500 outline-none font-medium" placeholder="e.g. 15k - 20k" />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase text-gray-500">Special Requirements</label>
+              <textarea name="note" rows="3" className="w-full border rounded-xl p-4 focus:border-orange-500 outline-none" placeholder="We need a private pool, wheelchair access, etc."></textarea>
+            </div>
+            <button type="submit" className="w-full bg-gray-900 text-white font-bold py-4 rounded-xl hover:bg-black transition shadow-lg flex justify-center items-center gap-2">
+              Build My Trip on WhatsApp <ArrowRight className="w-4 h-4"/>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+);
+
+const HomePage = ({ onSearch, setSearchTerm, searchTerm, onNavigate }) => {
+  const [selectedRegion, setSelectedRegion] = useState('all');
+  const [selectedType, setSelectedType] = useState('all');
+
+  const filteredTours = TOURS.filter(tour => {
+    const matchesRegion = selectedRegion === 'all' || tour.region === selectedRegion;
+    const matchesType = selectedType === 'all' || tour.type === selectedType;
+    return matchesRegion && matchesType;
+  });
+
+  const bestsellers = TOURS.filter(t => t.bestseller).slice(0, 4);
+  const isDefaultView = selectedRegion === 'all' && selectedType === 'all';
+
+  return (
+      <>
+        <Hero searchTerm={searchTerm} setSearchTerm={setSearchTerm} onSearch={onSearch} />
+        <FilterBar
+            selectedRegion={selectedRegion}
+            setSelectedRegion={setSelectedRegion}
+            selectedType={selectedType}
+            setSelectedType={setSelectedType}
+        />
+
+        <div className="relative bg-white overflow-hidden">
+          <div className="absolute inset-0 bg-scribble pointer-events-none" />
+          <section id="tours" className="py-24 min-h-[600px] relative z-10">
+            <div className="container mx-auto px-8 lg:px-24 xl:px-32">
+              {!isDefaultView ? (
+                  <div>
+                    <h2 className="text-4xl font-serif font-bold text-gray-900 mb-12">Your Selection</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                      {filteredTours.map(tour => <TourCard key={tour.id} tour={tour} onViewDetails={(id) => onNavigate('trip-detail', id)} />)}
+                    </div>
+                  </div>
+              ) : (
+                  <div className="space-y-24">
+                    <div>
+                      <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
+                        <div>
+                          <span className="text-emerald-600 font-bold uppercase tracking-widest text-xs mb-3 block">Traveler Favorites</span>
+                          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900">Bestselling Collections</h2>
+                        </div>
+                        <button onClick={() => {setSelectedRegion('all'); setSelectedType('all')}} className="hidden md:flex items-center text-emerald-900 font-bold hover:text-emerald-700 transition text-sm uppercase tracking-wider group">
+                          See All <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {bestsellers.map(tour => <TourCard key={tour.id} tour={tour} onViewDetails={(id) => onNavigate('trip-detail', id)} />)}
+                      </div>
+                    </div>
+                  </div>
+              )}
+            </div>
+          </section>
+        </div>
+        {/* FeatureSection Removed */}
+      </>
+  );
+};
+
+// --- SEARCH RESULTS PAGE ---
+const SearchResultsPage = ({ searchTerm, setSearchTerm, onNavigate }) => {
   const filteredTours = TOURS.filter(tour => {
     const term = searchTerm.toLowerCase();
     return tour.title.toLowerCase().includes(term) ||
@@ -934,13 +1501,9 @@ const SearchResultsPage = ({ searchTerm, setSearchTerm }) => {
 
   return (
       <div className="bg-gray-50 min-h-screen pt-20">
-        {/* Minimal Search Header */}
         <div className="bg-white border-b border-gray-200 py-12">
           <div className="container mx-auto px-8 lg:px-24 xl:px-32">
             <h1 className="text-3xl font-serif font-bold text-gray-900 mb-4">Search Results</h1>
-            <p className="text-gray-500 mb-6">Showing results for "<span className="font-bold text-gray-900">{searchTerm}</span>"</p>
-
-            {/* Search Input on Results Page */}
             <div className="max-w-2xl relative">
               <input
                   type="text"
@@ -953,17 +1516,14 @@ const SearchResultsPage = ({ searchTerm, setSearchTerm }) => {
             </div>
           </div>
         </div>
-
         <div className="container mx-auto px-8 lg:px-24 xl:px-32 py-12">
           {filteredTours.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {filteredTours.map(tour => <TourCard key={tour.id} tour={tour} />)}
+                {filteredTours.map(tour => <TourCard key={tour.id} tour={tour} onViewDetails={(id) => onNavigate('trip-detail', id)} />)}
               </div>
           ) : (
               <div className="text-center py-32">
-                <MapPin className="mx-auto h-16 w-16 text-gray-300 mb-6" />
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">No destinations found</h3>
-                <p className="text-gray-500">We couldn't find any trips matching your search. Try different keywords.</p>
               </div>
           )}
         </div>
@@ -971,817 +1531,121 @@ const SearchResultsPage = ({ searchTerm, setSearchTerm }) => {
   );
 };
 
-const HomePage = ({ onSearch, setSearchTerm, searchTerm }) => {
-  const [selectedRegion, setSelectedRegion] = useState('all');
-  const [selectedType, setSelectedType] = useState('all');
-
-  // Filter Logic for Main List
-  const filteredTours = TOURS.filter(tour => {
-    const matchesRegion = selectedRegion === 'all' || tour.region === selectedRegion;
-    const matchesType = selectedType === 'all' || tour.type === selectedType;
-    return matchesRegion && matchesType;
-  });
-
-  // Categorized Data
-  const bestsellers = TOURS.filter(t => t.bestseller).slice(0, 4);
-  const trending = [...TOURS].sort((a, b) => b.rating - a.rating).slice(0, 4);
-  const international = TOURS.filter(t => t.region === 'international').slice(0, 4);
-
-  // If filters are active, show filtered list. Else show categorized sections.
-  const isDefaultView = selectedRegion === 'all' && selectedType === 'all';
-
-  return (
-      <>
-        <Hero searchTerm={searchTerm} setSearchTerm={setSearchTerm} onSearch={onSearch} />
-
-        {/* Moved FilterBar outside to fix clipping/stacking issue */}
-        <FilterBar
-            selectedRegion={selectedRegion}
-            setSelectedRegion={setSelectedRegion}
-            selectedType={selectedType}
-            setSelectedType={setSelectedType}
-        />
-
-        {/* Background Wrapper for Tours section */}
-        <div className="relative bg-white overflow-hidden">
-          {/* Abstract shapes/circles */}
-          <div className="absolute top-0 right-0 translate-x-1/3 -translate-y-1/4 w-[500px] h-[500px] rounded-full border border-gray-100 pointer-events-none" />
-          <div className="absolute top-20 right-0 translate-x-1/2 w-[300px] h-[300px] rounded-full bg-emerald-50/50 blur-3xl pointer-events-none" />
-
-          <div className="absolute bottom-0 left-0 -translate-x-1/3 translate-y-1/4 w-[600px] h-[600px] rounded-full border border-gray-100 pointer-events-none" />
-
-          {/* Subtle Scribble Texture Overlay */}
-          <div className="absolute inset-0 bg-scribble pointer-events-none" />
-
-          <section id="tours" className="py-24 min-h-[600px] relative z-10">
-            <div className="container mx-auto px-8 lg:px-24 xl:px-32">
-
-              {!isDefaultView ? (
-                  // Filtered View
-                  <div>
-                    <div className="flex justify-between items-end mb-12">
-                      <div>
-                        <span className="text-emerald-600 font-bold uppercase tracking-widest text-xs mb-3 block">Results</span>
-                        <h2 className="text-4xl font-serif font-bold text-gray-900">Your Selection</h2>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                      {filteredTours.map(tour => <TourCard key={tour.id} tour={tour} />)}
-                    </div>
-                    {filteredTours.length === 0 && (
-                        <div className="text-center py-24">
-                          <p className="text-gray-500">No trips found for these filters.</p>
-                          <button onClick={() => {setSelectedRegion('all'); setSelectedType('all')}} className="text-emerald-700 font-bold mt-4 hover:underline">Clear Filters</button>
-                        </div>
-                    )}
-                  </div>
-              ) : (
-                  // Default Categorized View
-                  <div className="space-y-24">
-
-                    {/* Section 1: Bestsellers */}
-                    <div>
-                      <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
-                        <div>
-                          <span className="text-emerald-600 font-bold uppercase tracking-widest text-xs mb-3 block">Traveler Favorites</span>
-                          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900">Bestselling Collections</h2>
-                        </div>
-                        <button onClick={() => {setSelectedRegion('all'); setSelectedType('all')}} className="hidden md:flex items-center text-emerald-900 font-bold hover:text-emerald-700 transition text-sm uppercase tracking-wider group">
-                          See All <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </button>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {bestsellers.map(tour => <TourCard key={tour.id} tour={tour} />)}
-                      </div>
-                    </div>
-
-                    {/* Section 2: Trending */}
-                    <div>
-                      <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
-                        <div>
-                          <span className="text-orange-500 font-bold uppercase tracking-widest text-xs mb-3 block">Don't Miss Out</span>
-                          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900">Trending Now</h2>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {trending.map(tour => <TourCard key={tour.id} tour={tour} />)}
-                      </div>
-                    </div>
-
-                    {/* Section 3: International */}
-                    <div>
-                      <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
-                        <div>
-                          <span className="text-blue-500 font-bold uppercase tracking-widest text-xs mb-3 block">Global Wandering</span>
-                          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900">International Adventures</h2>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {international.map(tour => <TourCard key={tour.id} tour={tour} />)}
-                      </div>
-                    </div>
-
-                  </div>
-              )}
-
-            </div>
-          </section>
-        </div>
-
-        <FeatureSection />
-      </>
-  );
-};
-
-const UpcomingTripsPage = () => {
-  const [selectedDestinations, setSelectedDestinations] = useState([]);
-  const [priceRange, setPriceRange] = useState(60000);
-  const [selectedDurations, setSelectedDurations] = useState([]);
-
-  // Helper to generate next Saturdays
-  const getUpcomingSaturdays = (count = 5) => {
-    const dates = [];
-    let currentDate = new Date();
-    // Move to next Saturday
-    currentDate.setDate(currentDate.getDate() + (6 - currentDate.getDay() + 7) % 7);
-    // Ensure it's in the future
-    if (currentDate <= new Date()) currentDate.setDate(currentDate.getDate() + 7);
-
-    for (let i = 0; i < count; i++) {
-      dates.push(new Date(currentDate));
-      currentDate.setDate(currentDate.getDate() + 7);
-    }
-    return dates;
-  };
-
-  const upcomingDates = useMemo(() => getUpcomingSaturdays(8), []);
-
-  // Extract unique regions for filter
-  const uniqueRegions = Array.from(new Set(TOURS.map(t => t.location)));
-
-  // Generate schedule
-  const schedule = useMemo(() => {
-    return upcomingDates.map(date => {
-      // Randomly select tours for this date (simulated)
-      const availableTours = TOURS.filter((tour, index) => {
-        // Filter logic
-        const matchesDest = selectedDestinations.length === 0 || selectedDestinations.includes(tour.location);
-        const matchesPrice = tour.price <= priceRange;
-        // Simple duration matching logic (parsing string to approx days)
-        const days = parseInt(tour.duration);
-        const isShort = days <= 5;
-        const matchesDuration = selectedDurations.length === 0 ||
-            (selectedDurations.includes('short') && isShort) ||
-            (selectedDurations.includes('long') && !isShort);
-
-        // Deterministic randomization based on date + index
-        const isScheduled = (date.getTime() + index) % 3 === 0;
-
-        return matchesDest && matchesPrice && matchesDuration && isScheduled;
-      });
-      return { date, tours: availableTours };
-    }).filter(item => item.tours.length > 0);
-  }, [upcomingDates, selectedDestinations, priceRange, selectedDurations]);
-
-  const toggleDestination = (dest) => {
-    setSelectedDestinations(prev =>
-        prev.includes(dest) ? prev.filter(d => d !== dest) : [...prev, dest]
-    );
-  };
-
-  const toggleDuration = (type) => {
-    setSelectedDurations(prev =>
-        prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
-    );
-  };
-
-  return (
-      <div className="bg-gray-50 min-h-screen pt-20">
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200 py-12">
-          <div className="container mx-auto px-8 lg:px-24 xl:px-32">
-            <h1 className="text-4xl font-serif font-bold text-gray-900 mb-4">Upcoming Departures</h1>
-            <p className="text-gray-500 max-w-2xl">Plan your weekends with our scheduled group departures. Fixed dates, like-minded travelers, and curated experiences.</p>
-          </div>
-        </div>
-
-        <div className="container mx-auto px-4 lg:px-24 xl:px-32 py-12">
-          <div className="flex flex-col lg:flex-row gap-12">
-
-            {/* Left Sidebar Filters */}
-            <div className="w-full lg:w-1/4 space-y-8">
-              <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm sticky top-28">
-                <div className="flex items-center gap-2 mb-6 text-gray-900 font-bold border-b border-gray-100 pb-4">
-                  <Filter className="w-5 h-5" />
-                  <span>Filters</span>
-                </div>
-
-                {/* Destination Filter */}
-                <div className="mb-8">
-                  <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Destinations</h4>
-                  <div className="space-y-3">
-                    {uniqueRegions.map(region => (
-                        <label key={region} className="flex items-center gap-3 cursor-pointer group">
-                          <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selectedDestinations.includes(region) ? 'bg-emerald-600 border-emerald-600' : 'border-gray-300 bg-white group-hover:border-emerald-400'}`}>
-                            {selectedDestinations.includes(region) && <Check className="w-3.5 h-3.5 text-white" />}
-                          </div>
-                          <input
-                              type="checkbox"
-                              className="hidden"
-                              checked={selectedDestinations.includes(region)}
-                              onChange={() => toggleDestination(region)}
-                          />
-                          <span className="text-sm text-gray-600 group-hover:text-gray-900">{region}</span>
-                        </label>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Price Filter */}
-                <div className="mb-8">
-                  <div className="flex justify-between items-center mb-4">
-                    <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest">Max Budget</h4>
-                    <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">₹{priceRange.toLocaleString()}</span>
-                  </div>
-                  <input
-                      type="range"
-                      min="5000"
-                      max="60000"
-                      step="1000"
-                      value={priceRange}
-                      onChange={(e) => setPriceRange(Number(e.target.value))}
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
-                  />
-                  <div className="flex justify-between mt-2 text-[10px] text-gray-400 font-medium">
-                    <span>₹5k</span>
-                    <span>₹60k+</span>
-                  </div>
-                </div>
-
-                {/* Duration Filter */}
-                <div>
-                  <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Duration</h4>
-                  <div className="space-y-3">
-                    {[
-                      { id: 'short', label: 'Short Trips (< 5 Days)' },
-                      { id: 'long', label: 'Long Trips (5+ Days)' }
-                    ].map(type => (
-                        <label key={type.id} className="flex items-center gap-3 cursor-pointer group">
-                          <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selectedDurations.includes(type.id) ? 'bg-emerald-600 border-emerald-600' : 'border-gray-300 bg-white group-hover:border-emerald-400'}`}>
-                            {selectedDurations.includes(type.id) && <Check className="w-3.5 h-3.5 text-white" />}
-                          </div>
-                          <input
-                              type="checkbox"
-                              className="hidden"
-                              checked={selectedDurations.includes(type.id)}
-                              onChange={() => toggleDuration(type.id)}
-                          />
-                          <span className="text-sm text-gray-600 group-hover:text-gray-900">{type.label}</span>
-                        </label>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Content - Schedule */}
-            <div className="w-full lg:w-3/4">
-              {schedule.length > 0 ? (
-                  <div className="space-y-12">
-                    {schedule.map((item, idx) => (
-                        <div key={idx} className="relative pl-8 md:pl-0">
-                          {/* Date Marker for Mobile */}
-                          <div className="md:hidden absolute left-0 top-0 bottom-0 w-0.5 bg-gray-200"></div>
-                          <div className="md:hidden absolute left-[-5px] top-0 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-white"></div>
-
-                          <div className="flex flex-col md:flex-row gap-6 items-start">
-                            {/* Date Column */}
-                            <div className="md:w-32 shrink-0 md:text-right md:sticky md:top-32 self-start">
-                              <div className="text-3xl font-serif font-bold text-gray-900 leading-none mb-1">
-                                {item.date.getDate()}
-                              </div>
-                              <div className="text-sm font-bold text-emerald-600 uppercase tracking-widest mb-1">
-                                {item.date.toLocaleString('default', { month: 'short' })}
-                              </div>
-                              <div className="text-xs text-gray-400 font-medium">
-                                {item.date.toLocaleString('default', { weekday: 'long' })}
-                              </div>
-                            </div>
-
-                            {/* Tours List */}
-                            <div className="flex-1 grid grid-cols-1 gap-4">
-                              {item.tours.map(tour => (
-                                  <div key={tour.id} className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-all group flex flex-col sm:flex-row gap-4">
-                                    <div className="w-full sm:w-32 h-32 sm:h-24 shrink-0 rounded-lg overflow-hidden bg-gray-100">
-                                      <img src={tour.image} alt={tour.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                    </div>
-                                    <div className="flex-1 flex flex-col justify-between">
-                                      <div>
-                                        <div className="flex justify-between items-start">
-                                                                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full mb-2 inline-block">
-                                                                        {tour.duration}
-                                                                    </span>
-                                          <div className="flex items-center text-xs text-gray-500">
-                                            <Star className="w-3 h-3 text-orange-400 fill-current mr-1" />
-                                            <span className="font-bold text-gray-900 mr-1">{tour.rating}</span>
-                                            <span>({tour.reviews})</span>
-                                          </div>
-                                        </div>
-                                        <h4 className="font-bold text-gray-900 group-hover:text-emerald-700 transition-colors line-clamp-1">{tour.title}</h4>
-                                        <div className="flex items-center text-xs text-gray-500 mt-1">
-                                          <MapPin className="w-3 h-3 mr-1" /> {tour.location}
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="flex sm:flex-col justify-between items-end sm:border-l sm:border-gray-100 sm:pl-4 min-w-[100px]">
-                                      <div className="text-right">
-                                        <span className="text-xs text-gray-400 line-through block">₹{tour.oldPrice}</span>
-                                        <span className="text-lg font-bold text-gray-900 block">₹{tour.price.toLocaleString()}</span>
-                                      </div>
-                                      <a
-                                          href={`https://wa.me/919999999999?text=Hi, I'm interested in the ${tour.title} trip starting on ${item.date.toDateString()}`}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="bg-emerald-900 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide hover:bg-emerald-800 transition"
-                                      >
-                                        Book Now
-                                      </a>
-                                    </div>
-                                  </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                    ))}
-                  </div>
-              ) : (
-                  <div className="text-center py-24 bg-white rounded-xl border border-dashed border-gray-200">
-                    <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">No trips found</h3>
-                    <p className="text-gray-500 text-sm">Try adjusting your filters to find available dates.</p>
-                    <button
-                        onClick={() => {setSelectedDestinations([]); setPriceRange(60000); setSelectedDurations([]);}}
-                        className="mt-4 text-emerald-600 font-bold text-sm hover:underline"
-                    >
-                      Reset Filters
-                    </button>
-                  </div>
-              )}
-
-              <div className="mt-16 bg-emerald-900 rounded-2xl p-8 text-center text-white relative overflow-hidden">
-                <div className="relative z-10">
-                  <h3 className="text-2xl font-serif font-bold mb-3">Can't find your dates?</h3>
-                  <p className="text-emerald-100 mb-6 max-w-lg mx-auto text-sm">We organize custom private trips for groups of 4 or more. Pick your own dates and we'll handle the rest.</p>
-                  <button className="bg-white text-emerald-900 px-8 py-3 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-emerald-50 transition shadow-lg">
-                    Request Custom Trip
-                  </button>
-                </div>
-                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-800 rounded-full blur-3xl -mr-32 -mt-32 opacity-50"></div>
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-500 rounded-full blur-3xl -ml-32 -mb-32 opacity-20"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-  );
-};
-
-const AboutPage = () => (
-    <div className="bg-white min-h-screen pt-20">
-      {/* Hero Section */}
-      <div className="relative bg-emerald-900 text-white overflow-hidden py-32">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <img src="https://images.unsplash.com/photo-1530789253388-582c481c54b0?q=80&w=2000&auto=format&fit=crop" className="w-full h-full object-cover" alt="Texture" />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-900 via-emerald-900/90 to-transparent"></div>
-
-        <div className="container mx-auto px-8 lg:px-24 xl:px-32 relative z-10">
-          <div className="max-w-4xl">
-            <div className="flex items-center space-x-3 mb-6">
-              <span className="h-px w-8 bg-emerald-400"></span>
-              <span className="text-emerald-300 font-bold uppercase tracking-[0.2em] text-xs">Our Manifesto</span>
-            </div>
-            <h1 className="text-5xl md:text-7xl font-serif font-bold mb-8 leading-tight">
-              Travel isn't just movement. <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-200 to-teal-100 italic">It's a feeling.</span>
-            </h1>
-            <p className="text-xl text-emerald-100/90 leading-relaxed max-w-2xl font-light">
-              Humsafar was born from a simple belief: the best stories aren't found in guidebooks. They're found at the end of dirt roads, shared over chai with strangers who become family.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* The Journey Section - Timeline */}
-      <section className="py-24 bg-white relative">
-        <div className="container mx-auto px-8 lg:px-24 xl:px-32">
-          <div className="text-center mb-16">
-            <span className="text-emerald-600 font-bold uppercase tracking-widest text-xs">Our Journey</span>
-            <h2 className="text-3xl font-serif font-bold text-gray-900 mt-3">From a Dorm Room to the Himalayas</h2>
-          </div>
-
-          <div className="relative border-l-2 border-emerald-100 ml-4 md:ml-1/2 space-y-12">
-            {[
-              { year: '2019', title: 'The Idea', desc: 'Two friends, one hostel dorm, and a realization that travel had become too transactional.' },
-              { year: '2020', title: 'The First Trip', desc: 'We took 10 strangers to Spiti Valley. They came back as best friends. Humsafar was born.' },
-              { year: '2022', title: 'Growing the Family', desc: 'Expanded to Uttarakhand and Rajasthan. Our community touched 5,000 travelers.' },
-              { year: '2024', title: 'Going Global', desc: 'Launched international legs in Vietnam and Thailand. The spirit remains the same.' }
-            ].map((item, idx) => (
-                <div key={idx} className="relative pl-8 md:pl-0">
-                  <div className={`md:flex items-center justify-between ${idx % 2 === 0 ? 'flex-row-reverse' : ''} group`}>
-                    {/* Dot */}
-                    <div className="absolute left-[-9px] md:left-1/2 md:-ml-[9px] w-4 h-4 rounded-full bg-white border-4 border-emerald-500 group-hover:scale-125 transition-transform"></div>
-
-                    <div className="hidden md:block w-5/12"></div>
-                    <div className="md:w-5/12 mb-2">
-                      <span className="text-emerald-900 font-black text-5xl opacity-10 absolute -mt-4 -ml-4 z-0">{item.year}</span>
-                      <div className="relative z-10">
-                        <span className="text-emerald-600 font-bold text-sm mb-1 block">{item.year}</span>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
-                        <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Values Section */}
-      <section className="py-24 bg-gray-50">
-        <div className="container mx-auto px-8 lg:px-24 xl:px-32">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-6 text-emerald-700">
-                <Globe className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Sustainable Steps</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                We don't just visit; we respect. We partner with local homestays, minimize plastic use, and ensure 80% of our revenue stays within the local community.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-6 text-orange-700">
-                <Users className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Zero Solo</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                You might join us alone, but you'll never feel lonely. Our group dynamics are curated to turn strangers into lifelong travel companions.
-              </p>
-            </div>
-            <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6 text-blue-700">
-                <Tent className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Raw & Real</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                We prioritize experiences over luxury. We'd rather have a billion-star view from a tent than a 5-star hotel room with no soul.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-8 lg:px-24 xl:px-32">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16">
-            <div>
-              <span className="text-emerald-600 font-bold uppercase tracking-widest text-xs mb-3 block">The Pack</span>
-              <h2 className="text-3xl font-serif font-bold text-gray-900">Meet the Explorers</h2>
-            </div>
-            <p className="text-gray-500 max-w-md mt-4 md:mt-0 text-sm">
-              We are a team of mountain lovers, beach bums, and road trippers dedicated to curating your perfect escape.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { name: 'Arjun Mehta', role: 'Founder & Lead Explorer', img: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&auto=format&fit=crop' },
-              { name: 'Sarah Jenkins', role: 'Community Manager', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop' },
-              { name: 'Dev Patel', role: 'Operations Head', img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop' },
-              { name: 'Ananya Singh', role: 'Experience Curator', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop' },
-            ].map((member, i) => (
-                <div key={i} className="group text-center">
-                  <div className="relative overflow-hidden rounded-2xl mb-4 aspect-[3/4]">
-                    <img src={member.img} alt={member.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-6">
-                      <div className="flex space-x-3 text-white">
-                        <Instagram className="w-4 h-4 cursor-pointer hover:text-emerald-400" />
-                        <Mail className="w-4 h-4 cursor-pointer hover:text-emerald-400" />
-                      </div>
-                    </div>
-                  </div>
-                  <h4 className="font-bold text-gray-900 text-lg">{member.name}</h4>
-                  <p className="text-emerald-600 text-xs uppercase tracking-widest font-medium">{member.role}</p>
-                </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Inquiry Form */}
-      <div className="bg-white">
-        <InquiryForms />
-      </div>
-    </div>
-);
-
+// --- RESTORED: Blog Page ---
 const BlogPage = () => (
     <div className="bg-white min-h-screen pt-20">
-      {/* Blog Hero - Newsletter Themed */}
       <div className="bg-gray-50 border-b border-gray-200 py-20">
         <div className="container mx-auto px-8 lg:px-24 xl:px-32 text-center">
           <span className="text-emerald-600 font-bold uppercase tracking-[0.2em] text-xs mb-4 block">The Humsafar Chronicle</span>
           <h1 className="text-4xl md:text-6xl font-serif font-bold text-gray-900 mb-6">Stories from the Road,<br/>Delivered Weekly.</h1>
-          <p className="text-gray-500 text-lg max-w-2xl mx-auto mb-8">
-            Join 15,000+ travelers who read our weekly newsletter for hidden gems, travel hacks, and inspiring stories.
-          </p>
-
-          {/* Quick Subscribe in Hero */}
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto mb-8">Join 15,000+ travelers who read our weekly newsletter for hidden gems, travel hacks, and inspiring stories.</p>
           <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
             <input type="email" placeholder="Enter your email" className="flex-1 px-5 py-3 rounded-full border border-gray-300 focus:border-emerald-500 outline-none shadow-sm" />
-            <button className="bg-emerald-900 text-white px-8 py-3 rounded-full font-bold uppercase text-xs tracking-widest hover:bg-emerald-800 transition shadow-lg">
-              Join Free
-            </button>
+            <button className="bg-emerald-900 text-white px-8 py-3 rounded-full font-bold uppercase text-xs tracking-widest hover:bg-emerald-800 transition shadow-lg">Join Free</button>
           </div>
         </div>
       </div>
-
       <div className="container mx-auto px-8 lg:px-24 xl:px-32 py-16">
-
-        {/* Latest Post - Featured */}
         <div className="mb-16">
-          <h2 className="text-2xl font-serif font-bold text-gray-900 mb-8 flex items-center">
-            <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-1 rounded mr-3 uppercase tracking-wider">Latest Edition</span>
-            Fresh off the press
-          </h2>
+          <h2 className="text-2xl font-serif font-bold text-gray-900 mb-8 flex items-center"><span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-1 rounded mr-3 uppercase tracking-wider">Latest Edition</span>Fresh off the press</h2>
           <div className="group cursor-pointer grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-all">
-            <div className="overflow-hidden rounded-xl aspect-[16/9] lg:aspect-auto lg:h-80">
-              <img
-                  src={BLOG_POSTS[0].image}
-                  alt={BLOG_POSTS[0].title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-            </div>
+            <div className="overflow-hidden rounded-xl aspect-[16/9] lg:aspect-auto lg:h-80"><img src={BLOG_POSTS[0].image} alt={BLOG_POSTS[0].title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" /></div>
             <div className="py-2">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest">{BLOG_POSTS[0].category}</span>
-                <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-                <span className="text-xs text-gray-400">{BLOG_POSTS[0].date}</span>
-              </div>
-              <h3 className="text-3xl font-bold font-serif text-gray-900 mb-4 group-hover:text-emerald-700 transition-colors">
-                {BLOG_POSTS[0].title}
-              </h3>
-              <p className="text-gray-600 leading-relaxed mb-6">
-                {BLOG_POSTS[0].excerpt}
-              </p>
-              <div className="flex gap-2 mb-6">
-                {BLOG_POSTS[0].tags.map(tag => (
-                    <span key={tag} className="text-[10px] bg-gray-100 text-gray-600 px-2 py-1 rounded-md">#{tag}</span>
-                ))}
-              </div>
+              <div className="flex items-center gap-3 mb-4"><span className="text-xs font-bold text-emerald-600 uppercase tracking-widest">{BLOG_POSTS[0].category}</span><span className="w-1 h-1 bg-gray-300 rounded-full"></span><span className="text-xs text-gray-400">{BLOG_POSTS[0].date}</span></div>
+              <h3 className="text-3xl font-bold font-serif text-gray-900 mb-4 group-hover:text-emerald-700 transition-colors">{BLOG_POSTS[0].title}</h3>
+              <p className="text-gray-600 leading-relaxed mb-6">{BLOG_POSTS[0].excerpt}</p>
               <button className="text-emerald-700 font-bold text-sm uppercase tracking-widest border-b-2 border-emerald-100 group-hover:border-emerald-700 transition-all pb-1">Read Full Issue</button>
             </div>
           </div>
         </div>
-
-        {/* Archive Grid */}
         <div>
           <h2 className="text-2xl font-serif font-bold text-gray-900 mb-8">Past Editions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {BLOG_POSTS.slice(1).map(post => (
                 <div key={post.id} className="group cursor-pointer flex flex-col h-full bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all">
-                  <div className="aspect-[3/2] overflow-hidden">
-                    <img
-                        src={post.image}
-                        alt={post.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  </div>
+                  <div className="aspect-[3/2] overflow-hidden"><img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" /></div>
                   <div className="p-6 flex flex-col flex-1">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">{post.category}</span>
-                      <span className="text-[10px] text-gray-400">{post.date}</span>
-                    </div>
-                    <h3 className="text-lg font-bold font-serif text-gray-900 mb-3 group-hover:text-emerald-700 transition-colors line-clamp-2">
-                      {post.title}
-                    </h3>
-                    <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3 flex-1">
-                      {post.excerpt}
-                    </p>
-                    <div className="pt-4 border-t border-gray-50 flex items-center justify-between">
-                      <span className="text-xs text-gray-400 font-medium">By {post.author}</span>
-                      <ArrowRight className="w-4 h-4 text-emerald-600 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all" />
-                    </div>
+                    <div className="flex items-center justify-between mb-3"><span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">{post.category}</span><span className="text-[10px] text-gray-400">{post.date}</span></div>
+                    <h3 className="text-lg font-bold font-serif text-gray-900 mb-3 group-hover:text-emerald-700 transition-colors line-clamp-2">{post.title}</h3>
+                    <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3 flex-1">{post.excerpt}</p>
                   </div>
                 </div>
             ))}
           </div>
         </div>
-
       </div>
     </div>
 );
 
-const ExclusivePage = () => {
-  return (
-      <div className="bg-white min-h-screen pt-20">
-        {/* Exclusive Hero */}
-        <div className="relative bg-indigo-950 text-white overflow-hidden py-32">
-          <div className="absolute inset-0 opacity-40">
-            <img src="https://images.unsplash.com/photo-1542259659-4ab2b5e3066e?q=80&w=2000&auto=format&fit=crop" className="w-full h-full object-cover" alt="Exclusive Hero" />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-r from-indigo-950 via-indigo-900/90 to-transparent"></div>
-          <div className="container mx-auto px-8 lg:px-24 xl:px-32 relative z-10">
-            <div className="max-w-4xl">
-              <span className="text-indigo-300 font-bold uppercase tracking-[0.2em] text-xs mb-4 block">Humsafar Exclusive</span>
-              <h1 className="text-5xl md:text-7xl font-serif font-bold mb-8 leading-tight">
-                Redefining <br/>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-200 to-purple-100 italic">The Art of Living.</span>
-              </h1>
-              <p className="text-xl text-indigo-100/90 leading-relaxed max-w-2xl font-light">
-                Explore our curated collection of niche travel concepts designed for the modern nomad. From productivity-focused retreats to surprise adventures.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="container mx-auto px-8 lg:px-24 xl:px-32 py-24 space-y-32">
-
-          {/* Work & Lifestyle Blends */}
-          <div>
-            <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-gray-100 pb-8">
-              <div>
-                <h2 className="text-3xl font-serif font-bold text-gray-900 mb-2">Work & Lifestyle Blends</h2>
-                <p className="text-gray-500 text-sm">Because your office can be anywhere with a view.</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-gray-50 rounded-2xl p-8 hover:bg-white hover:shadow-xl transition-all border border-gray-100 group">
-                <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <Wifi className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Workation</h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  Working from a vacation destination. We guarantee high-speed WiFi, ergonomic chairs, and "golden hour" views for your Zoom calls.
-                </p>
-                <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest">Plugs & Peaks</span>
-              </div>
-              <div className="bg-gray-50 rounded-2xl p-8 hover:bg-white hover:shadow-xl transition-all border border-gray-100 group">
-                <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <Briefcase className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Bleisure</h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  Business + Leisure. Extend your business trip for a few fun days. We provide "After 5 PM" itineraries and weekend add-ons to business hubs.
-                </p>
-                <span className="text-xs font-bold text-purple-600 uppercase tracking-widest">Work Hard, Play Hard</span>
-              </div>
-              <div className="bg-gray-50 rounded-2xl p-8 hover:bg-white hover:shadow-xl transition-all border border-gray-100 group">
-                <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <Home className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Flexcation</h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  Longer stays (2+ weeks) for families who can work/study remotely. Villa rentals with kitchenettes and separate rooms for calls.
-                </p>
-                <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest">Home Away From Home</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Niche Concepts */}
-          <div>
-            <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-gray-100 pb-8">
-              <div>
-                <h2 className="text-3xl font-serif font-bold text-gray-900 mb-2">The Niche Collection</h2>
-                <p className="text-gray-500 text-sm">Specialized trips for specific milestones.</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="relative group overflow-hidden rounded-2xl aspect-[4/5] cursor-pointer">
-                <img src="https://images.unsplash.com/photo-1513279922550-250c2129b13a?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Blind Booking" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-8 text-white">
-                  <Gift className="w-8 h-8 mb-4 text-yellow-400" />
-                  <h3 className="text-2xl font-bold mb-2">Blind Booking</h3>
-                  <p className="text-sm text-gray-300 mb-4 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">Set a budget, fill a survey, and don't know the destination until you arrive at the airport. Sell the thrill of surprise.</p>
-                  <span className="text-xs font-bold uppercase tracking-widest border-b border-yellow-400 pb-1">Mystery Trip</span>
-                </div>
-              </div>
-              <div className="relative group overflow-hidden rounded-2xl aspect-[4/5] cursor-pointer">
-                <img src="https://images.unsplash.com/photo-1516939884455-1445c8652f83?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Solomoon" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-8 text-white">
-                  <User className="w-8 h-8 mb-4 text-pink-400" />
-                  <h3 className="text-2xl font-bold mb-2">Solomoon</h3>
-                  <p className="text-sm text-gray-300 mb-4 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">Celebrate yourself. Solo-friendly dining, empowerment workshops, and high safety standards for your personal milestone.</p>
-                  <span className="text-xs font-bold uppercase tracking-widest border-b border-pink-400 pb-1">Uni-Trip</span>
-                </div>
-              </div>
-              <div className="relative group overflow-hidden rounded-2xl aspect-[4/5] cursor-pointer">
-                <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Minimoon" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-8 text-white">
-                  <Heart className="w-8 h-8 mb-4 text-red-400" />
-                  <h3 className="text-2xl font-bold mb-2">Minimoon</h3>
-                  <p className="text-sm text-gray-300 mb-4 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">A short (2-3 day) luxury escape for couples who can't take a long honeymoon yet but need an immediate break.</p>
-                  <span className="text-xs font-bold uppercase tracking-widest border-b border-red-400 pb-1">Quick Romance</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* New Concepts: Staycation & Skillcation */}
-          <div>
-            <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-gray-100 pb-8">
-              <div>
-                <h2 className="text-3xl font-serif font-bold text-gray-900 mb-2">New Concepts</h2>
-                <p className="text-gray-500 text-sm">Redefining how you spend your free time.</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-
-              {/* Staycation */}
-              <div className="flex flex-col md:flex-row gap-8 items-start bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-all">
-                <div className="w-full md:w-1/3 aspect-square rounded-xl overflow-hidden bg-gray-100 shrink-0">
-                  <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Staycation" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <BedDouble className="w-5 h-5 text-indigo-600" />
-                    <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest">Staycation</span>
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Rediscover Your Backyard.</h3>
-                  <p className="text-sm text-gray-500 italic mb-4">Luxury is Closer Than You Think.</p>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                    Why spend hours in transit? Handpicked local properties—hidden boutique hotels, luxury resorts, or heritage homes—within a 2-hour radius. Zero travel stress, upgraded living, and local immersion.
-                  </p>
-                  <button className="text-indigo-700 font-bold text-sm hover:underline">Book a Local Escape</button>
-                </div>
-              </div>
-
-              {/* Skillcation */}
-              <div className="flex flex-col md:flex-row gap-8 items-start bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-all">
-                <div className="w-full md:w-1/3 aspect-square rounded-xl overflow-hidden bg-gray-100 shrink-0">
-                  <img src="https://images.unsplash.com/photo-1452860606245-08befc0ff44b?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Skillcation" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Palette className="w-5 h-5 text-orange-600" />
-                    <span className="text-xs font-bold text-orange-600 uppercase tracking-widest">Skillcation</span>
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Learn. Create. Travel.</h3>
-                  <p className="text-sm text-gray-500 italic mb-4">Upgrade Yourself on Vacation.</p>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                    Transform your holiday into a masterclass. Pottery in a village, surfing on the coast, or tribal cuisine. Hands-on workshops, cultural depth, and tangible creations to take home.
-                  </p>
-                  <button className="text-orange-700 font-bold text-sm hover:underline">Find a Workshop</button>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-
-        {/* Inquiry CTA */}
-        <div className="bg-indigo-50 py-24 text-center">
-          <div className="container mx-auto px-8">
-            <Anchor className="w-12 h-12 text-indigo-900 mx-auto mb-6" />
-            <h2 className="text-3xl font-serif font-bold text-indigo-900 mb-4">Intrigued by the unconventional?</h2>
-            <p className="text-indigo-700/80 mb-8 max-w-xl mx-auto">These experiences are custom crafted. Reach out to our specialized "Exclusive" team to design your unique itinerary.</p>
-            <button onClick={() => document.getElementById('forms')?.scrollIntoView({ behavior: 'smooth' })} className="bg-indigo-900 text-white px-8 py-4 rounded-xl font-bold uppercase tracking-widest text-sm hover:bg-indigo-800 transition shadow-lg">
-              Request Exclusive Plan
-            </button>
-          </div>
-        </div>
-      </div>
-  );
-};
 
 // --- MAIN APP COMPONENT ---
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
+  const [selectedTourId, setSelectedTourId] = useState(null); // State for Detail Page
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
+  // HISTORY API SUPPORT: Browser Back Button
+  useEffect(() => {
+    // Check if there is a state on initial load
+    if (window.history.state) {
+      setCurrentPage(window.history.state.page || 'home');
+      if (window.history.state.id) setSelectedTourId(window.history.state.id);
+    }
+
+    const handlePopState = (event) => {
+      if (event.state) {
+        setCurrentPage(event.state.page);
+        if (event.state.id) setSelectedTourId(event.state.id);
+      } else {
+        // Fallback to home if no state is present
+        setCurrentPage('home');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // SCROLL LISTENER
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navigate = (page) => {
+  // UPDATED NAVIGATE FUNCTION WITH HISTORY PUSH
+  const navigate = (page, id = null) => {
     window.scrollTo(0, 0);
     setCurrentPage(page);
+    if(id) setSelectedTourId(id);
     setIsMenuOpen(false);
+
+    // Push new state to browser history
+    window.history.pushState({ page, id }, '', `#${page}`);
   };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate('search');
+    }
+  };
+
+  const pageComponents = {
+    home: <HomePage onSearch={handleSearch} setSearchTerm={setSearchTerm} searchTerm={searchTerm} onNavigate={navigate} />,
+    search: <SearchResultsPage searchTerm={searchTerm} setSearchTerm={setSearchTerm} onNavigate={navigate} />,
+    upcoming: <UpcomingTripsPage onNavigate={navigate} />,
+    custom: <CustomTripPage />,
+    'trip-detail': <TripDetailPage tourId={selectedTourId} onBack={() => window.history.back()} onNavigate={navigate} />,
+    // about: <AboutPage />, // Commented out
+    blog: <BlogPage />,
+    // ExclusivePage Removed
+  };
+
+  const CurrentPageComponent = pageComponents[currentPage] || pageComponents['home'];
 
   return (
       <div className="min-h-screen bg-white font-sans text-gray-900 scroll-smooth selection:bg-emerald-100 selection:text-emerald-900">
@@ -1797,46 +1661,21 @@ export default function App() {
             setSearchTerm={setSearchTerm}
         />
 
-        {currentPage === 'home' && (
-            <HomePage
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-                onSearch={(e) => { e.preventDefault(); if(searchTerm.trim()) navigate('search'); }}
-            />
-        )}
-
-        {currentPage === 'about' && (
-            <AboutPage />
-        )}
-
-        {currentPage === 'blog' && (
-            <BlogPage />
-        )}
-
-        {currentPage === 'upcoming' && (
-            <UpcomingTripsPage />
-        )}
-
-        {currentPage === 'exclusive' && (
-            <ExclusivePage />
-        )}
-
-        {currentPage === 'search' && (
-            <SearchResultsPage searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        )}
+        {CurrentPageComponent}
 
         <Footer onNavigate={navigate} />
 
-        {/* Floating WhatsApp Button */}
-        <a
-            href="https://wa.me/919999999999"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="fixed bottom-8 right-8 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:bg-[#20bd5a] transition-transform transform hover:scale-110 z-50 flex items-center justify-center group"
-            aria-label="Chat on WhatsApp"
-        >
-          <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
-        </a>
+        {/* Floating WhatsApp Button - Hidden on Trip Detail page to avoid clutter with booking bar */}
+        {currentPage !== 'trip-detail' && (
+            <a
+                href={WHATSAPP_BASE}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition-all z-50 flex items-center justify-center animate-bounce-slow"
+            >
+              <MessageCircle className="w-6 h-6" />
+            </a>
+        )}
       </div>
   );
 }
