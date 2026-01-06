@@ -871,7 +871,7 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
 
   return (
       <div className="min-h-screen bg-gray-50 pb-20 md:pb-0">
-        {/* Sticky Mobile Bottom Bar */}
+        {/* Sticky Mobile Bottom Bar - kept for quick access, but form is now visible below content */}
         <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 z-50 flex items-center justify-between shadow-[0_-5px_20px_rgba(0,0,0,0.1)]">
           <div>
             <p className="text-xs text-gray-400 line-through">₹{tour.oldPrice}</p>
@@ -890,7 +890,6 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
               <ArrowRight className="w-4 h-4 rotate-180" /> Back
             </button>
           </div>
-          {/* RESPONSIVE: Padding adjusted */}
           <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 lg:p-24 pb-8 md:pb-12 text-white">
             <div className="container mx-auto px-2 md:px-8">
               <div className="flex gap-2 mb-4">
@@ -906,7 +905,6 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
           </div>
         </div>
 
-        {/* RESPONSIVE: Container padding */}
         <div className="container mx-auto px-4 md:px-8 lg:px-24 xl:px-32 py-8 md:py-12 grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 pb-24">
           <div className="lg:col-span-2 space-y-8 md:space-y-12">
 
@@ -981,8 +979,9 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
 
           </div>
 
-          {/* Right Sidebar: Booking Card */}
-          <div className="hidden md:block lg:col-span-1">
+          {/* Booking Card - Updated for Mobile Visibility */}
+          {/* Changes: Removed 'hidden' class, added margin bottom for mobile so it doesn't get hidden behind the fixed bottom bar */}
+          <div className="lg:col-span-1 mb-24 lg:mb-0">
             <div className="sticky top-32 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
               <div className="bg-emerald-900 p-6 text-white text-center">
                 <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">Total Trip Cost</p>
