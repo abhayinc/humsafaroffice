@@ -42,7 +42,9 @@ import {
   Twitter,
   Mountain,
   Plus,
-  Minus
+  Minus,
+  Image as ImageIcon,
+  Share2
 } from 'lucide-react';
 
 // --- CONFIGURATION ---
@@ -54,9 +56,6 @@ const CustomStyles = () => (
     <style dangerouslySetInnerHTML={{ __html: `
     .bg-scribble {
       background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l2 2' stroke='%23000' stroke-width='1' fill='none' opacity='0.02'/%3E%3C/svg%3E");
-    }
-    .bg-topography {
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     }
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
@@ -107,7 +106,7 @@ const getNextSaturdays = (count = 4) => {
   return dates;
 };
 
-// --- MOCK DATA ---
+// --- MOCK DATA (Updated Image Quality) ---
 const TOURS = [
   {
     id: 1,
@@ -118,7 +117,8 @@ const TOURS = [
     duration: "6 Days / 5 Nights",
     price: 6999,
     oldPrice: "9,500",
-    image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=800&auto=format&fit=crop",
+    // Changed w=800 to w=1200 for better quality
+    image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=1200&auto=format&fit=crop",
     rating: 4.8,
     reviews: 245,
     bestseller: true,
@@ -162,7 +162,7 @@ const TOURS = [
     duration: "7 Days / 6 Nights",
     price: 45000,
     oldPrice: "52,000",
-    image: "https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=1200&auto=format&fit=crop",
     rating: 4.8,
     reviews: 86,
     bestseller: true,
@@ -180,7 +180,7 @@ const TOURS = [
     duration: "6 Days / 5 Nights",
     price: 16500,
     oldPrice: "21,000",
-    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=1200&auto=format&fit=crop",
     rating: 4.9,
     reviews: 120,
     bestseller: true,
@@ -216,7 +216,7 @@ const TOURS = [
     duration: "4 Days / 3 Nights",
     price: 6500,
     oldPrice: "8,500",
-    image: "https://images.unsplash.com/photo-1593183570379-3c9704944888?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1593183570379-3c9704944888?q=80&w=1200&auto=format&fit=crop",
     rating: 4.7,
     reviews: 95,
     bestseller: false,
@@ -234,7 +234,7 @@ const TOURS = [
     duration: "3 Days / 2 Nights",
     price: 4500,
     oldPrice: "6,000",
-    image: "https://images.unsplash.com/photo-1624365113944-128c704c7286?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1624365113944-128c704c7286?q=80&w=1200&auto=format&fit=crop",
     rating: 4.6,
     reviews: 450,
     bestseller: false,
@@ -252,7 +252,7 @@ const TOURS = [
     duration: "5 Days / 4 Nights",
     price: 12999,
     oldPrice: "16,500",
-    image: "https://images.unsplash.com/photo-1548578680-6927d6f5492d?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1548578680-6927d6f5492d?q=80&w=1200&auto=format&fit=crop",
     rating: 4.8,
     reviews: 78,
     bestseller: false,
@@ -270,7 +270,7 @@ const TOURS = [
     duration: "5 Days / 4 Nights",
     price: 8999,
     oldPrice: "12,000",
-    image: "https://images.unsplash.com/photo-1615836245337-f5b9b2303f10?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1615836245337-f5b9b2303f10?q=80&w=1200&auto=format&fit=crop",
     rating: 4.7,
     reviews: 134,
     bestseller: false,
@@ -288,7 +288,7 @@ const TOURS = [
     duration: "4 Days / 3 Nights",
     price: 7500,
     oldPrice: "9,500",
-    image: "https://images.unsplash.com/photo-1569074127014-9c59520cb29f?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1569074127014-9c59520cb29f?q=80&w=1200&auto=format&fit=crop",
     rating: 4.9,
     reviews: 212,
     bestseller: true,
@@ -324,7 +324,7 @@ const TOURS = [
     duration: "6 Days / 5 Nights",
     price: 38999,
     oldPrice: "45,000",
-    image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?q=80&w=1200&auto=format&fit=crop",
     rating: 4.7,
     reviews: 89,
     bestseller: false,
@@ -342,7 +342,7 @@ const TOURS = [
     duration: "7 Days / 6 Nights",
     price: 15000,
     oldPrice: "20,000",
-    image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?q=80&w=1200&auto=format&fit=crop",
     rating: 4.6,
     reviews: 156,
     bestseller: false,
@@ -377,7 +377,6 @@ const BLOG_POSTS = [
     title: "Edition 24: The Secret Valleys of Himachal",
     excerpt: "In this week's edition, we explore the untouched Tirthan Valley, discuss sustainable trekking practices.",
     category: "Weekly Newsletter",
-    // FIXED: Changed image URL to a reliable source
     image: "https://images.unsplash.com/photo-1605649487215-476786e5b497?q=80&w=800&auto=format&fit=crop",
     date: "Oct 15, 2024"
   },
@@ -869,24 +868,40 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
           </a>
         </div>
 
-        <div className="relative h-[50vh] lg:h-[70vh]">
-          <img src={tour.image} alt={tour.title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-          <div className="absolute top-24 left-4 lg:left-24 z-20">
-            <button onClick={onBack} className="bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white/40 transition flex items-center gap-2">
+        {/* === HERO SECTION (IMPROVED UI & REDUCED HEIGHT) === */}
+        <div className="relative h-[42vh] md:h-[60vh] lg:h-[70vh] group overflow-hidden">
+          <img src={tour.image} alt={tour.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+
+          {/* Gradient Overlay - Darkened at bottom for better text contrast */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20"></div>
+
+          {/* Top Actions */}
+          <div className="absolute top-24 left-0 w-full px-4 md:px-8 lg:px-24 flex justify-between items-start z-20">
+            <button onClick={onBack} className="bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white/40 transition flex items-center gap-2 border border-white/10">
               <ArrowRight className="w-4 h-4 rotate-180" /> Back
             </button>
+            <div className="flex gap-2">
+              <button className="bg-white/20 backdrop-blur-md text-white p-2 rounded-full hover:bg-white/40 transition border border-white/10">
+                <Share2 className="w-4 h-4" />
+              </button>
+              <button className="bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white/40 transition flex items-center gap-2 border border-white/10">
+                <ImageIcon className="w-4 h-4" /> Gallery
+              </button>
+            </div>
           </div>
-          <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 lg:p-24 pb-8 md:pb-12 text-white">
-            <div className="container mx-auto px-2 md:px-8">
-              <div className="flex gap-2 mb-4">
-                <span className="bg-emerald-600 text-white px-3 py-1 rounded-md text-[10px] md:text-xs font-bold uppercase tracking-wider">{tour.region}</span>
-                <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-md text-[10px] md:text-xs font-bold uppercase tracking-wider flex items-center gap-1"><Clock className="w-3 h-3"/> {tour.duration}</span>
+
+          {/* Bottom Content */}
+          <div className="absolute bottom-0 left-0 w-full p-4 md:p-8 lg:p-24 pb-6 md:pb-12 text-white z-20">
+            <div className="container mx-auto px-0 md:px-8">
+              <div className="flex flex-wrap gap-2 mb-3">
+                <span className="bg-emerald-600/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider border border-emerald-500/50 shadow-sm">{tour.region}</span>
+                <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider flex items-center gap-1 border border-white/10"><Clock className="w-3 h-3"/> {tour.duration}</span>
+                <span className="bg-orange-500/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider flex items-center gap-1 border border-orange-400/50">From ₹{tour.price.toLocaleString()}</span>
               </div>
-              <h1 className="text-3xl md:text-6xl font-serif font-bold mb-4 leading-tight">{tour.title}</h1>
-              <div className="flex flex-wrap items-center gap-4 md:gap-6 text-xs md:text-sm font-medium text-emerald-100">
-                <span className="flex items-center gap-1"><MapPin className="w-4 h-4"/> {tour.location}</span>
-                <span className="flex items-center gap-1"><Star className="w-4 h-4 text-orange-400 fill-current"/> {tour.rating} ({tour.reviews})</span>
+              <h1 className="text-2xl md:text-5xl lg:text-6xl font-serif font-bold mb-3 leading-tight text-white drop-shadow-lg">{tour.title}</h1>
+              <div className="flex flex-wrap items-center gap-4 md:gap-6 text-xs md:text-sm font-medium text-gray-200">
+                <span className="flex items-center gap-1"><MapPin className="w-4 h-4 text-emerald-400"/> {tour.location}</span>
+                <span className="flex items-center gap-1"><Star className="w-4 h-4 text-orange-400 fill-current"/> {tour.rating} ({tour.reviews} Reviews)</span>
               </div>
             </div>
           </div>
