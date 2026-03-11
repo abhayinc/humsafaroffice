@@ -839,7 +839,7 @@ const Footer = ({ onNavigate }) => (
     </footer>
 );
 
-const TripDetailPage = ({ tours, tourId, onBack, onNavigate }) => {
+const TripDetailPage  = ({ tours, tourId, onBack, onNavigate }) => {
   // FIND THE TOUR. Memoize to prevent re-calculations.
   const tour = useMemo(() => tours.find(t => t._id === tourId) || tours[0], [tourId]);
 
