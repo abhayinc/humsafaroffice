@@ -1069,17 +1069,17 @@ const TripDetailPage   = ({ tours, tourId, onBack, onNavigate }) => {
   );
 };
 
-const UpcomingTripsPage = ({ onNavigate }) => {
+const UpcomingTripsPage = ({ onNavigate, tours }) => {
   const [selectedDestinations, setSelectedDestinations] = useState([]);
   const [priceRange, setPriceRange] = useState(60000);
   const [selectedDurations, setSelectedDurations] = useState([]);
 
   const upcomingDates = useMemo(() => getNextSaturdays(8), []);
-  const uniqueRegions = Array.from(new Set(TOURS.map(t => t.location)));
+  const uniqueRegions = Array.from(new Set(tours.map(t => t.location)));
 
   const schedule = useMemo(() => {
     return upcomingDates.map(date => {
-      const availableTours = TOURS.filter((tour, index) => {
+      const availableTours = tours.filter((tour, index) => {
         const matchesDest = selectedDestinations.length === 0 || selectedDestinations.includes(tour.location);
         const matchesPrice = tour.price <= priceRange;
         const isScheduled = (date.getTime() + index) % 3 === 0;
@@ -1270,8 +1270,8 @@ const HomePage = ({ tours, onSearch, setSearchTerm, searchTerm, onNavigate }) =>
   );
 };
 
-const SearchResultsPage = ({ searchTerm, setSearchTerm, onNavigate }) => {
-  const filteredTours = TOURS.filter(tour => {
+const SearchResultsPage = ({ searchTerm, setSearchTerm, onNavigate, tours }) => {
+  const filteredTours = tours.filter(tour => {
     const term = searchTerm.toLowerCase();
     return tour.title.toLowerCase().includes(term) ||
         tour.location.toLowerCase().includes(term) ||
@@ -1405,8 +1405,8 @@ export default function App() {
 
   const pageComponents = {
     home: <HomePage tours={liveTours} onSearch={handleSearch} setSearchTerm={setSearchTerm} searchTerm={searchTerm} onNavigate={navigate} />,
-    search: <SearchResultsPage searchTerm={searchTerm} setSearchTerm={setSearchTerm} onNavigate={navigate} />,
-    upcoming: <UpcomingTripsPage onNavigate={navigate} />,
+    search: <SearchResultsPage tours={liveTours} searchTerm={searchTerm} setSearchTerm={setSearchTerm} onNavigate={navigate} />,
+    upcoming: <UpcomingTripsPage tours={liveTours} onNavigate={navigate } />,
     custom: <CustomTripPage />,
     'trip-detail': <TripDetailPage tours={liveTours} key={selectedTourId} tourId={selectedTourId} onBack={() => window.history.back()} onNavigate={navigate}  />,
     blog: <BlogPage />,
