@@ -1,4 +1,6 @@
 "use client";
+
+import { client } from '@/sanity/lib/client';
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   Search,
@@ -107,269 +109,287 @@ const getNextSaturdays = (count = 4) => {
 };
 
 // --- MOCK DATA (Updated Image Quality) ---
-const TOURS = [
-  {
-    id: 1,
-    title: "Manali Kasol: Solang, Atal Tunnel & Sissu",
-    location: "Himachal Pradesh",
-    region: "himachal",
-    type: "group",
-    duration: "6 Days / 5 Nights",
-    price: 6999,
-    oldPrice: "9,500",
-    // Changed w=800 to w=1200 for better quality
-    image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=1200&auto=format&fit=crop",
-    rating: 4.8,
-    reviews: 245,
-    bestseller: true,
-    interestedCount: 124,
-    highlights: ["Solang Valley", "Atal Tunnel", "Sissu", "Manikaran Gurudwara", "Kasol Cafe Hopping", "Hadimba Devi Temple"],
-    itinerary: [
-      { day: 1, title: "Delhi to Manali", desc: "Start your journey from Delhi to Manali (approx 560 KMS). Board an AC Semi Sleeper Traveller/Volvo at the predetermined spot. Overnight journey through scenic views towards the Himalayas." },
-      { day: 2, title: "Arrival & Sightseeing in Manali", desc: "Reach Manali and complete check-in. Visit the mystical Hadimba Devi Temple (heart of Manali), explore Mall Road for cafes/shopping, visit Van Vihar, and the Tibetan Monastery. Dinner and overnight stay in Manali." },
-      { day: 3, title: "Solang Valley - Atal Tunnel - Sissu", desc: "Full day excursion. Visit Solang Valley (Snow Valley) for adventure sports like skiing, zipline, zorbing (own cost). Pass through the Atal Tunnel to reach Sissu. Enjoy Sissu Lake/Koksar activities. Return to Manali for dinner and overnight stay." },
-      { day: 4, title: "Kullu - Manikaran - Kasol", desc: "Visit the Paragliding point (Asia's highest) and River Rafting in Beas River (own cost). Explore a Shawl factory. Proceed to Kasol. Check-in to Kasol Camp. Enjoy a Bonfire & Musical Night. Dinner and overnight stay." },
-      { day: 5, title: "Kasol Sightseeing & Departure", desc: "Visit Manikaran Gurudwara and soak in the beauty of Parvati Valley. Explore local markets and Israeli vintage cafes. Optional Water Trek/Chalal Trek. Evening departure for Delhi. Overnight travel." },
-      { day: 6, title: "Delhi Arrival", desc: "Reach Delhi by early morning. The group parts ways with fond memories. Trip ends." }
-    ],
-    inclusions: ["AC Volvo / Traveller", "Accommodations (3 Star)", "Meal Plan: MAP", "Trip Lead", "Permits & Taxes", "Music Night"],
-    exclusions: ["Adventure activities", "Lunch", "Personal expenses", "Heater charges", "Any transport not mentioned"]
-  },
-  {
-    id: 4,
-    title: "Kedarnath Yatra & Trek",
-    location: "Uttarakhand",
-    region: "uttarakhand",
-    type: "group",
-    duration: "5 Days / 4 Nights",
-    price: 10500,
-    oldPrice: "14,000",
-    image: "https://badrinath-kedarnath.gov.in/css_js_2024/img/kedarnath-4k.jpg",
-    rating: 5.0,
-    reviews: 189,
-    bestseller: true,
-    interestedCount: 350,
-    highlights: ["Guptkashi Stay", "Trek to Kedarnath", "Sonprayag", "Ganga Aarti"],
-    inclusions: ["Transportation", "Accommodation", "Meals (Breakfast & Dinner)", "Yatra Registration Assistance"],
-    exclusions: ["Pony/Palki charges", "Lunch", "Personal expenses"]
-  },
-  {
-    id: 9,
-    title: "Vietnam Explorer",
-    location: "Vietnam",
-    region: "international",
-    type: "group",
-    duration: "7 Days / 6 Nights",
-    price: 45000,
-    oldPrice: "52,000",
-    image: "https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=1200&auto=format&fit=crop",
-    rating: 4.8,
-    reviews: 86,
-    bestseller: true,
-    interestedCount: 89,
-    highlights: ["Hanoi City Tour", "Ha Long Bay Cruise", "Ninh Binh", "Local Cuisine"],
-    inclusions: ["Airport Transfers", "3 Star Hotels", "Ha Long Bay Cruise", "Breakfast", "Guide"],
-    exclusions: ["International Flights", "Visa Fees", "Lunch & Dinner", "Tips"]
-  },
-  {
-    id: 13,
-    title: "Kerala Backwaters",
-    location: "Kerala",
-    region: "other",
-    type: "group",
-    duration: "6 Days / 5 Nights",
-    price: 16500,
-    oldPrice: "21,000",
-    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=1200&auto=format&fit=crop",
-    rating: 4.9,
-    reviews: 120,
-    bestseller: true,
-    interestedCount: 156,
-    highlights: ["Munnar Tea Gardens", "Alleppey Houseboat", "Cochin Tour", "Kathakali Show"],
-    inclusions: ["AC Vehicle", "Accommodation", "Houseboat Stay with meals", "Breakfast"],
-    exclusions: ["Airfare", "Entry tickets", "Lunch & Dinner in hotels"]
-  },
-  {
-    id: 2,
-    title: "Spiti Valley Winter Expedition",
-    location: "Himachal Pradesh",
-    region: "himachal",
-    type: "group",
-    duration: "8 Days / 7 Nights",
-    price: 18500,
-    oldPrice: "24,000",
-    image: "https://himalayaexpert.com/uploads/exp-img/spiti-valley-expedition.webp",
-    rating: 4.9,
-    reviews: 310,
-    bestseller: false,
-    interestedCount: 210,
-    highlights: ["Key Monastery", "Chandratal Lake", "Kunzum Pass", "World's Highest Post Office"],
-    inclusions: ["Tempo Traveller", "Homestays", "Breakfast & Dinner", "Oxygen Cylinder"],
-    exclusions: ["Lunch", "Monastery Entry Fees", "Personal Gear"]
-  },
-  {
-    id: 3,
-    title: "Jibhi & Tirthan Valley Leisure",
-    location: "Himachal Pradesh",
-    region: "himachal",
-    type: "group",
-    duration: "4 Days / 3 Nights",
-    price: 6500,
-    oldPrice: "8,500",
-    image: "https://images.unsplash.com/photo-1593183570379-3c9704944888?q=80&w=1200&auto=format&fit=crop",
-    rating: 4.7,
-    reviews: 95,
-    bestseller: false,
-    interestedCount: 78,
-    highlights: ["Jalori Pass", "Serolsar Lake", "Jibhi Waterfall", "Chehni Kothi"],
-    inclusions: ["Transport", "Cottage Stay", "Meals (MAP)", "Guide"],
-    exclusions: ["Lunch", "Personal Expenses"]
-  },
-  {
-    id: 5,
-    title: "Rishikesh Rafting & Camping",
-    location: "Uttarakhand",
-    region: "uttarakhand",
-    type: "corporate",
-    duration: "3 Days / 2 Nights",
-    price: 4500,
-    oldPrice: "6,000",
-    image: "https://images.unsplash.com/photo-1624365113944-128c704c7286?q=80&w=1200&auto=format&fit=crop",
-    rating: 4.6,
-    reviews: 450,
-    bestseller: false,
-    interestedCount: 500,
-    highlights: ["River Rafting", "Cliff Jumping", "Bonfire & Music", "Jungle Camping"],
-    inclusions: ["Camping", "All Meals", "Rafting Charges", "Bonfire"],
-    exclusions: ["Transport to Rishikesh", "Alcohol"]
-  },
-  {
-    id: 6,
-    title: "Auli Skiing Adventure",
-    location: "Uttarakhand",
-    region: "uttarakhand",
-    type: "group",
-    duration: "5 Days / 4 Nights",
-    price: 12999,
-    oldPrice: "16,500",
-    image: "https://images.unsplash.com/photo-1548578680-6927d6f5492d?q=80&w=1200&auto=format&fit=crop",
-    rating: 4.8,
-    reviews: 78,
-    bestseller: false,
-    interestedCount: 134,
-    highlights: ["Skiing Experience", "Joshimath Tour", "Nanda Devi View", "Cable Car Ride"],
-    inclusions: ["Transport", "Stay", "Meals", "Skiing Equipment"],
-    exclusions: ["Cable Car Ticket", "Personal Porter"]
-  },
-  {
-    id: 7,
-    title: "Royal Udaipur & Mount Abu",
-    location: "Rajasthan",
-    region: "rajasthan",
-    type: "group",
-    duration: "5 Days / 4 Nights",
-    price: 8999,
-    oldPrice: "12,000",
-    image: "https://images.unsplash.com/photo-1615836245337-f5b9b2303f10?q=80&w=1200&auto=format&fit=crop",
-    rating: 4.7,
-    reviews: 134,
-    bestseller: false,
-    interestedCount: 98,
-    highlights: ["City Palace", "Lake Pichola", "Jag Dish Temple", "Monsoon Palace"],
-    inclusions: ["AC Car", "Hotels", "Breakfast"],
-    exclusions: ["Entry Tickets", "Lunch/Dinner"]
-  },
-  {
-    id: 8,
-    title: "Jaisalmer Desert Safari",
-    location: "Rajasthan",
-    region: "rajasthan",
-    type: "educational",
-    duration: "4 Days / 3 Nights",
-    price: 7500,
-    oldPrice: "9,500",
-    image: "https://images.unsplash.com/photo-1569074127014-9c59520cb29f?q=80&w=1200&auto=format&fit=crop",
-    rating: 4.9,
-    reviews: 212,
-    bestseller: true,
-    interestedCount: 180,
-    highlights: ["Sam Sand Dunes", "Jeep Safari", "Jaisalmer Fort", "Gadisar Lake"],
-    inclusions: ["Stay (Hotel + Camp)", "Camel/Jeep Safari", "Breakfast & Dinner"],
-    exclusions: ["Train Tickets", "Personal Expenses"]
-  },
-  {
-    id: 10,
-    title: "Dubai Skyline & Desert",
-    location: "UAE",
-    region: "international",
-    type: "corporate",
-    duration: "5 Days / 4 Nights",
-    price: 55000,
-    oldPrice: "65,000",
-    image: "https://www.thrillophilia.com/blog/wp-content/uploads/2025/09/shutterstock_1291548640-1-1.jpg",
-    rating: 4.9,
-    reviews: 56,
-    bestseller: false,
-    interestedCount: 45,
-    highlights: ["Burj Khalifa", "Desert Safari BBQ", "Dubai Mall", "Marina Cruise"],
-    inclusions: ["Visa", "4 Star Stay", "Transfers", "Tours"],
-    exclusions: ["Flights", "Dirham Tax", "Tips"]
-  },
-  {
-    id: 11,
-    title: "Thailand Island Hopping",
-    location: "Thailand",
-    region: "international",
-    type: "group",
-    duration: "6 Days / 5 Nights",
-    price: 38999,
-    oldPrice: "45,000",
-    image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?q=80&w=1200&auto=format&fit=crop",
-    rating: 4.7,
-    reviews: 89,
-    bestseller: false,
-    interestedCount: 112,
-    highlights: ["Phi Phi Island", "Phuket Beaches", "Coral Island", "Bangkok City Tour"],
-    inclusions: ["Hotels", "Tours", "Transfers", "Breakfast"],
-    exclusions: ["Flights", "Visa on Arrival", "National Park Fees"]
-  },
-  {
-    id: 12,
-    title: "Goa Workation",
-    location: "Goa",
-    region: "other",
-    type: "corporate",
-    duration: "7 Days / 6 Nights",
-    price: 15000,
-    oldPrice: "20,000",
-    image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?q=80&w=1200&auto=format&fit=crop",
-    rating: 4.6,
-    reviews: 156,
-    bestseller: false,
-    interestedCount: 230,
-    highlights: ["North Goa Beaches", "Fort Aguada", "Dudhsagar Trek", "Casino Night"],
-    inclusions: ["Stay with Breakfast", "Scooty Rental Assistance", "Transfers"],
-    exclusions: ["Flights/Train", "Lunch/Dinner", "Petrol", "Entry Fees"]
-  },
-  {
-    id: 14,
-    title: "Meghalaya: Abode of Clouds",
-    location: "Meghalaya",
-    region: "other",
-    type: "group",
-    duration: "7 Days / 6 Nights",
-    price: 22000,
-    oldPrice: "28,000",
-    image: "https://hblimg.mmtcdn.com/content/hubble/img/cherrapunji/mmt/destination/m_destination-cherrapunji-landscape_l_400_640.jpg",
-    rating: 5.0,
-    reviews: 42,
-    bestseller: true,
-    interestedCount: 65,
-    highlights: ["Double Decker Bridge", "Umngot River", "Mawlynnong", "Seven Sisters Falls"],
-    inclusions: ["Transport", "Stay", "Breakfast", "Guide"],
-    exclusions: ["Lunch/Dinner", "Entry Fees"]
-  }
-];
+// const TOURS = [
+//   {
+//     id: 1,
+//     title: "Manali Kasol: Solang, Atal Tunnel & Sissu",
+//     location: "Himachal Pradesh",
+//     region: "himachal",
+//     type: "group",
+//     duration: "6 Days / 5 Nights",
+//     price: 6999,
+//     oldPrice: "9,500",
+//     // Changed w=800 to w=1200 for better quality
+//     image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=1200&auto=format&fit=crop",
+//     rating: 4.8,
+//     reviews: 245,
+//     bestseller: true,
+//     interestedCount: 124,
+//     highlights: ["Solang Valley", "Atal Tunnel", "Sissu", "Manikaran Gurudwara", "Kasol Cafe Hopping", "Hadimba Devi Temple"],
+//     itinerary: [
+//       { day: 1, title: "Delhi to Manali", desc: "Start your journey from Delhi to Manali (approx 560 KMS). Board an AC Semi Sleeper Traveller/Volvo at the predetermined spot. Overnight journey through scenic views towards the Himalayas." },
+//       { day: 2, title: "Arrival & Sightseeing in Manali", desc: "Reach Manali and complete check-in. Visit the mystical Hadimba Devi Temple (heart of Manali), explore Mall Road for cafes/shopping, visit Van Vihar, and the Tibetan Monastery. Dinner and overnight stay in Manali." },
+//       { day: 3, title: "Solang Valley - Atal Tunnel - Sissu", desc: "Full day excursion. Visit Solang Valley (Snow Valley) for adventure sports like skiing, zipline, zorbing (own cost). Pass through the Atal Tunnel to reach Sissu. Enjoy Sissu Lake/Koksar activities. Return to Manali for dinner and overnight stay." },
+//       { day: 4, title: "Kullu - Manikaran - Kasol", desc: "Visit the Paragliding point (Asia's highest) and River Rafting in Beas River (own cost). Explore a Shawl factory. Proceed to Kasol. Check-in to Kasol Camp. Enjoy a Bonfire & Musical Night. Dinner and overnight stay." },
+//       { day: 5, title: "Kasol Sightseeing & Departure", desc: "Visit Manikaran Gurudwara and soak in the beauty of Parvati Valley. Explore local markets and Israeli vintage cafes. Optional Water Trek/Chalal Trek. Evening departure for Delhi. Overnight travel." },
+//       { day: 6, title: "Delhi Arrival", desc: "Reach Delhi by early morning. The group parts ways with fond memories. Trip ends." }
+//     ],
+//     inclusions: ["AC Volvo / Traveller", "Accommodations (3 Star)", "Meal Plan: MAP", "Trip Lead", "Permits & Taxes", "Music Night"],
+//     exclusions: ["Adventure activities", "Lunch", "Personal expenses", "Heater charges", "Any transport not mentioned"]
+//   },
+//   {
+//     id: 4,
+//     title: "Kedarnath Yatra & Trek",
+//     location: "Uttarakhand",
+//     region: "uttarakhand",
+//     type: "group",
+//     duration: "5 Days / 4 Nights",
+//     price: 10500,
+//     oldPrice: "14,000",
+//     image: "https://badrinath-kedarnath.gov.in/css_js_2024/img/kedarnath-4k.jpg",
+//     rating: 5.0,
+//     reviews: 189,
+//     bestseller: true,
+//     interestedCount: 350,
+//     highlights: ["Guptkashi Stay", "Trek to Kedarnath", "Sonprayag", "Ganga Aarti"],
+//     inclusions: ["Transportation", "Accommodation", "Meals (Breakfast & Dinner)", "Yatra Registration Assistance"],
+//     exclusions: ["Pony/Palki charges", "Lunch", "Personal expenses"]
+//   },
+//   {
+//     id: 9,
+//     title: "Vietnam Explorer",
+//     location: "Vietnam",
+//     region: "international",
+//     type: "group",
+//     duration: "7 Days / 6 Nights",
+//     price: 45000,
+//     oldPrice: "52,000",
+//     image: "https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=1200&auto=format&fit=crop",
+//     rating: 4.8,
+//     reviews: 86,
+//     bestseller: true,
+//     interestedCount: 89,
+//     highlights: ["Hanoi City Tour", "Ha Long Bay Cruise", "Ninh Binh", "Local Cuisine"],
+//     inclusions: ["Airport Transfers", "3 Star Hotels", "Ha Long Bay Cruise", "Breakfast", "Guide"],
+//     exclusions: ["International Flights", "Visa Fees", "Lunch & Dinner", "Tips"]
+//   },
+//   {
+//     id: 13,
+//     title: "Kerala Backwaters",
+//     location: "Kerala",
+//     region: "other",
+//     type: "group",
+//     duration: "6 Days / 5 Nights",
+//     price: 16500,
+//     oldPrice: "21,000",
+//     image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=1200&auto=format&fit=crop",
+//     rating: 4.9,
+//     reviews: 120,
+//     bestseller: true,
+//     interestedCount: 156,
+//     highlights: ["Munnar Tea Gardens", "Alleppey Houseboat", "Cochin Tour", "Kathakali Show"],
+//     inclusions: ["AC Vehicle", "Accommodation", "Houseboat Stay with meals", "Breakfast"],
+//     exclusions: ["Airfare", "Entry tickets", "Lunch & Dinner in hotels"]
+//   },
+//   {
+//     id: 2,
+//     title: "Spiti Valley Winter Expedition",
+//     location: "Himachal Pradesh",
+//     region: "himachal",
+//     type: "group",
+//     duration: "8 Days / 7 Nights",
+//     price: 18500,
+//     oldPrice: "24,000",
+//     image: "https://himalayaexpert.com/uploads/exp-img/spiti-valley-expedition.webp",
+//     rating: 4.9,
+//     reviews: 310,
+//     bestseller: false,
+//     interestedCount: 210,
+//     highlights: ["Key Monastery", "Chandratal Lake", "Kunzum Pass", "World's Highest Post Office"],
+//     inclusions: ["Tempo Traveller", "Homestays", "Breakfast & Dinner", "Oxygen Cylinder"],
+//     exclusions: ["Lunch", "Monastery Entry Fees", "Personal Gear"]
+//   },
+//   {
+//     id: 3,
+//     title: "Jibhi & Tirthan Valley Leisure",
+//     location: "Himachal Pradesh",
+//     region: "himachal",
+//     type: "group",
+//     duration: "4 Days / 3 Nights",
+//     price: 6500,
+//     oldPrice: "8,500",
+//     image: "https://images.unsplash.com/photo-1593183570379-3c9704944888?q=80&w=1200&auto=format&fit=crop",
+//     rating: 4.7,
+//     reviews: 95,
+//     bestseller: false,
+//     interestedCount: 78,
+//     highlights: ["Jalori Pass", "Serolsar Lake", "Jibhi Waterfall", "Chehni Kothi"],
+//     inclusions: ["Transport", "Cottage Stay", "Meals (MAP)", "Guide"],
+//     exclusions: ["Lunch", "Personal Expenses"]
+//   },
+//   {
+//     id: 5,
+//     title: "Rishikesh Rafting & Camping",
+//     location: "Uttarakhand",
+//     region: "uttarakhand",
+//     type: "corporate",
+//     duration: "3 Days / 2 Nights",
+//     price: 4500,
+//     oldPrice: "6,000",
+//     image: "https://images.unsplash.com/photo-1624365113944-128c704c7286?q=80&w=1200&auto=format&fit=crop",
+//     rating: 4.6,
+//     reviews: 450,
+//     bestseller: false,
+//     interestedCount: 500,
+//     highlights: ["River Rafting", "Cliff Jumping", "Bonfire & Music", "Jungle Camping"],
+//     inclusions: ["Camping", "All Meals", "Rafting Charges", "Bonfire"],
+//     exclusions: ["Transport to Rishikesh", "Alcohol"]
+//   },
+//   {
+//     id: 6,
+//     title: "Auli Skiing Adventure",
+//     location: "Uttarakhand",
+//     region: "uttarakhand",
+//     type: "group",
+//     duration: "5 Days / 4 Nights",
+//     price: 12999,
+//     oldPrice: "16,500",
+//     image: "https://images.unsplash.com/photo-1548578680-6927d6f5492d?q=80&w=1200&auto=format&fit=crop",
+//     rating: 4.8,
+//     reviews: 78,
+//     bestseller: false,
+//     interestedCount: 134,
+//     highlights: ["Skiing Experience", "Joshimath Tour", "Nanda Devi View", "Cable Car Ride"],
+//     inclusions: ["Transport", "Stay", "Meals", "Skiing Equipment"],
+//     exclusions: ["Cable Car Ticket", "Personal Porter"]
+//   },
+//   {
+//     id: 7,
+//     title: "Royal Udaipur & Mount Abu",
+//     location: "Rajasthan",
+//     region: "rajasthan",
+//     type: "group",
+//     duration: "5 Days / 4 Nights",
+//     price: 8999,
+//     oldPrice: "12,000",
+//     image: "https://images.unsplash.com/photo-1615836245337-f5b9b2303f10?q=80&w=1200&auto=format&fit=crop",
+//     rating: 4.7,
+//     reviews: 134,
+//     bestseller: false,
+//     interestedCount: 98,
+//     highlights: ["City Palace", "Lake Pichola", "Jag Dish Temple", "Monsoon Palace"],
+//     inclusions: ["AC Car", "Hotels", "Breakfast"],
+//     exclusions: ["Entry Tickets", "Lunch/Dinner"]
+//   },
+//   {
+//     id: 8,
+//     title: "Jaisalmer Desert Safari",
+//     location: "Rajasthan",
+//     region: "rajasthan",
+//     type: "educational",
+//     duration: "4 Days / 3 Nights",
+//     price: 7500,
+//     oldPrice: "9,500",
+//     image: "https://images.unsplash.com/photo-1569074127014-9c59520cb29f?q=80&w=1200&auto=format&fit=crop",
+//     rating: 4.9,
+//     reviews: 212,
+//     bestseller: true,
+//     interestedCount: 180,
+//     highlights: ["Sam Sand Dunes", "Jeep Safari", "Jaisalmer Fort", "Gadisar Lake"],
+//     inclusions: ["Stay (Hotel + Camp)", "Camel/Jeep Safari", "Breakfast & Dinner"],
+//     exclusions: ["Train Tickets", "Personal Expenses"]
+//   },
+//   {
+//     id: 10,
+//     title: "Dubai Skyline & Desert",
+//     location: "UAE",
+//     region: "international",
+//     type: "corporate",
+//     duration: "5 Days / 4 Nights",
+//     price: 55000,
+//     oldPrice: "65,000",
+//     image: "https://www.thrillophilia.com/blog/wp-content/uploads/2025/09/shutterstock_1291548640-1-1.jpg",
+//     rating: 4.9,
+//     reviews: 56,
+//     bestseller: false,
+//     interestedCount: 45,
+//     highlights: ["Burj Khalifa", "Desert Safari BBQ", "Dubai Mall", "Marina Cruise"],
+//     inclusions: ["Visa", "4 Star Stay", "Transfers", "Tours"],
+//     exclusions: ["Flights", "Dirham Tax", "Tips"]
+//   },
+//   {
+//     id: 11,
+//     title: "Thailand Island Hopping",
+//     location: "Thailand",
+//     region: "international",
+//     type: "group",
+//     duration: "6 Days / 5 Nights",
+//     price: 38999,
+//     oldPrice: "45,000",
+//     image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?q=80&w=1200&auto=format&fit=crop",
+//     rating: 4.7,
+//     reviews: 89,
+//     bestseller: false,
+//     interestedCount: 112,
+//     highlights: ["Phi Phi Island", "Phuket Beaches", "Coral Island", "Bangkok City Tour"],
+//     inclusions: ["Hotels", "Tours", "Transfers", "Breakfast"],
+//     exclusions: ["Flights", "Visa on Arrival", "National Park Fees"]
+//   },
+//   {
+//     id: 12,
+//     title: "Goa Workation",
+//     location: "Goa",
+//     region: "other",
+//     type: "corporate",
+//     duration: "7 Days / 6 Nights",
+//     price: 15000,
+//     oldPrice: "20,000",
+//     image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?q=80&w=1200&auto=format&fit=crop",
+//     rating: 4.6,
+//     reviews: 156,
+//     bestseller: false,
+//     interestedCount: 230,
+//     highlights: ["North Goa Beaches", "Fort Aguada", "Dudhsagar Trek", "Casino Night"],
+//     inclusions: ["Stay with Breakfast", "Scooty Rental Assistance", "Transfers"],
+//     exclusions: ["Flights/Train", "Lunch/Dinner", "Petrol", "Entry Fees"]
+//   },
+//   {
+//     id: 14,
+//     title: "Meghalaya: Abode of Clouds",
+//     location: "Meghalaya",
+//     region: "other",
+//     type: "group",
+//     duration: "7 Days / 6 Nights",
+//     price: 22000,
+//     oldPrice: "28,000",
+//     image: "https://hblimg.mmtcdn.com/content/hubble/img/cherrapunji/mmt/destination/m_destination-cherrapunji-landscape_l_400_640.jpg",
+//     rating: 5.0,
+//     reviews: 42,
+//     bestseller: true,
+//     interestedCount: 65,
+//     highlights: ["Double Decker Bridge", "Umngot River", "Mawlynnong", "Seven Sisters Falls"],
+//     inclusions: ["Transport", "Stay", "Breakfast", "Guide"],
+//     exclusions: ["Lunch/Dinner", "Entry Fees"]
+//   },
+//   {
+//     id: 14,
+//     title: "Chambal: Abode of Clouds",
+//     location: "Meghalaya",
+//     region: "other",
+//     type: "group",
+//     duration: "7 Days / 6 Nights",
+//     price: 22000,
+//     oldPrice: "28,000",
+//     image: "https://hblimg.mmtcdn.com/content/hubble/img/cherrapunji/mmt/destination/m_destination-cherrapunji-landscape_l_400_640.jpg",
+//     rating: 5.0,
+//     reviews: 42,
+//     bestseller: true,
+//     interestedCount: 65,
+//     highlights: ["Double Decker Bridge", "Umngot River", "Mawlynnong", "Seven Sisters Falls"],
+//     inclusions: ["Transport", "Stay", "Breakfast", "Guide"],
+//     exclusions: ["Lunch/Dinner", "Entry Fees"]
+//   }
+// ];
 
 const BLOG_POSTS = [
   {
@@ -617,7 +637,7 @@ const TourCard = ({ tour, onViewDetails }) => {
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden">
           <img
-              src={tour.image}
+              src={tour.imageUrl}
               alt={tour.title}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
@@ -819,9 +839,9 @@ const Footer = ({ onNavigate }) => (
     </footer>
 );
 
-const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
+const TripDetailPage = ({ tours, tourId, onBack, onNavigate }) => {
   // FIND THE TOUR. Memoize to prevent re-calculations.
-  const tour = useMemo(() => TOURS.find(t => t.id === tourId) || TOURS[0], [tourId]);
+  const tour = useMemo(() => tours.find(t => t._id === tourId) || tours[0], [tourId]);
 
   const upcomingSaturdays = useMemo(() => getNextSaturdays(5), []);
   const [activeDate, setActiveDate] = useState(upcomingSaturdays[0]);
@@ -870,7 +890,7 @@ const TripDetailPage = ({ tourId, onBack, onNavigate }) => {
 
         {/* === HERO SECTION (IMPROVED UI & REDUCED HEIGHT) === */}
         <div className="relative h-[42vh] md:h-[60vh] lg:h-[70vh] group overflow-hidden">
-          <img src={tour.image} alt={tour.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+          <img src={tour.imageUrl} alt={tour.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
 
           {/* Gradient Overlay - Darkened at bottom for better text contrast */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20"></div>
@@ -1189,17 +1209,17 @@ const CustomTripPage = () => (
     </div>
 );
 
-const HomePage = ({ onSearch, setSearchTerm, searchTerm, onNavigate }) => {
+const HomePage = ({ tours, onSearch, setSearchTerm, searchTerm, onNavigate }) => {
   const [selectedRegion, setSelectedRegion] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
 
-  const filteredTours = TOURS.filter(tour => {
+  const filteredTours = tours.filter(tour => {
     const matchesRegion = selectedRegion === 'all' || tour.region === selectedRegion;
     const matchesType = selectedType === 'all' || tour.type === selectedType;
     return matchesRegion && matchesType;
   });
 
-  const bestsellers = TOURS.filter(t => t.bestseller).slice(0, 4);
+  const bestsellers = tours.filter(t => t.bestseller).slice(0, 4);
   const isDefaultView = selectedRegion === 'all' && selectedType === 'all';
 
   return (
@@ -1220,7 +1240,7 @@ const HomePage = ({ onSearch, setSearchTerm, searchTerm, onNavigate }) => {
                   <div>
                     <h2 className="text-2xl md:text-4xl font-serif font-bold text-gray-900 mb-8 md:mb-12">Your Selection</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-                      {filteredTours.map(tour => <TourCard key={tour.id} tour={tour} onViewDetails={(id) => onNavigate('trip-detail', id)} />)}
+                      {filteredTours.map(tour => <TourCard key={tour._id} tour={tour} onViewDetails={() => onNavigate('trip-detail', tour._id)}  />)}
                     </div>
                   </div>
               ) : (
@@ -1236,7 +1256,7 @@ const HomePage = ({ onSearch, setSearchTerm, searchTerm, onNavigate }) => {
                         </button>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-                        {bestsellers.map(tour => <TourCard key={tour.id} tour={tour} onViewDetails={(id) => onNavigate('trip-detail', id)} />)}
+                        {bestsellers.map(tour => <TourCard key={tour._id} tour={tour} onViewDetails={() => onNavigate('trip-detail', tour._id)} />)}
                       </div>
                     </div>
                   </div>
@@ -1339,6 +1359,7 @@ export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [liveTours, setLiveTours] = useState([]);
 
   useEffect(() => {
     if (window.history.state) {
@@ -1381,15 +1402,28 @@ export default function App() {
   };
 
   const pageComponents = {
-    home: <HomePage onSearch={handleSearch} setSearchTerm={setSearchTerm} searchTerm={searchTerm} onNavigate={navigate} />,
+    home: <HomePage tours={liveTours} onSearch={handleSearch} setSearchTerm={setSearchTerm} searchTerm={searchTerm} onNavigate={navigate} />,
     search: <SearchResultsPage searchTerm={searchTerm} setSearchTerm={setSearchTerm} onNavigate={navigate} />,
     upcoming: <UpcomingTripsPage onNavigate={navigate} />,
     custom: <CustomTripPage />,
-    'trip-detail': <TripDetailPage key={selectedTourId} tourId={selectedTourId} onBack={() => window.history.back()} onNavigate={navigate} />,
+    'trip-detail': <TripDetailPage tours={liveTours} key={selectedTourId} tourId={selectedTourId} onBack={() => window.history.back()} onNavigate={navigate}  />,
     blog: <BlogPage />,
   };
 
   const CurrentPageComponent = pageComponents[currentPage] || pageComponents['home'];
+
+  useEffect(() => {
+    const getTours = async () => {
+      const data = await client.fetch('*[_type == "tour"]{..., "imageUrl": image.asset->url}');
+      console.log("Mera Live Sanity Data! 🚀", data);
+
+      // Bas yeh nayi line add karni thi!
+      // Iska matlab hai: Sanity ka data = liveTours
+      setLiveTours(data);
+    };
+
+    getTours();
+  }, []);
 
   return (
       <div className="min-h-screen bg-white font-sans text-gray-900 scroll-smooth selection:bg-emerald-100 selection:text-emerald-900">
